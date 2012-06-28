@@ -1,0 +1,184 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package mangadownloader.bus;
+
+import java.io.IOException;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import bbmangadownloader.TestCode;
+import mangadownloader.bus.description.IBusOnePage;
+import mangadownloader.entity.Chapter;
+import mangadownloader.entity.Image;
+import mangadownloader.entity.Manga;
+import mangadownloader.entity.Server;
+import mangadownloader.ult.DateTimeUtilities;
+import mangadownloader.ult.HttpDownloadManager;
+import mangadownloader.ult.MultitaskJob;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+/**
+ *
+ * @author Bach
+ */
+public class KissManga implements IBusOnePage {  // Done 
+    // Thiss class have a subclass: VnSharing
+
+    private static final int DEFAULT_POOL_SIZE_MANGA_DOWNLOAD = 3;
+    private static final Pattern PATTERN_IMAGE = Pattern.compile("lstImages.push\\(\"(http://.+)\"\\);");
+    //
+    private static final String BASED_URL = "http://kissmanga.com";
+    private static final String BASED_URL_LIST_MANGA = "http://kissmanga.com/MangaList?page=";
+    private static final String URL_LIST_MANGA = "http://kissmanga.com/MangaList";
+    //
+    private static final String DATE_FORMAT_UPLOAD = "dd/MM/yyyy";
+    private static final String DEFAULT_TRANS = "KissManga";
+
+    protected Document getDocument(String url) throws IOException {
+        return HttpDownloadManager.getDocument(url);
+    }
+
+    protected String getBasedUrl() {
+        return BASED_URL;
+    }
+
+    protected String getBasedUrlListManga() {
+        return BASED_URL_LIST_MANGA;
+    }
+
+    protected String getMangaListUrl() {
+        return URL_LIST_MANGA;
+    }
+
+    protected Manga getMangaFromTag(Element e) {
+        if (e.attr("class").equals("odd") || e.attributes().size() == 0) {
+            Element el = e.children().first().child(0);
+            Manga m = new Manga(null, el.text(), getBasedUrl() + el.attr("href"));
+            return m;
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public List<Manga> getAllMangas(Server s) throws IOException {
+        List<Callable<List<Manga>>> lstTask = new ArrayList<>();
+        Document doc = getDocument(getMangaListUrl());
+        Elements xmlNodes = doc.select("div[class=pagination pagination-left] a");
+        try {
+            int page = Integer.parseInt(xmlNodes.last().attr("page"));
+
+            for (int i = 1; i <= page; i++) {
+                EatMangaMangaLoaderTask task = new EatMangaMangaLoaderTask(getBasedUrlListManga() + i);
+                lstTask.add(task);
+            }
+
+            List<Future<List<Manga>>> lstLst = MultitaskJob.doTask(
+                    DEFAULT_POOL_SIZE_MANGA_DOWNLOAD, lstTask);
+            List<Manga> lstReturn = new ArrayList<>();
+
+            for (Future<List<Manga>> f : lstLst) {
+                if (f.isDone()) {
+                    try {
+                        lstReturn.addAll(f.get());
+                    } catch (InterruptedException | ExecutionException ex) {
+                        Logger.getLogger(TestCode.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                } else {
+                    System.out.println("WTF ?");
+                }
+            }
+            return lstReturn;
+        } catch (NumberFormatException ex) {
+            System.out.println("Can not get number page");
+            return null;
+        }
+    }
+
+    @Override
+    public List<Chapter> getAllChapters(Manga manga) throws IOException {
+        ArrayList<Chapter> lstChapter = new ArrayList<>();
+
+        Document doc = getDocument(manga.getUrl());
+        Elements xmlNode = doc.select("div[class=barContent chapterList] table[class=listing] tr");
+        xmlNode.remove(0);
+
+        for (Element e : xmlNode) {
+            Elements nodes = e.children();
+            if (nodes.size() == 2) {
+                Element aTag = nodes.get(0).select("a").first();
+                Date date = null;
+                try {
+                    date = DateTimeUtilities.getDate(nodes.get(1).text(), DATE_FORMAT_UPLOAD);
+                } catch (ParseException ex) {
+                }
+                Chapter c;
+                c = new Chapter(
+                        -1,
+                        aTag.html(), BASED_URL + aTag.attr("href"), manga,
+                        DEFAULT_TRANS, date);
+                lstChapter.add(c);
+
+            }
+        }
+        return lstChapter;
+    }
+
+    @Override
+    public List<Image> getAllImages(Chapter chapter) throws IOException {
+        List<Image> lstImage = new ArrayList<>();
+        Document doc = getDocument(chapter.getUrl());
+        Elements xmlNodes = doc.select("script[type=text/javascript]").not("script[src]");
+
+        for (Element e : xmlNodes) {
+            if (e.html().contains("var lstImages = new Array()")) {
+                Matcher m = PATTERN_IMAGE.matcher(e.html());
+                int i = 0;
+                int start = 0;
+                while (m.find(start)) {
+                    lstImage.add(new Image(i++, m.group(1), chapter));
+                    start = m.end();
+                }
+                break;
+            }
+        }
+
+        return lstImage;
+    }
+
+    protected class EatMangaMangaLoaderTask implements Callable<List<Manga>> {
+
+        private String url;
+//        private KissManga s;
+
+        public EatMangaMangaLoaderTask(String url) {
+            this.url = url;
+        }
+
+        @Override
+        public List<Manga> call() throws Exception {
+            List<Manga> lstReturn = new ArrayList<>();
+            Document doc = getDocument(url);
+            Elements xmlNodes = doc.select("table[class=listing] tr");
+            for (Element e : xmlNodes) {
+                Manga m = getMangaFromTag(e);
+                if (m != null) {
+                    lstReturn.add(m);
+                }
+            }
+            return lstReturn;
+        }
+    }
+}
