@@ -14,6 +14,7 @@ import bbmangadownloader.database.entity.LinkMangaServer;
 import bbmangadownloader.faces.IFacadeMangaServer;
 import bbmangadownloader.faces.ServerManager;
 import bbmangadownloader.ult.Heuristic;
+import java.util.*;
 
 /**
  *
@@ -201,5 +202,24 @@ public class Manga extends HtmlDocument implements Serializable {
         }
         final Manga other = (Manga) obj;
         return other.hashCode() == this.hashCode();
+    }
+
+    public void doSortChapters(boolean isAsc) {
+        Collections.sort(lstChapter, new ComparatorImpl(isAsc));
+    }
+
+    private static class ComparatorImpl implements Comparator<Chapter> {
+
+        private boolean isAsc;
+
+        public ComparatorImpl(boolean isAsc) {
+            this.isAsc = isAsc;
+        }
+
+        @Override
+        public int compare(Chapter o1, Chapter o2) {
+            int b = (o1.compareTo(o2));
+            return isAsc ? b : (-b);
+        }
     }
 }

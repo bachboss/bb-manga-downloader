@@ -10,20 +10,27 @@ import bbmangadownloader.database.entity.Watchers;
 import bbmangadownloader.entity.Chapter;
 import bbmangadownloader.entity.Manga;
 import bbmangadownloader.gui.bus.ListTaskDownloader;
+import bbmangadownloader.gui.listener.TableMouseListener;
+import bbmangadownloader.gui.listener.TableMouseMenuHandler;
 import bbmangadownloader.gui.model.ChapterDownloadModel;
 import bbmangadownloader.gui.model.Watcher;
 import bbmangadownloader.gui.model.WatcherMangaTreeTableModel;
 import bbmangadownloader.gui.model.WatcherTableModel;
+import bbmangadownloader.ult.GUIUtilities;
+import bbmangadownloader.ult.MultitaskJob;
 import comichtmlgender.HTMLGenerator;
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.swing.JTable;
-import javax.swing.SwingUtilities;
 import javax.swing.table.TableColumnModel;
 import org.jdesktop.swingx.treetable.DefaultTreeTableModel;
 
@@ -37,26 +44,63 @@ public class MangaWatcherGUI extends javax.swing.JFrame {
     private WatcherMangaTreeTableModel modelManga;
     private ChapterDownloadModel modelDownload;
     private Watcher currentWatcher;
-//    private Manga selectingManga;
+    private Manga selectingManga;
     private Chapter[] selectingChapers;
     private SearchMangaDialog searchManga;
 
     public MangaWatcherGUI() {
+        initIconAndTitle();
         initComponents();
         initWatcherTable();
         initPopUpMenuForItem();
         initDownloadTable();
+        initColumnModel();
 //        initTreeTable();
 //        initColumnForTreeTable();
-
     }
 
-    private void initColumnForTreeTable() {
-        TableColumnModel columnModel = ttblList.getColumnModel();
-        columnModel.getColumn(0).setPreferredWidth(300);
-        columnModel.getColumn(1).setPreferredWidth(50);
-        columnModel.getColumn(2).setPreferredWidth(100);
-        columnModel.getColumn(3).setPreferredWidth(150);
+    private void initIconAndTitle() {
+        URL imageURL = this.getClass().getClassLoader().getResource("bbmangadownloader/resources/icon/icon.png");
+        BufferedImage icon;
+        try {
+            icon = ImageIO.read(imageURL);
+            this.setIconImage(icon);
+        } catch (IOException ex) {
+            Logger.getLogger(MangaWatcherGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        setTitle("BB Manga Downloader");
+    }
+
+    private void initColumnModel() {
+        {
+            TableColumnModel columnModel = tblWatcher.getColumnModel();
+            columnModel.getColumn(0).setPreferredWidth(150);
+            columnModel.getColumn(1).setPreferredWidth(50);
+            tblDownload.setAutoCreateColumnsFromModel(false);
+        }
+
+        {
+            TableColumnModel columnModel = tblDownload.getColumnModel();
+            columnModel.getColumn(0).setPreferredWidth(50);
+            columnModel.getColumn(0).setMaxWidth(100);
+            columnModel.getColumn(1).setPreferredWidth(200);
+            columnModel.getColumn(2).setPreferredWidth(100);
+            columnModel.getColumn(2).setMaxWidth(100);
+            columnModel.getColumn(3).setPreferredWidth(350);
+            tblDownload.setAutoCreateColumnsFromModel(false);
+        }
+    }
+
+    private void initColumnModelForTreeTable() {
+        {
+            TableColumnModel columnModel = ttblList.getColumnModel();
+            columnModel.getColumn(0).setPreferredWidth(300);
+            columnModel.getColumn(1).setPreferredWidth(50);
+            columnModel.getColumn(2).setPreferredWidth(100);
+            columnModel.getColumn(3).setPreferredWidth(150);
+            ttblList.setAutoCreateColumnsFromModel(false);
+        }
+
     }
 
     private void initDownloadTable() {
@@ -71,35 +115,56 @@ public class MangaWatcherGUI extends javax.swing.JFrame {
     }
 
     private void initPopUpMenuForItem() {
-        tblWatcher.setComponentPopupMenu(popWatcher);
-        tblWatcher.setInheritsPopupMenu(true);
-
         tblDownload.setComponentPopupMenu(popDownload);
         tblDownload.setInheritsPopupMenu(true);
 
 //        ttblList.setComponentPopupMenu(popListManga);
 //        ttblList.setInheritsPopupMenu(true);
 
-        ttblList.addMouseListener(new MouseAdapter() {
+//        tblWatcher.setComponentPopupMenu(popWatcher);
+//        tblWatcher.setInheritsPopupMenu(true);
 
-            private boolean isRowInSelecting(int value, int[] arrValue) {
-                for (int i : arrValue) {
-                    if (value == i) {
-                        return true;
-                    }
-                }
-                return false;
+        tblWatcher.addMouseListener(new TableMouseListener(tblWatcher, new TableMouseMenuHandler() {
+
+            private void setEnableOnMulti(boolean enable) {
+                mnWatcherAddHost.setEnabled(enable);
+                mnWatcherRename.setEnabled(enable);
             }
 
-            private void showMenu(MouseEvent e) {
+            @Override
+            public void onShowMenu(MouseEvent e) {
                 if (e.isPopupTrigger() && e.getComponent() instanceof JTable) {
+                    boolean isDisable = (tblWatcher.getSelectedRowCount() > 1);
+                    System.out.println("Show Menu, disable = " + isDisable);
+                    if (isDisable) {
+                        setEnableOnMulti(false);
+                    }
+                    popWatcher.revalidate();
+                    popWatcher.show(e.getComponent(), e.getX(), e.getY());
+                    if (isDisable) {
+                        setEnableOnMulti(true);
+                    }
+                }
+            }
+        }));
+
+        ttblList.addMouseListener(new TableMouseListener(ttblList, new TableMouseMenuHandler() {
+
+            @Override
+            public void onShowMenu(MouseEvent e) {
+                if (e.isPopupTrigger() && e.getComponent() instanceof JTable) {
+                    mnChapterViewOnBrowser.setEnabled(true);
                     Object o = ttblList.getValueAt(ttblList.getSelectedRow(), -1);
                     if (o instanceof Manga) {
-//                            selectingManga = (Manga) o;
-                        popListManga.show(e.getComponent(), e.getX(), e.getY());
-                        System.out.println();
+                        selectingManga = (Manga) o;
+                        mnChapterViewOnBrowser.setEnabled(false);
+                        popManga.show(e.getComponent(), e.getX(), e.getY());
+                        mnChapterViewOnBrowser.setEnabled(true);
                     } else if (o instanceof Chapter) {
                         int[] arrInt = ttblList.getSelectedRows();
+                        if (arrInt.length > 1) {
+                            mnChapterViewOnBrowser.setEnabled(false);
+                        }
                         ArrayList<Chapter> arrTemp = new ArrayList<>();
                         for (int i : arrInt) {
                             Object o2 = ttblList.getValueAt(i, -1);
@@ -109,52 +174,13 @@ public class MangaWatcherGUI extends javax.swing.JFrame {
                         }
                         selectingChapers = (Chapter[]) arrTemp.toArray(new Chapter[0]);
                         if (selectingChapers.length != 0) {
-                            popManga.show(e.getComponent(), e.getX(), e.getY());
+                            popChapter.show(e.getComponent(), e.getX(), e.getY());
                         }
                     }
                 }
             }
+        }));
 
-            @Override
-            public void mouseReleased(MouseEvent e) {
-                if (SwingUtilities.isRightMouseButton(e)) {
-                    int mouseAtRow = ttblList.rowAtPoint(e.getPoint());
-                    int[] rowSelecting = ttblList.getSelectedRows();
-                    int rowindex = ttblList.getSelectedRow();
-                    /*
-                     * If mouseAtRow in selecingRow then show menu
-                     * else select one record !
-                     */
-
-                    if (isRowInSelecting(mouseAtRow, rowSelecting)) {
-                        showMenu(e);
-                    } else {
-                        ttblList.setRowSelectionInterval(mouseAtRow, mouseAtRow);
-                        showMenu(e);
-                    }
-//                    } else {
-//                        ttblList.clearSelection();
-//                    }
-                    //                    if (mouseAtRow >= 0 && mouseAtRow < ttblList.getRowCount()) {
-                    //                    } else {
-                    //                        ttblList.clearSelection();
-                    //                    }
-                    //<editor-fold>
-                    //                    if (r >= 0 && r < ttblList.getRowCount()) {
-                    //                        ttblList.setRowSelectionInterval(r, r);
-                    //                        lastRelease = r;
-                    //                    } else {
-                    //                        ttblList.clearSelection();
-                    //                    }
-                    //</editor-fold>
-                    //                    if (rowindex < 0) {
-                    //                        return;
-                    //                    }
-                    {
-                    }
-                }
-            }
-        });
 
         //        ttblList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
@@ -177,12 +203,13 @@ public class MangaWatcherGUI extends javax.swing.JFrame {
         mnWatcherRename = new javax.swing.JMenuItem();
         mnWatcherRemove = new javax.swing.JMenuItem();
         mnWatcherAddHost = new javax.swing.JMenuItem();
-        popListManga = new javax.swing.JPopupMenu();
-        mnListAdd = new javax.swing.JMenuItem();
-        mnListEdit = new javax.swing.JMenuItem();
-        mnListRemove = new javax.swing.JMenuItem();
         popManga = new javax.swing.JPopupMenu();
-        mnMangaAdd = new javax.swing.JMenuItem();
+        mnListAdd = new javax.swing.JMenuItem();
+        mnMangaRemove = new javax.swing.JMenuItem();
+        mnMangaViewOnBrowser = new javax.swing.JMenuItem();
+        popChapter = new javax.swing.JPopupMenu();
+        mnChapterAdd = new javax.swing.JMenuItem();
+        mnChapterViewOnBrowser = new javax.swing.JMenuItem();
         popDownload = new javax.swing.JPopupMenu();
         mnDownloadStart = new javax.swing.JMenuItem();
         mnDownloadStop = new javax.swing.JMenuItem();
@@ -261,26 +288,39 @@ public class MangaWatcherGUI extends javax.swing.JFrame {
                 mnListAddActionPerformed(evt);
             }
         });
-        popListManga.add(mnListAdd);
+        popManga.add(mnListAdd);
 
-        mnListEdit.setText("Edit");
-        mnListEdit.addActionListener(new java.awt.event.ActionListener() {
+        mnMangaRemove.setText("Remove");
+        mnMangaRemove.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnListEditActionPerformed(evt);
+                mnMangaRemoveActionPerformed(evt);
             }
         });
-        popListManga.add(mnListEdit);
+        popManga.add(mnMangaRemove);
 
-        mnListRemove.setText("Remove");
-        popListManga.add(mnListRemove);
-
-        mnMangaAdd.setLabel("Add to download");
-        mnMangaAdd.addActionListener(new java.awt.event.ActionListener() {
+        mnMangaViewOnBrowser.setText("View in browser");
+        mnMangaViewOnBrowser.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnMangaAddActionPerformed(evt);
+                mnMangaViewOnBrowserActionPerformed(evt);
             }
         });
-        popManga.add(mnMangaAdd);
+        popManga.add(mnMangaViewOnBrowser);
+
+        mnChapterAdd.setLabel("Add to download");
+        mnChapterAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnChapterAddActionPerformed(evt);
+            }
+        });
+        popChapter.add(mnChapterAdd);
+
+        mnChapterViewOnBrowser.setText("View in browser");
+        mnChapterViewOnBrowser.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnChapterViewOnBrowserActionPerformed(evt);
+            }
+        });
+        popChapter.add(mnChapterViewOnBrowser);
 
         mnDownloadStart.setText("Start");
         mnDownloadStart.addActionListener(new java.awt.event.ActionListener() {
@@ -335,23 +375,9 @@ public class MangaWatcherGUI extends javax.swing.JFrame {
             }
         });
 
-        tblWatcher.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
         tblWatcher.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tblWatcherMouseClicked(evt);
-            }
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                tblWatcherMouseReleased(evt);
             }
         });
         jScrollPane2.setViewportView(tblWatcher);
@@ -391,6 +417,18 @@ public class MangaWatcherGUI extends javax.swing.JFrame {
 
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel4.setText("to");
+
+        spnFrom.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                spnFromStateChanged(evt);
+            }
+        });
+
+        spnTo.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                spnToStateChanged(evt);
+            }
+        });
 
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel5.setText("to");
@@ -467,17 +505,6 @@ public class MangaWatcherGUI extends javax.swing.JFrame {
                 .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 367, Short.MAX_VALUE))
         );
 
-        tblDownload.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
         jScrollPane3.setViewportView(tblDownload);
 
         javax.swing.GroupLayout pnlRightLeftLayout = new javax.swing.GroupLayout(pnlRightLeft);
@@ -571,9 +598,9 @@ public class MangaWatcherGUI extends javax.swing.JFrame {
             if (row != -1) {
                 currentWatcher = modelWatcher.getWatcherAt(row);
                 loadWatcher(currentWatcher);
+                loadAllChapterInWatcher(currentWatcher);
             }
         }
-
     }//GEN-LAST:event_tblWatcherMouseClicked
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -592,15 +619,13 @@ public class MangaWatcherGUI extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnAddWatcherActionPerformed
 
-    private void tblWatcherMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblWatcherMouseReleased
-        // on Right click
-    }//GEN-LAST:event_tblWatcherMouseReleased
-
     private void mnWatcherCheckActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnWatcherCheckActionPerformed
-        // Check all manga in watcher        
-
-        loadAllChapterInWatcher();
-
+        int[] arrTemp = tblWatcher.getSelectedRows();
+        Watcher[] arrWatcher = new Watcher[arrTemp.length];
+        for (int i = 0; i < arrTemp.length; i++) {
+            arrWatcher[i] = modelWatcher.getWatcherAt(arrTemp[i]);
+        }
+        loadAllChapterInWatcher(arrWatcher);
     }//GEN-LAST:event_mnWatcherCheckActionPerformed
 
     private void mnListAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnListAddActionPerformed
@@ -611,23 +636,12 @@ public class MangaWatcherGUI extends javax.swing.JFrame {
         actionClickOnRenameWatcher();
     }//GEN-LAST:event_mnWatcherRenameActionPerformed
 
-    private void mnListEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnListEditActionPerformed
-        int s = ttblList.getSelectedRow();
-        System.out.println("Selected: " + s);
-//        
-//        modelWatcher.get(ttblList.getSelectedRow())
-//        if ()
-
-    }//GEN-LAST:event_mnListEditActionPerformed
-
-    private void mnMangaAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnMangaAddActionPerformed
+    private void mnChapterAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnChapterAddActionPerformed
         addToDownloadList();
-    }//GEN-LAST:event_mnMangaAddActionPerformed
+    }//GEN-LAST:event_mnChapterAddActionPerformed
 
     private void mnDownloadStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnDownloadStartActionPerformed
-
         new Thread(new ListTaskDownloader(modelDownload.getListDownload(), modelDownload)).start();
-
     }//GEN-LAST:event_mnDownloadStartActionPerformed
 
     private void mnWatcherAddHostActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnWatcherAddHostActionPerformed
@@ -659,6 +673,36 @@ public class MangaWatcherGUI extends javax.swing.JFrame {
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         new AboutUsDiaglog(this, true).setVisible(true);
     }//GEN-LAST:event_jMenuItem2ActionPerformed
+
+    private void mnChapterViewOnBrowserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnChapterViewOnBrowserActionPerformed
+        String url = selectingChapers[0].getUrl();
+        viewOnBrowser(url);
+    }//GEN-LAST:event_mnChapterViewOnBrowserActionPerformed
+
+    private void mnMangaRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnMangaRemoveActionPerformed
+        throw new UnsupportedOperationException("Not support !");
+    }//GEN-LAST:event_mnMangaRemoveActionPerformed
+
+    private void mnMangaViewOnBrowserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnMangaViewOnBrowserActionPerformed
+        String url = selectingManga.getUrl();
+        viewOnBrowser(url);
+    }//GEN-LAST:event_mnMangaViewOnBrowserActionPerformed
+
+    private void spnFromStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_spnFromStateChanged
+        int valueFrom = (Integer) spnFrom.getValue();
+        int valueTo = (Integer) spnTo.getValue();
+        if (valueTo < valueFrom) {
+            spnTo.setValue(valueFrom);
+        }
+    }//GEN-LAST:event_spnFromStateChanged
+
+    private void spnToStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_spnToStateChanged
+        int valueFrom = (Integer) spnFrom.getValue();
+        int valueTo = (Integer) spnTo.getValue();
+        if (valueTo < valueFrom) {
+            spnFrom.setValue(valueTo);
+        }
+    }//GEN-LAST:event_spnToStateChanged
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddWatcher;
     private org.jdesktop.swingx.JXDatePicker cldFrom;
@@ -687,12 +731,13 @@ public class MangaWatcherGUI extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JPopupMenu.Separator jSeparator1;
+    private javax.swing.JMenuItem mnChapterAdd;
+    private javax.swing.JMenuItem mnChapterViewOnBrowser;
     private javax.swing.JMenuItem mnDownloadStart;
     private javax.swing.JMenuItem mnDownloadStop;
     private javax.swing.JMenuItem mnListAdd;
-    private javax.swing.JMenuItem mnListEdit;
-    private javax.swing.JMenuItem mnListRemove;
-    private javax.swing.JMenuItem mnMangaAdd;
+    private javax.swing.JMenuItem mnMangaRemove;
+    private javax.swing.JMenuItem mnMangaViewOnBrowser;
     private javax.swing.JMenuItem mnWatcherAddHost;
     private javax.swing.JMenuItem mnWatcherCheck;
     private javax.swing.JMenuItem mnWatcherRemove;
@@ -701,8 +746,8 @@ public class MangaWatcherGUI extends javax.swing.JFrame {
     private javax.swing.JPanel pnlLeft;
     private javax.swing.JPanel pnlRightLeft;
     private javax.swing.JPanel pnlRightTop;
+    private javax.swing.JPopupMenu popChapter;
     private javax.swing.JPopupMenu popDownload;
-    private javax.swing.JPopupMenu popListManga;
     private javax.swing.JPopupMenu popManga;
     private javax.swing.JPopupMenu popWatcher;
     private javax.swing.JSpinner spnFrom;
@@ -719,7 +764,7 @@ public class MangaWatcherGUI extends javax.swing.JFrame {
             modelManga = new WatcherMangaTreeTableModel();
             modelManga.initFromWatcher(w);
             ttblList.setTreeTableModel(modelManga);
-            initColumnForTreeTable();
+            initColumnModelForTreeTable();
         } else {
             ttblList.setTreeTableModel(new DefaultTreeTableModel());
             modelManga.initFromWatcher(w);
@@ -760,18 +805,34 @@ public class MangaWatcherGUI extends javax.swing.JFrame {
         }
     }
 
-    private void loadAllChapterInWatcher() {
-        if (currentWatcher != null) {
-            List<Manga> lstManga = currentWatcher.getLstManga();
-            for (final Manga m : lstManga) {
-                new Thread(new Runnable() {
+    private void loadAllChapterInWatcher(final Watcher w) {
+        new Thread(new Runnable() {
 
-                    @Override
-                    public void run() {
-                        m.loadChapter();
-                    }
-                }).start();
+            @Override
+            public void run() {
+                w.loadChapers();
             }
+        }).start();
+
+    }
+
+    private void loadAllChapterInWatcher(final Watcher[] arrWatchers) {
+        if (arrWatchers != null && arrWatchers.length != 0) {
+            MultitaskJob.doTask(DEFAULT_POOL_LOAD, new ArrayList<Callable<Boolean>>() {
+
+                {
+                    for (final Watcher w : arrWatchers) {
+                        add(new Callable<Boolean>() {
+
+                            @Override
+                            public Boolean call() throws Exception {
+                                loadAllChapterInWatcher(w);
+                                return true;
+                            }
+                        });
+                    }
+                }
+            });
         }
     }
 
@@ -806,4 +867,11 @@ public class MangaWatcherGUI extends javax.swing.JFrame {
         modelWatcher.fireTableDataChanged();
         System.out.println("Renamed to " + w.getName());
     }
+
+    private void viewOnBrowser(String url) {
+        if (!GUIUtilities.openLink(url)) {
+            GUIUtilities.showError(this, "Your OS not support browse action!");
+        }
+    }
+    private static final int DEFAULT_POOL_LOAD = 3;
 }

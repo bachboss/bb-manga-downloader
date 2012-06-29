@@ -5,6 +5,11 @@
 package bbmangadownloader.ult;
 
 import java.awt.Component;
+import java.awt.Desktop;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -34,5 +39,20 @@ public class GUIUtilities {
         } else {
             return path;
         }
+    }
+
+    public static boolean openLink(String url) {
+        if (Desktop.isDesktopSupported()) {
+            Desktop desktop = java.awt.Desktop.getDesktop();
+            if (desktop.isSupported(Desktop.Action.BROWSE)) {
+                try {
+                    desktop.browse(new URI(url));
+                    return true;
+                } catch (Exception ex) {
+                    return false;
+                }
+            }
+        }
+        return false;
     }
 }

@@ -15,7 +15,7 @@ import javax.swing.table.AbstractTableModel;
 public class WatcherTableModel extends AbstractTableModel implements MyTableModelSortable<Watcher> {
 
     private List<Watcher> listWatcher;
-    private static String[] COLUMNS = {"Watcher", "Count"};
+    private static String[] COLUMNS = {"Watcher", "New"};
     private boolean isAsc = true;
 
     public WatcherTableModel() {
@@ -49,9 +49,10 @@ public class WatcherTableModel extends AbstractTableModel implements MyTableMode
     public Object getDisplayDataAtColumn(int column, Watcher w) {
         switch (column) {
             case (0):
-                return w.getName();
+                return w.getName() + " (" + w.getMangaCount() + ")";
             case (1):
-                return w.getMangaCount();
+                WatcherStatus s = w.getWatcherStatus();
+                return (s == WatcherStatus.Loaded) ? w.getNewestChapter() : s.toString();
         }
         return null;
     }
@@ -61,8 +62,8 @@ public class WatcherTableModel extends AbstractTableModel implements MyTableMode
         switch (column) {
             case (0):
                 return w.getName();
-            case (1):
-                return w.getMangaCount();
+            case (2):
+                return w.getNewestChapter();
         }
         return null;
     }
