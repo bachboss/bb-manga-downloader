@@ -55,8 +55,6 @@ public class VnSharing extends KissManga { // Done
 
     @Override
     protected Document getDocument(String url) throws IOException {
-        System.out.println("Get Document of VnSharing");
-
         if (fromPicasaCookieValue == -1) {
             fromPicasaCookieValue = (ConfigManager.getCurrentInstance().getBooleanProperty(CONFIG_PICASA))
                     ? 0 : 1;
@@ -64,7 +62,7 @@ public class VnSharing extends KissManga { // Done
         if (fromPicasaCookieValue == 0) {
             return HttpDownloadManager.getDocument(url);
         } else {
-            return HttpDownloadManager.getDocument(url, new HashMap<String, String>() {
+            return HttpDownloadManager.getDocumentWithCookie(url, new HashMap<String, String>() {
 
                 {
                     put(COOKIES_PICASA, Integer.toString(fromPicasaCookieValue));
@@ -73,12 +71,63 @@ public class VnSharing extends KissManga { // Done
         }
     }
 
+    private Document getDocumentInPostForm(final String seoValue) throws IOException {
+        return HttpDownloadManager.getDocumentWithCookieAndPostForm("http://truyen.vnsharing.net/Manga/GetChapterListOfManga",
+                null,
+                new HashMap<String, String>() {
+
+                    {
+                        put("mangaSeoName", seoValue);
+                    }
+                });
+    }
+
     @Override
     public List<Chapter> getAllChapters(Manga manga) throws IOException {
         ArrayList<Chapter> lstChapter = new ArrayList<>();
-
         Document doc = getDocument(manga.getUrl());
-        Elements xmlNodes = doc.select("div[class=barContent chapterList] table[class=listing] tr");
+        {
+            // Get Translator;
+            String translator = DEFAULT_TRANS;
+            {
+                Elements xmlNodes = doc.select("span[class=info]");
+                for (Element e : xmlNodes) {
+                    if (e.text().contains("Nhóm dịch")) {
+                        translator = e.nextElementSibling().text();
+                        break;
+                    }
+                }
+            }
+            // First, parse data in the table. 
+            Elements xmlNodes = doc.select("div[class=barContent chapterList] table[class=listing] tr");
+            lstChapter.addAll(getChapterInTable(xmlNodes, manga, translator));
+        }
+        {
+            // Get all the others in POST form...
+            String[] seoTmpArr;
+            String[] trans;
+            {
+                Elements xmlNodes = doc.select(" a[seoName]");
+                seoTmpArr = new String[xmlNodes.size()];
+                trans = new String[seoTmpArr.length];
+                for (int i = 0; i < xmlNodes.size(); i++) {
+                    Element e = xmlNodes.get(i);
+                    seoTmpArr[i] = e.attr("seoName");
+                    trans[i] = e.parent().parent().parent().firstElementSibling().child(0).text();
+                }
+            }
+
+            for (int i = 0; i < seoTmpArr.length; i++) {
+                doc = getDocumentInPostForm(seoTmpArr[i]);
+                Elements xmlNodes = doc.select("table[class=listing] tr");
+                lstChapter.addAll(getChapterInTable(xmlNodes, manga, trans[i]));
+            }
+        }
+        return lstChapter;
+    }
+
+    private ArrayList<Chapter> getChapterInTable(Elements xmlNodes, Manga manga, String translator) {
+        ArrayList<Chapter> lstChapter = new ArrayList<>();
         for (Element e : xmlNodes) {
             if (e.children().size() != 3) {
                 continue;
@@ -99,7 +148,7 @@ public class VnSharing extends KissManga { // Done
             }
 
             Chapter c = new Chapter(-1, aTag.html(), BASED_URL + aTag.attr("href"), manga,
-                    DEFAULT_TRANS, date);
+                    translator, date);
             lstChapter.add(c);
         }
         return lstChapter;

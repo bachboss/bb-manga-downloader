@@ -53,7 +53,7 @@ public class WatcherMangaTreeTableModel extends AbstractTreeTableModel {
                 case 4:
                     return m.manga.getURL();
                 default:
-                    return "";
+                    return "---";
             }
         } else if (o instanceof Chapter) {
             Chapter c = (Chapter) o;

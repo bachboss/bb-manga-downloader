@@ -4,10 +4,10 @@
  */
 package bbmangadownloader.faces;
 
+import bbmangadownloader.entity.Server;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Set;
-import bbmangadownloader.entity.Server;
 
 /**
  *
@@ -18,7 +18,8 @@ public class ServerManager {
 
     private static final HashMap<String, Server> mapServer = new HashMap<>();
 
-    static {
+    public static void loadServer() {
+        System.out.println("Loading servers...");
         ServerFacadeManager.loadData();
         Set<Entry<String, IFacadeMangaServer>> set = ServerFacadeManager.MAP_HOST.entrySet();
         for (Entry<String, IFacadeMangaServer> entry : set) {

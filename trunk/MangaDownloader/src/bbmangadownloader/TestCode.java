@@ -4,6 +4,15 @@
  */
 package bbmangadownloader;
 
+import bbmangadownloader.config.ConfigManager;
+import bbmangadownloader.entity.Chapter;
+import bbmangadownloader.entity.Manga;
+import bbmangadownloader.entity.Server;
+import bbmangadownloader.faces.IFacadeMangaServer;
+import bbmangadownloader.faces.ServerManager;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author Bach
@@ -11,6 +20,27 @@ package bbmangadownloader;
 public class TestCode {
 
     public static void main(String[] args) throws Exception {
+        ConfigManager.loadOnStartUp();
+        ServerManager.loadServer();
+        Server server = ServerManager.getServerByName("VnSharing");
+        IFacadeMangaServer facade = server.getMangaServer();
+
+        String[] lstUrl = new String[]{
+            "http://truyen.vnsharing.net/Truyen/Bakuman"
+        };
+        List<Chapter> lstC = new ArrayList<>();
+
+        for (String str : lstUrl) {
+            List<Chapter> lstChapter = facade.getAllChapters(new Manga(server, "",
+                    str));
+            lstC.addAll(lstChapter);
+        }
+        System.out.println("--------------------------------------------------");
+        for (Chapter c : lstC) {
+            System.out.format("%-60s\t%-15s\t%s\n", c.getDisplayName(), c.getTranslator(), c.getUrl());
+        }
+
+
         //        MangaInn m = new MangaInn();
         //        List<Chapter> lst = m.getAllChapters(new Manga(
         //                new Server(new FacadeMangaInn()), "", "http://localhost/mangainn.hunter.html"));
@@ -33,37 +63,6 @@ public class TestCode {
         //
         //        System.out.println(xmlNodes.size());
         //        System.out.println("Total: " + xmlNodes.size());
-        //        Element node = xmlNode.get(0);
-        //        String url = VietBoom.BASED_URL + node.attr("href");
-        //        url = url.substring(0, url.length() - 1);
-        //
-        //        int page = 0;
-        //        boolean isHasNextPage = true;
-        //        while (isHasNextPage) {
-        //            page++;
-        //            doc = DownloadManager.getDocument(url + page);
-        //            xmlNode = (Elements) doc.select("div[class=cellChapter] a");
-        //            if (xmlNode.isEmpty()) {
-        //                isHasNextPage = false;
-        //            } else {
-        //                for (Iterator<Element> it = xmlNode.iterator(); it.hasNext();) {
-        //                    Element e = it.next();
-        //                    System.out.println(e);
-        //                }
-        //            }
-        //        }
-        //        System.out.println(xmlNode);
-        //
-        //            for (String str : arrStr) {
-        //                System.out.println(str);
-        //            }
-        //            Iterator<Element> iElement = xmlNode.iterator();
-        //            while (iElement.hasNext()) {
-        //                Element e = iElement.next();
-        //                System.out.println(e);
-        //            }
-        //        } catch (IOException ex) {
-        //            Logger.getLogger(bbmangadownloader.class.getName()).log(Level.SEVERE, null, ex);
-        //        }
+        //       
     }
 }

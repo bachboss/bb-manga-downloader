@@ -21,8 +21,11 @@ import java.util.List;
 public class CacheBuilder {
 
     public static void main(String[] args) throws Exception {
-        String serverUrl = "http://truyentranhtuan.com";
-        String serverName = "TruyenTranhTuan";
+        ConfigManager.loadOnStartUp();
+        ServerManager.loadServer();
+
+        String serverUrl = "http://truyen.vnsharing.net/";
+        String serverName = "VnSharing";
 
         File folderCache = new File("D:\\Manga\\Cache\\", serverName);
         folderCache.mkdirs();

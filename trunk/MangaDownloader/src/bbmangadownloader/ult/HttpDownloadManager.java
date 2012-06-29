@@ -5,6 +5,7 @@
 package bbmangadownloader.ult;
 
 import bbmangadownloader.MangaDownloader;
+import java.io.DataOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.*;
@@ -89,6 +90,15 @@ public class HttpDownloadManager {
     }
 //</editor-fold>
 
+    private static String getStringFromForms(Map<String, String> postForm) {
+        StringBuilder sb = new StringBuilder();
+        for (Map.Entry<String, String> item : postForm.entrySet()) {
+            sb.append(item.getKey()).append("=").append(item.getValue()).append("&");
+        }
+        sb.deleteCharAt(sb.length() - 1);
+        return sb.toString();
+    }
+
     private static String getStringFromCookies(Map<String, String> cookies) {
         StringBuilder sb = new StringBuilder();
         for (Map.Entry<String, String> item : cookies.entrySet()) {
@@ -98,7 +108,7 @@ public class HttpDownloadManager {
     }
 
     private static Document getDocumentFromUrl(
-            URL url, Map<String, String> cookies, int connectTimeOut, int readTimeOut, boolean isUseProxy)
+            URL url, Map<String, String> cookies, Map<String, String> postForm, int connectTimeOut, int readTimeOut, boolean isUseProxy)
             throws IOException {
 //        System.out.println("Is Use Proxy (?): " + isUseProxy);
         HttpDownloadManager dlmng = getCurrentInstance();
@@ -116,6 +126,19 @@ public class HttpDownloadManager {
             uc.setRequestProperty("cookie", c);
             uc.setRequestProperty("set-cookie", c);
         }
+
+        if (postForm != null) {
+            uc.setRequestMethod("POST");
+            uc.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+            uc.setDoOutput(true);
+            String c = getStringFromForms(postForm);
+            try (DataOutputStream wr = new DataOutputStream(
+                            uc.getOutputStream())) {
+                wr.writeBytes(c);
+                wr.flush();
+            }
+        }
+
         uc.setReadTimeout(readTimeOut);
         uc.setConnectTimeout(connectTimeOut);
 
@@ -124,11 +147,15 @@ public class HttpDownloadManager {
     }
 
     public static Document getDocument(String url) throws IOException {
-        return getDocument(url, null);
-
+        return getDocumentWithCookieAndPostForm(url, null, null);
     }
 
-    public static Document getDocument(String strUrl, Map<String, String> cookies) throws IOException {
+    public static Document getDocumentWithCookie(String url, Map<String, String> cookies) throws IOException {
+        return getDocumentWithCookieAndPostForm(url, cookies, null);
+    }
+
+    public static Document getDocumentWithCookieAndPostForm(String strUrl, Map<String, String> cookies,
+            Map<String, String> postForm) throws IOException {
         IOException lastEx = null;
         int connectTimeOut;
         int readTimeOut;
@@ -155,6 +182,7 @@ public class HttpDownloadManager {
                     // Download Here !
                     Document doc = getDocumentFromUrl(fileUrl,
                             cookies,
+                            postForm,
                             connectTimeOut,
                             readTimeOut,
                             isUseProxy);

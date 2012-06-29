@@ -4,18 +4,6 @@
  */
 package bbmangadownloader.gui;
 
-import comichtmlgender.HTMLGenerator;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.*;
-import javax.swing.table.TableColumnModel;
-import bbmangadownloader.cache.CacheLoader;
-import bbmangadownloader.config.ConfigManager;
 import bbmangadownloader.database.Database;
 import bbmangadownloader.database.entity.LinkWatcherLinkms;
 import bbmangadownloader.database.entity.Watchers;
@@ -26,6 +14,17 @@ import bbmangadownloader.gui.model.ChapterDownloadModel;
 import bbmangadownloader.gui.model.Watcher;
 import bbmangadownloader.gui.model.WatcherMangaTreeTableModel;
 import bbmangadownloader.gui.model.WatcherTableModel;
+import comichtmlgender.HTMLGenerator;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JTable;
+import javax.swing.SwingUtilities;
+import javax.swing.table.TableColumnModel;
 import org.jdesktop.swingx.treetable.DefaultTreeTableModel;
 
 /**
@@ -38,7 +37,7 @@ public class MangaWatcherGUI extends javax.swing.JFrame {
     private WatcherMangaTreeTableModel modelManga;
     private ChapterDownloadModel modelDownload;
     private Watcher currentWatcher;
-    private Manga selectingManga;
+//    private Manga selectingManga;
     private Chapter[] selectingChapers;
     private SearchMangaDialog searchManga;
 
@@ -83,47 +82,75 @@ public class MangaWatcherGUI extends javax.swing.JFrame {
 
         ttblList.addMouseListener(new MouseAdapter() {
 
-            int lastRelease = -1;
+            private boolean isRowInSelecting(int value, int[] arrValue) {
+                for (int i : arrValue) {
+                    if (value == i) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+            private void showMenu(MouseEvent e) {
+                if (e.isPopupTrigger() && e.getComponent() instanceof JTable) {
+                    Object o = ttblList.getValueAt(ttblList.getSelectedRow(), -1);
+                    if (o instanceof Manga) {
+//                            selectingManga = (Manga) o;
+                        popListManga.show(e.getComponent(), e.getX(), e.getY());
+                        System.out.println();
+                    } else if (o instanceof Chapter) {
+                        int[] arrInt = ttblList.getSelectedRows();
+                        ArrayList<Chapter> arrTemp = new ArrayList<>();
+                        for (int i : arrInt) {
+                            Object o2 = ttblList.getValueAt(i, -1);
+                            if (o2 instanceof Chapter) {
+                                arrTemp.add((Chapter) o2);
+                            }
+                        }
+                        selectingChapers = (Chapter[]) arrTemp.toArray(new Chapter[0]);
+                        if (selectingChapers.length != 0) {
+                            popManga.show(e.getComponent(), e.getX(), e.getY());
+                        }
+                    }
+                }
+            }
 
             @Override
             public void mouseReleased(MouseEvent e) {
                 if (SwingUtilities.isRightMouseButton(e)) {
-                    int r = ttblList.rowAtPoint(e.getPoint());
-//                    if (lastRelease == -1) {
-//                        lastRelease = r;
-//                    }
-                    if (r >= 0 && r < ttblList.getRowCount()) {
-                        ttblList.setRowSelectionInterval(r, r);
-                        lastRelease = r;
-                    } else {
-                        ttblList.clearSelection();
-                    }
-
+                    int mouseAtRow = ttblList.rowAtPoint(e.getPoint());
+                    int[] rowSelecting = ttblList.getSelectedRows();
                     int rowindex = ttblList.getSelectedRow();
-                    if (rowindex < 0) {
-                        return;
-                    }
+                    /*
+                     * If mouseAtRow in selecingRow then show menu
+                     * else select one record !
+                     */
 
-                    if (e.isPopupTrigger() && e.getComponent() instanceof JTable) {
-                        Object o = ttblList.getValueAt(ttblList.getSelectedRow(), -1);
-                        if (o instanceof Manga) {
-                            selectingManga = (Manga) o;
-                            popListManga.show(e.getComponent(), e.getX(), e.getY());
-                            System.out.println();
-                        } else if (o instanceof Chapter) {
-                            int[] arrInt = ttblList.getSelectedRows();
-                            ArrayList<Chapter> arrTemp = new ArrayList<>();
-                            for (int i : arrInt) {
-                                Object o2 = ttblList.getValueAt(i, -1);
-                                if (o2 instanceof Chapter) {
-                                    arrTemp.add((Chapter) o2);
-                                }
-                            }
-                            selectingChapers = (Chapter[]) arrTemp.toArray(new Chapter[0]);
-                            if (selectingChapers.length != 0) {
-                                popManga.show(e.getComponent(), e.getX(), e.getY());
-                            }
-                        }
+                    if (isRowInSelecting(mouseAtRow, rowSelecting)) {
+                        showMenu(e);
+                    } else {
+                        ttblList.setRowSelectionInterval(mouseAtRow, mouseAtRow);
+                        showMenu(e);
+                    }
+//                    } else {
+//                        ttblList.clearSelection();
+//                    }
+                    //                    if (mouseAtRow >= 0 && mouseAtRow < ttblList.getRowCount()) {
+                    //                    } else {
+                    //                        ttblList.clearSelection();
+                    //                    }
+                    //<editor-fold>
+                    //                    if (r >= 0 && r < ttblList.getRowCount()) {
+                    //                        ttblList.setRowSelectionInterval(r, r);
+                    //                        lastRelease = r;
+                    //                    } else {
+                    //                        ttblList.clearSelection();
+                    //                    }
+                    //</editor-fold>
+                    //                    if (rowindex < 0) {
+                    //                        return;
+                    //                    }
+                    {
                     }
                 }
             }
@@ -566,7 +593,6 @@ public class MangaWatcherGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAddWatcherActionPerformed
 
     private void tblWatcherMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblWatcherMouseReleased
-        // TODO add your handling code here:
         // on Right click
     }//GEN-LAST:event_tblWatcherMouseReleased
 

@@ -4,13 +4,13 @@
  */
 package bbmangadownloader.faces;
 
+import bbmangadownloader.config.ConfigManager;
+import bbmangadownloader.faces.implement.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import bbmangadownloader.config.ConfigManager;
-import bbmangadownloader.faces.implement.*;
 
 /**
  *
@@ -21,6 +21,7 @@ public class ServerFacadeManager {
     public static final HashMap<String, IFacadeMangaServer> MAP_HOST = new HashMap<>();
 
     public static void loadData() {
+        System.out.println("Loading Facade...");
         // Add Data
         MAP_HOST.put("vechai", new FacadeVeChai());
         MAP_HOST.put("eatmanga", new FacadeEatManga());

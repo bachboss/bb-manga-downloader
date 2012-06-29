@@ -66,36 +66,38 @@ public class BuildDB {
 //        createDatabase();
 //    }
     public static void main(String[] args) {
+        ConfigManager.loadOnStartUp();
+        ServerManager.loadServer();
 
         String[] arrPU = new String[]{
-            "bbmangadownloaderDerbyPU", "bbmangadownloaderSQLPU"
+            "MangaDownloaderDerbyPU", "MangaDownloaderSQLPU"
         };
         Database.persitenceUnitPU = arrPU[0];
 
         ConfigManager.loadOnStartUp();
 
         String[] serverUrls = {
-            "http://www.batoto.net",
-            "http://eatmanga.com",
-            "http://kissmanga.com",
-            "http://mangafox.me",
-            "http://mangainn.com",
-            "http://www.mangareader.net",
-            "http://truyentranhtuan.com",
+            //            "http://www.batoto.net",
+            //            "http://eatmanga.com",
+            //            "http://kissmanga.com",
+            //            "http://mangafox.me",
+            //            "http://mangainn.com",
+            //            "http://www.mangareader.net",
+            //            "http://truyentranhtuan.com",
             "http://truyen.vnsharing.net"
         };
         String[] serverNames = {
-            "Batoto",
-            "EatManga",
-            "KissManga",
-            "MangaFox",
-            "MangaInn",
-            "MangaReader",
-            "TruyenTranhTuan",
+            //            "Batoto",
+            //            "EatManga",
+            //            "KissManga",
+            //            "MangaFox",
+            //            "MangaInn",
+            //            "MangaReader",
+            //            "TruyenTranhTuan",
             "VnSharing"
         };
         int mangaCounter = 0;
-        for (int i = 6; i <= 6; i++) {
+        for (int i = 0; i < serverNames.length; i++) {
 
             String serverUrl = serverUrls[i];
             String serverName = serverNames[i];
