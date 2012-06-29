@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package mangadownloader.database.entity;
+package bbmangadownloader.database.entity;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -122,7 +122,7 @@ public class LinkMangaServer implements Serializable {
 
     @Override
     public String toString() {
-        return "mangadownloader.database.entity.LinkMangaServer[ lMsId=" + lMsId + " ]";
+        return "bbmangadownloader.database.entity.LinkMangaServer[ lMsId=" + lMsId + " ]";
     }
     
 }

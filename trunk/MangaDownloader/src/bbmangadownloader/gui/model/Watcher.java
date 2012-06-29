@@ -2,13 +2,13 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package mangadownloader.gui.model;
+package bbmangadownloader.gui.model;
 
 import java.util.ArrayList;
 import java.util.List;
-import mangadownloader.database.entity.LinkWatcherLinkms;
-import mangadownloader.database.entity.Watchers;
-import mangadownloader.entity.Manga;
+import bbmangadownloader.database.entity.LinkWatcherLinkms;
+import bbmangadownloader.database.entity.Watchers;
+import bbmangadownloader.entity.Manga;
 
 /**
  *

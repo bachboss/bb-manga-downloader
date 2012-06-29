@@ -2,12 +2,12 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package mangadownloader.faces;
+package bbmangadownloader.faces;
 
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Set;
-import mangadownloader.entity.Server;
+import bbmangadownloader.entity.Server;
 
 /**
  *

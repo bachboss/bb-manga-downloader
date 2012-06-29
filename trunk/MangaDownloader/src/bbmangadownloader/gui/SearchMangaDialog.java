@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package mangadownloader.gui;
+package bbmangadownloader.gui;
 
 import java.awt.Component;
 import java.awt.event.KeyEvent;
@@ -11,12 +11,12 @@ import java.util.List;
 import java.util.regex.Pattern;
 import javax.swing.JTextField;
 import javax.swing.table.TableRowSorter;
-import mangadownloader.cache.CacheLoader;
-import mangadownloader.database.Database;
-import mangadownloader.database.entity.LinkMangaServer;
-import mangadownloader.entity.Manga;
-import mangadownloader.gui.model.MangaTableModel;
-import mangadownloader.gui.model.Watcher;
+import bbmangadownloader.cache.CacheLoader;
+import bbmangadownloader.database.Database;
+import bbmangadownloader.database.entity.LinkMangaServer;
+import bbmangadownloader.entity.Manga;
+import bbmangadownloader.gui.model.MangaTableModel;
+import bbmangadownloader.gui.model.Watcher;
 import org.jdesktop.swingx.sort.RowFilters;
 
 /**

@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package mangadownloader.database.entity;
+package bbmangadownloader.database.entity;
 
 import java.io.Serializable;
 import javax.persistence.*;
@@ -85,7 +85,7 @@ public class LinkWatcherLinkms implements Serializable {
 
     @Override
     public String toString() {
-        return "mangadownloader.database.entity.LinkWatcherLinkms[ lWlId=" + lWlId + " ]";
+        return "bbmangadownloader.database.entity.LinkWatcherLinkms[ lWlId=" + lWlId + " ]";
     }
     
 }

@@ -2,9 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package mangadownloader.bus.model.data;
+package bbmangadownloader.bus.model.data;
 
-import mangadownloader.entity.Chapter;
+import bbmangadownloader.entity.Chapter;
 
 /**
  *

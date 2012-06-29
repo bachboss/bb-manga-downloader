@@ -1,7 +1,7 @@
 ----------------------------------------------------------------
-Fri Jun 29 01:45:00 ICT 2012:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.8.2.2 - (1181258): instance a816c00e-0138-3469-1bbe-000008937400 
-on database directory D:\Manga\DB  with class loader sun.misc.Launcher$AppClassLoader@22652552 
+Fri Jun 29 14:01:25 ICT 2012:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.8.2.2 - (1181258): instance a816c00e-0138-370b-5475-0000062eede0 
+on database directory D:\Manga\DB  with class loader sun.misc.Launcher$AppClassLoader@24dbf79d 
 Loaded from file:/D:/Java_Project/My%20Project/MangaDownloader/lib/Derby/derby.jar
 java.vendor=Oracle Corporation
 java.runtime.version=1.7.0_03-b05

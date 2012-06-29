@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package mangadownloader.gui;
+package bbmangadownloader.gui;
 
 import comichtmlgender.HTMLGenerator;
 import java.awt.Rectangle;
@@ -16,19 +16,19 @@ import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumnModel;
-import mangadownloader.bus.model.data.DownloadTask;
-import mangadownloader.entity.Chapter;
-import mangadownloader.entity.Manga;
-import mangadownloader.entity.Server;
-import mangadownloader.faces.IFacadeMangaServer;
-import mangadownloader.faces.ServerFacadeManager;
-import mangadownloader.gui.bus.ListTaskDownloader;
-import mangadownloader.gui.model.ChapterDownloadModel;
-import mangadownloader.gui.model.ChapterModel;
-import mangadownloader.gui.model.MyColumnSorter;
-import mangadownloader.gui.model.MyTableModelSortable;
-import mangadownloader.ult.GUIUtilities;
-import mangadownloader.ult.HttpDownloadManager;
+import bbmangadownloader.bus.model.data.DownloadTask;
+import bbmangadownloader.entity.Chapter;
+import bbmangadownloader.entity.Manga;
+import bbmangadownloader.entity.Server;
+import bbmangadownloader.faces.IFacadeMangaServer;
+import bbmangadownloader.faces.ServerFacadeManager;
+import bbmangadownloader.gui.bus.ListTaskDownloader;
+import bbmangadownloader.gui.model.ChapterDownloadModel;
+import bbmangadownloader.gui.model.ChapterModel;
+import bbmangadownloader.gui.model.MyColumnSorter;
+import bbmangadownloader.gui.model.MyTableModelSortable;
+import bbmangadownloader.ult.GUIUtilities;
+import bbmangadownloader.ult.HttpDownloadManager;
 
 /**
  *

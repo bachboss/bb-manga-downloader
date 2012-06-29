@@ -2,15 +2,15 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package mangadownloader.ult;
+package bbmangadownloader.ult;
 
+import bbmangadownloader.MangaDownloader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.*;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import bbmangadownloader.MangaDownloader;
 import org.apache.commons.codec.EncoderException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

@@ -4,14 +4,17 @@
  */
 package bbmangadownloader;
 
-import java.io.*;
+import bbmangadownloader.config.ConfigManager;
+import bbmangadownloader.database.Database;
+import bbmangadownloader.database.entity.Mangas;
+import bbmangadownloader.entity.Manga;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import mangadownloader.config.ConfigManager;
-import mangadownloader.database.Database;
-import mangadownloader.database.entity.Mangas;
-import mangadownloader.entity.Manga;
 
 /**
  *
@@ -22,7 +25,7 @@ public class MangaDownloader {
     public static void main(String[] args) {
 
         String[] arrPU = new String[]{
-            "MangaDownloaderDerbyPU", "MangaDownloaderSQLPU"
+            "bbmangadownloaderDerbyPU", "bbmangadownloaderSQLPU"
         };
         Database.persitenceUnitPU = arrPU[1];
 

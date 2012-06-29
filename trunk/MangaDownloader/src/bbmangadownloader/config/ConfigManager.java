@@ -2,14 +2,14 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package mangadownloader.config;
+package bbmangadownloader.config;
 
 import java.io.*;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import mangadownloader.ult.HttpDownloadManager;
-import mangadownloader.ult.FileManager;
+import bbmangadownloader.ult.HttpDownloadManager;
+import bbmangadownloader.ult.FileManager;
 
 /**
  *

@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package mangadownloader.ult;
+package bbmangadownloader.ult;
 
 import java.awt.Component;
 import javax.swing.JOptionPane;
@@ -22,8 +22,8 @@ public class GUIUtilities {
     }
 
     public static void showLog(String text) {
-        if (mangadownloader.gui.MangaDownloadGUI.lblOutput != null) {
-            mangadownloader.gui.MangaDownloadGUI.lblOutput.setText(text);
+        if (bbmangadownloader.gui.MangaDownloadGUI.lblOutput != null) {
+            bbmangadownloader.gui.MangaDownloadGUI.lblOutput.setText(text);
         }
     }
 

@@ -2,13 +2,13 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package mangadownloader.bus;
+package bbmangadownloader.bus;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import mangadownloader.bus.description.ABusPageBasedDefaultChapPageImage;
-import mangadownloader.entity.*;
+import bbmangadownloader.bus.description.ABusPageBasedDefaultChapPageImage;
+import bbmangadownloader.entity.*;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;

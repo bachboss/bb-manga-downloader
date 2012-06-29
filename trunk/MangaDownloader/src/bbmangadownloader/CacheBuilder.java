@@ -4,16 +4,15 @@
  */
 package bbmangadownloader;
 
+import bbmangadownloader.config.ConfigManager;
+import bbmangadownloader.entity.Manga;
+import bbmangadownloader.entity.Server;
+import bbmangadownloader.faces.IFacadeMangaServer;
+import bbmangadownloader.faces.ServerManager;
+import bbmangadownloader.faces.SupportType;
+import bbmangadownloader.ult.MyUtilities;
 import java.io.*;
 import java.util.List;
-import mangadownloader.config.ConfigManager;
-import mangadownloader.entity.Manga;
-import mangadownloader.entity.Server;
-import mangadownloader.faces.IFacadeMangaServer;
-import mangadownloader.faces.ServerFacadeManager;
-import mangadownloader.faces.ServerManager;
-import mangadownloader.faces.SupportType;
-import mangadownloader.ult.MyUtilities;
 
 /**
  *

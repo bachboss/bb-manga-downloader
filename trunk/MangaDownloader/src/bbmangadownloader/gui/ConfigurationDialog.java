@@ -2,17 +2,17 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package mangadownloader.gui;
+package bbmangadownloader.gui;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import mangadownloader.config.ConfigManager;
-import mangadownloader.ult.HttpDownloadManager;
-import mangadownloader.ult.FileManager;
-import mangadownloader.ult.GUIUtilities;
+import bbmangadownloader.config.ConfigManager;
+import bbmangadownloader.ult.HttpDownloadManager;
+import bbmangadownloader.ult.FileManager;
+import bbmangadownloader.ult.GUIUtilities;
 
 /**
  *

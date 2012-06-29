@@ -2,14 +2,14 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package mangadownloader.bus;
+package bbmangadownloader.bus;
 
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.*;
-import mangadownloader.bus.description.ABusPageBasedDefaultChapImage;
-import mangadownloader.entity.*;
-import mangadownloader.ult.DateTimeUtilities;
+import bbmangadownloader.bus.description.ABusPageBasedDefaultChapImage;
+import bbmangadownloader.entity.*;
+import bbmangadownloader.ult.DateTimeUtilities;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;

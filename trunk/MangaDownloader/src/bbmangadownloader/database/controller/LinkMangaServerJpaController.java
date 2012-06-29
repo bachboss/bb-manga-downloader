@@ -2,22 +2,22 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package mangadownloader.database.controller;
+package bbmangadownloader.database.controller;
 
+import bbmangadownloader.database.controller.exceptions.NonexistentEntityException;
+import bbmangadownloader.database.entity.LinkMangaServer;
 import java.io.Serializable;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import mangadownloader.database.entity.Servers;
-import mangadownloader.database.entity.Mangas;
-import mangadownloader.database.entity.LinkWatcherLinkms;
+import bbmangadownloader.database.entity.Servers;
+import bbmangadownloader.database.entity.Mangas;
+import bbmangadownloader.database.entity.LinkWatcherLinkms;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import mangadownloader.database.controller.exceptions.NonexistentEntityException;
-import mangadownloader.database.entity.LinkMangaServer;
 
 /**
  *
@@ -52,7 +52,7 @@ public class LinkMangaServerJpaController implements Serializable {
                 LMsManga = em.getReference(LMsManga.getClass(), LMsManga.getMId());
                 linkMangaServer.setLMsManga(LMsManga);
             }
-            List<LinkWatcherLinkms> attachedLinkWatcherLinkmsList = new ArrayList<>();
+            List<LinkWatcherLinkms> attachedLinkWatcherLinkmsList = new ArrayList<LinkWatcherLinkms>();
             for (LinkWatcherLinkms linkWatcherLinkmsListLinkWatcherLinkmsToAttach : linkMangaServer.getLinkWatcherLinkmsList()) {
                 linkWatcherLinkmsListLinkWatcherLinkmsToAttach = em.getReference(linkWatcherLinkmsListLinkWatcherLinkmsToAttach.getClass(), linkWatcherLinkmsListLinkWatcherLinkmsToAttach.getLWlId());
                 attachedLinkWatcherLinkmsList.add(linkWatcherLinkmsListLinkWatcherLinkmsToAttach);
@@ -104,7 +104,7 @@ public class LinkMangaServerJpaController implements Serializable {
                 LMsMangaNew = em.getReference(LMsMangaNew.getClass(), LMsMangaNew.getMId());
                 linkMangaServer.setLMsManga(LMsMangaNew);
             }
-            List<LinkWatcherLinkms> attachedLinkWatcherLinkmsListNew = new ArrayList<>();
+            List<LinkWatcherLinkms> attachedLinkWatcherLinkmsListNew = new ArrayList<LinkWatcherLinkms>();
             for (LinkWatcherLinkms linkWatcherLinkmsListNewLinkWatcherLinkmsToAttach : linkWatcherLinkmsListNew) {
                 linkWatcherLinkmsListNewLinkWatcherLinkmsToAttach = em.getReference(linkWatcherLinkmsListNewLinkWatcherLinkmsToAttach.getClass(), linkWatcherLinkmsListNewLinkWatcherLinkmsToAttach.getLWlId());
                 attachedLinkWatcherLinkmsListNew.add(linkWatcherLinkmsListNewLinkWatcherLinkmsToAttach);

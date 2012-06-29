@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package mangadownloader.ult;
+package bbmangadownloader.ult;
 
 import java.io.*;
 import java.net.URL;

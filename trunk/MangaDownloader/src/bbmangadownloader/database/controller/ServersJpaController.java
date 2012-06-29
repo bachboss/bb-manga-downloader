@@ -2,20 +2,20 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package mangadownloader.database.controller;
+package bbmangadownloader.database.controller;
 
+import bbmangadownloader.database.controller.exceptions.NonexistentEntityException;
 import java.io.Serializable;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import mangadownloader.database.entity.LinkMangaServer;
+import bbmangadownloader.database.entity.LinkMangaServer;
+import bbmangadownloader.database.entity.Servers;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import mangadownloader.database.controller.exceptions.NonexistentEntityException;
-import mangadownloader.database.entity.Servers;
 
 /**
  *
@@ -40,7 +40,7 @@ public class ServersJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            List<LinkMangaServer> attachedLinkMangaServerList = new ArrayList<>();
+            List<LinkMangaServer> attachedLinkMangaServerList = new ArrayList<LinkMangaServer>();
             for (LinkMangaServer linkMangaServerListLinkMangaServerToAttach : servers.getLinkMangaServerList()) {
                 linkMangaServerListLinkMangaServerToAttach = em.getReference(linkMangaServerListLinkMangaServerToAttach.getClass(), linkMangaServerListLinkMangaServerToAttach.getLMsId());
                 attachedLinkMangaServerList.add(linkMangaServerListLinkMangaServerToAttach);
@@ -72,7 +72,7 @@ public class ServersJpaController implements Serializable {
             Servers persistentServers = em.find(Servers.class, servers.getSId());
             List<LinkMangaServer> linkMangaServerListOld = persistentServers.getLinkMangaServerList();
             List<LinkMangaServer> linkMangaServerListNew = servers.getLinkMangaServerList();
-            List<LinkMangaServer> attachedLinkMangaServerListNew = new ArrayList<>();
+            List<LinkMangaServer> attachedLinkMangaServerListNew = new ArrayList<LinkMangaServer>();
             for (LinkMangaServer linkMangaServerListNewLinkMangaServerToAttach : linkMangaServerListNew) {
                 linkMangaServerListNewLinkMangaServerToAttach = em.getReference(linkMangaServerListNewLinkMangaServerToAttach.getClass(), linkMangaServerListNewLinkMangaServerToAttach.getLMsId());
                 attachedLinkMangaServerListNew.add(linkMangaServerListNewLinkMangaServerToAttach);

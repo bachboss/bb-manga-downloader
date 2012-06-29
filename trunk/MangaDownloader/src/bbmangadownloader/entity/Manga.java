@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package mangadownloader.entity;
+package bbmangadownloader.entity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -10,10 +10,10 @@ import java.util.List;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import mangadownloader.database.entity.LinkMangaServer;
-import mangadownloader.faces.IFacadeMangaServer;
-import mangadownloader.faces.ServerManager;
-import mangadownloader.ult.Heuristic;
+import bbmangadownloader.database.entity.LinkMangaServer;
+import bbmangadownloader.faces.IFacadeMangaServer;
+import bbmangadownloader.faces.ServerManager;
+import bbmangadownloader.ult.Heuristic;
 
 /**
  *

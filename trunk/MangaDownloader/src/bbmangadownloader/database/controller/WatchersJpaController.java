@@ -2,20 +2,20 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package mangadownloader.database.controller;
+package bbmangadownloader.database.controller;
 
+import bbmangadownloader.database.controller.exceptions.NonexistentEntityException;
 import java.io.Serializable;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import mangadownloader.database.entity.LinkWatcherLinkms;
+import bbmangadownloader.database.entity.LinkWatcherLinkms;
+import bbmangadownloader.database.entity.Watchers;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import mangadownloader.database.controller.exceptions.NonexistentEntityException;
-import mangadownloader.database.entity.Watchers;
 
 /**
  *
@@ -40,7 +40,7 @@ public class WatchersJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            List<LinkWatcherLinkms> attachedLinkWatcherLinkmsList = new ArrayList<>();
+            List<LinkWatcherLinkms> attachedLinkWatcherLinkmsList = new ArrayList<LinkWatcherLinkms>();
             for (LinkWatcherLinkms linkWatcherLinkmsListLinkWatcherLinkmsToAttach : watchers.getLinkWatcherLinkmsList()) {
                 linkWatcherLinkmsListLinkWatcherLinkmsToAttach = em.getReference(linkWatcherLinkmsListLinkWatcherLinkmsToAttach.getClass(), linkWatcherLinkmsListLinkWatcherLinkmsToAttach.getLWlId());
                 attachedLinkWatcherLinkmsList.add(linkWatcherLinkmsListLinkWatcherLinkmsToAttach);
@@ -72,7 +72,7 @@ public class WatchersJpaController implements Serializable {
             Watchers persistentWatchers = em.find(Watchers.class, watchers.getWId());
             List<LinkWatcherLinkms> linkWatcherLinkmsListOld = persistentWatchers.getLinkWatcherLinkmsList();
             List<LinkWatcherLinkms> linkWatcherLinkmsListNew = watchers.getLinkWatcherLinkmsList();
-            List<LinkWatcherLinkms> attachedLinkWatcherLinkmsListNew = new ArrayList<>();
+            List<LinkWatcherLinkms> attachedLinkWatcherLinkmsListNew = new ArrayList<LinkWatcherLinkms>();
             for (LinkWatcherLinkms linkWatcherLinkmsListNewLinkWatcherLinkmsToAttach : linkWatcherLinkmsListNew) {
                 linkWatcherLinkmsListNewLinkWatcherLinkmsToAttach = em.getReference(linkWatcherLinkmsListNewLinkWatcherLinkmsToAttach.getClass(), linkWatcherLinkmsListNewLinkWatcherLinkmsToAttach.getLWlId());
                 attachedLinkWatcherLinkmsListNew.add(linkWatcherLinkmsListNewLinkWatcherLinkmsToAttach);

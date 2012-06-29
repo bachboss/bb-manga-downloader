@@ -2,13 +2,13 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package mangadownloader.faces;
+package bbmangadownloader.faces;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import mangadownloader.bus.description.IBus;
+import bbmangadownloader.bus.description.IBus;
 
 /**
  *

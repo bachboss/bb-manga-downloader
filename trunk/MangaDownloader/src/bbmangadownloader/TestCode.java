@@ -4,10 +4,6 @@
  */
 package bbmangadownloader;
 
-import java.util.List;
-import mangadownloader.database.Database;
-import mangadownloader.database.entity.Mangas;
-
 /**
  *
  * @author Bach
@@ -15,10 +11,6 @@ import mangadownloader.database.entity.Mangas;
 public class TestCode {
 
     public static void main(String[] args) throws Exception {
-
-        List<Mangas> lstMangs = Database.getAllManga();
-        System.out.println("Find: " + lstMangs.size() + " record(s)!");
-
         //        MangaInn m = new MangaInn();
         //        List<Chapter> lst = m.getAllChapters(new Manga(
         //                new Server(new FacadeMangaInn()), "", "http://localhost/mangainn.hunter.html"));
@@ -71,7 +63,7 @@ public class TestCode {
         //                System.out.println(e);
         //            }
         //        } catch (IOException ex) {
-        //            Logger.getLogger(MangaDownloader.class.getName()).log(Level.SEVERE, null, ex);
+        //            Logger.getLogger(bbmangadownloader.class.getName()).log(Level.SEVERE, null, ex);
         //        }
     }
 }

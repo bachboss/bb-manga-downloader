@@ -2,18 +2,18 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package mangadownloader.cache;
+package bbmangadownloader.cache;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import mangadownloader.database.Database;
-import mangadownloader.database.entity.LinkMangaServer;
-import mangadownloader.entity.Manga;
-import mangadownloader.entity.Server;
-import mangadownloader.faces.ServerManager;
+import bbmangadownloader.database.Database;
+import bbmangadownloader.database.entity.LinkMangaServer;
+import bbmangadownloader.entity.Manga;
+import bbmangadownloader.entity.Server;
+import bbmangadownloader.faces.ServerManager;
 
 /**
  *

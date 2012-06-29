@@ -2,20 +2,20 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package mangadownloader.database.controller;
+package bbmangadownloader.database.controller;
 
+import bbmangadownloader.database.controller.exceptions.NonexistentEntityException;
 import java.io.Serializable;
+import javax.persistence.Query;
+import javax.persistence.EntityNotFoundException;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+import bbmangadownloader.database.entity.Watchers;
+import bbmangadownloader.database.entity.LinkMangaServer;
+import bbmangadownloader.database.entity.LinkWatcherLinkms;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityNotFoundException;
-import javax.persistence.Query;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-import mangadownloader.database.controller.exceptions.NonexistentEntityException;
-import mangadownloader.database.entity.LinkMangaServer;
-import mangadownloader.database.entity.LinkWatcherLinkms;
-import mangadownloader.database.entity.Watchers;
 
 /**
  *
@@ -192,4 +192,5 @@ public class LinkWatcherLinkmsJpaController implements Serializable {
             em.close();
         }
     }
+    
 }

@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package mangadownloader.gui;
+package bbmangadownloader.gui;
 
 import comichtmlgender.HTMLGenerator;
 import java.awt.event.MouseAdapter;
@@ -14,18 +14,18 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.*;
 import javax.swing.table.TableColumnModel;
-import mangadownloader.cache.CacheLoader;
-import mangadownloader.config.ConfigManager;
-import mangadownloader.database.Database;
-import mangadownloader.database.entity.LinkWatcherLinkms;
-import mangadownloader.database.entity.Watchers;
-import mangadownloader.entity.Chapter;
-import mangadownloader.entity.Manga;
-import mangadownloader.gui.bus.ListTaskDownloader;
-import mangadownloader.gui.model.ChapterDownloadModel;
-import mangadownloader.gui.model.Watcher;
-import mangadownloader.gui.model.WatcherMangaTreeTableModel;
-import mangadownloader.gui.model.WatcherTableModel;
+import bbmangadownloader.cache.CacheLoader;
+import bbmangadownloader.config.ConfigManager;
+import bbmangadownloader.database.Database;
+import bbmangadownloader.database.entity.LinkWatcherLinkms;
+import bbmangadownloader.database.entity.Watchers;
+import bbmangadownloader.entity.Chapter;
+import bbmangadownloader.entity.Manga;
+import bbmangadownloader.gui.bus.ListTaskDownloader;
+import bbmangadownloader.gui.model.ChapterDownloadModel;
+import bbmangadownloader.gui.model.Watcher;
+import bbmangadownloader.gui.model.WatcherMangaTreeTableModel;
+import bbmangadownloader.gui.model.WatcherTableModel;
 import org.jdesktop.swingx.treetable.DefaultTreeTableModel;
 
 /**
@@ -688,22 +688,6 @@ public class MangaWatcherGUI extends javax.swing.JFrame {
     private javax.swing.JTextField txtWatcherRename;
     // End of variables declaration//GEN-END:variables
 
-    public static void main(String[] args) {
-        try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
-            Logger.getLogger(MangaDownloadGUI.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-//        Database.persitenceUnitPU = "MangaDownloaderSQLPU";
-
-        ConfigManager.loadOnStartUp();
-
-        CacheLoader.loadMangas();
-
-        new MangaWatcherGUI().setVisible(true);
-    }
-
     private void loadWatcher(Watcher w) {
         if (modelManga == null) {
             modelManga = new WatcherMangaTreeTableModel();
@@ -771,46 +755,6 @@ public class MangaWatcherGUI extends javax.swing.JFrame {
             Watcher w = new Watcher(wE);
             modelWatcher.addWatcher(w);
         }
-
-
-//        {
-//            Watcher w = new Watcher("Naruto");
-//            modelWatcher.addWatcher(w);
-//
-//            w.addManga(new Manga(new Server(new FacadeBatoto()),
-//                    "Naruto", "http://www.batoto.net/comic/_/comics/naruto-r5"));
-//            w.addManga(new Manga(new Server(new FacadeEatManga()),
-//                    "Naruto", "http://eatmanga.com/Manga-Scan/Naruto"));
-//            w.addManga(new Manga(new Server(new FacadeMangaInn()),
-//                    "Naruto", "http://www.mangainn.com/manga/314_naruto"));
-//            w.addManga(new Manga(new Server(new FacadeMangafox()),
-//                    "Naruto", "http://mangafox.me/manga/naruto/"));
-//        }
-//
-//        {
-//            Watcher w = new Watcher("Fairy Tail");
-//            modelWatcher.addWatcher(w);
-//
-//            w.addManga(new Manga(new Server(new FacadeEatManga()),
-//                    "Fairy Tail", "http://eatmanga.com/Manga-Scan/Fairy-Tail"));
-//            w.addManga(new Manga(new Server(new FacadeMangaInn()),
-//                    "Fairy Tail", "http://www.mangainn.com/manga/324_fairy-tail"));
-//            w.addManga(new Manga(new Server(new FacadeMangafox()),
-//                    "Fairy Tail", "http://mangafox.me/manga/fairy_tail/"));
-//        }
-//
-//        {
-//            Watcher w = new Watcher("Kimi no iru machi");
-//            modelWatcher.addWatcher(w);
-//
-//            w.addManga(new Manga(new Server(new FacadeEatManga()),
-//                    "Fairy Tail", "http://eatmanga.com/Manga-Scan/Kimi-no-Iru-Machi/"));
-//            w.addManga(new Manga(new Server(new FacadeMangaInn()),
-//                    "Fairy Tail", "http://www.mangainn.com/manga/550_kimi-no-iru-machi"));
-//            w.addManga(new Manga(new Server(new FacadeMangafox()),
-//                    "Fairy Tail", "http://mangafox.me/manga/kimi_no_iru_machi/"));
-//        }
-
         tblWatcher.validate();
     }
 

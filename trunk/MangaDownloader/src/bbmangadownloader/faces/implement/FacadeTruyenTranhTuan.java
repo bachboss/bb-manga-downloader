@@ -2,12 +2,12 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package mangadownloader.faces.implement;
+package bbmangadownloader.faces.implement;
 
-import mangadownloader.bus.TruyenTranhTuan;
-import mangadownloader.bus.description.IBus;
-import mangadownloader.faces.AFacadeMangaServerPreLstImgLoad;
-import mangadownloader.faces.SupportType;
+import bbmangadownloader.bus.TruyenTranhTuan;
+import bbmangadownloader.bus.description.IBus;
+import bbmangadownloader.faces.AFacadeMangaServerPreLstImgLoad;
+import bbmangadownloader.faces.SupportType;
 
 /**
  *

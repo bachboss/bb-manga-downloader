@@ -2,13 +2,13 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package mangadownloader.bus.description;
+package bbmangadownloader.bus.description;
 
 import java.io.IOException;
 import java.util.List;
-import mangadownloader.entity.Chapter;
-import mangadownloader.entity.Image;
-import mangadownloader.entity.Page;
+import bbmangadownloader.entity.Chapter;
+import bbmangadownloader.entity.Image;
+import bbmangadownloader.entity.Page;
 
 /**
  *

@@ -1,13 +1,13 @@
-package mangadownloader.database;
+package bbmangadownloader.database;
 
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import mangadownloader.database.controller.*;
-import mangadownloader.database.controller.exceptions.NonexistentEntityException;
-import mangadownloader.database.controller.exceptions.PreexistingEntityException;
-import mangadownloader.database.entity.*;
+import bbmangadownloader.database.controller.*;
+import bbmangadownloader.database.controller.exceptions.NonexistentEntityException;
+import bbmangadownloader.database.controller.exceptions.PreexistingEntityException;
+import bbmangadownloader.database.entity.*;
 
 /*
  * To change this template, choose Tools | Templates and open the template in

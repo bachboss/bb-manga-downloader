@@ -2,8 +2,16 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package mangadownloader.bus;
+package bbmangadownloader.bus;
 
+import bbmangadownloader.bus.description.IBusOnePage;
+import bbmangadownloader.entity.Chapter;
+import bbmangadownloader.entity.Image;
+import bbmangadownloader.entity.Manga;
+import bbmangadownloader.entity.Server;
+import bbmangadownloader.ult.DateTimeUtilities;
+import bbmangadownloader.ult.HttpDownloadManager;
+import bbmangadownloader.ult.MultitaskJob;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -16,15 +24,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import bbmangadownloader.TestCode;
-import mangadownloader.bus.description.IBusOnePage;
-import mangadownloader.entity.Chapter;
-import mangadownloader.entity.Image;
-import mangadownloader.entity.Manga;
-import mangadownloader.entity.Server;
-import mangadownloader.ult.DateTimeUtilities;
-import mangadownloader.ult.HttpDownloadManager;
-import mangadownloader.ult.MultitaskJob;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -94,7 +93,7 @@ public class KissManga implements IBusOnePage {  // Done
                     try {
                         lstReturn.addAll(f.get());
                     } catch (InterruptedException | ExecutionException ex) {
-                        Logger.getLogger(TestCode.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(KissManga.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 } else {
                     System.out.println("WTF ?");

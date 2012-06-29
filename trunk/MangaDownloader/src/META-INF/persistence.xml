@@ -1,33 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence version="2.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
-  <!--
-    <persistence-unit name="MangaDownloaderSQLPU" transaction-type="RESOURCE_LOCAL">
+<!--    <persistence-unit name="MangaDownloaderSQLPU" transaction-type="RESOURCE_LOCAL">
         <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
         <class>mangadownloader.database.entity.Servers</class>
-    <class>mangadownloader.database.entity.Mangas</class>
-    <class>mangadownloader.database.entity.LinkMangaServer</class>
-    <class>mangadownloader.database.entity.LinkWatcherLinkms</class>
-    <class>mangadownloader.database.entity.Watchers</class>
+        <class>mangadownloader.database.entity.Mangas</class>
+        <class>mangadownloader.database.entity.LinkMangaServer</class>
+        <class>mangadownloader.database.entity.LinkWatcherLinkms</class>
+        <class>mangadownloader.database.entity.Watchers</class>
         <properties>
             <property name="javax.persistence.jdbc.url" value="jdbc:sqlserver://localhost:1433;databaseName=MangaDownloader"/>
             <property name="javax.persistence.jdbc.password" value="123456"/>
             <property name="javax.persistence.jdbc.driver" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"/>
             <property name="javax.persistence.jdbc.user" value="sa"/>
         </properties>
-    </persistence-unit>  
-    -->
-  <persistence-unit name="MangaDownloaderDerbyPU" transaction-type="RESOURCE_LOCAL">
-    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
-    <class>bbmangadownloader.database.entity.Servers</class>
-    <class>bbmangadownloader.database.entity.Watchers</class>
-    <class>bbmangadownloader.database.entity.LinkMangaServer</class>
-    <class>bbmangadownloader.database.entity.Mangas</class>
-    <class>bbmangadownloader.database.entity.LinkWatcherLinkms</class>
-    <properties>
-      <property name="javax.persistence.jdbc.url" value="jdbc:derby:D:\\Manga\\DB"/>
-      <property name="javax.persistence.jdbc.password" value=""/>
-      <property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.EmbeddedDriver"/>
-      <property name="javax.persistence.jdbc.user" value=""/>
-    </properties>
-  </persistence-unit>
+    </persistence-unit>  -->
+    <persistence-unit name="MangaDownloaderDerbyPU" transaction-type="RESOURCE_LOCAL">
+        <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+        <class>bbmangadownloader.database.entity.LinkMangaServer</class>
+        <class>bbmangadownloader.database.entity.LinkWatcherLinkms</class>
+        <class>bbmangadownloader.database.entity.Mangas</class>
+        <class>bbmangadownloader.database.entity.Servers</class>
+        <class>bbmangadownloader.database.entity.Watchers</class>
+        <properties>
+            <property name="javax.persistence.jdbc.url" value="jdbc:derby:D:\\Manga\\DB"/>
+            <property name="javax.persistence.jdbc.password" value=""/>
+            <property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.EmbeddedDriver"/>
+            <property name="javax.persistence.jdbc.user" value=""/>
+        </properties>
+    </persistence-unit>
 </persistence>

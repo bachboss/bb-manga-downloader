@@ -3,14 +3,14 @@
  * To change this template, choose Tools | Templates and open the template in
  * the editor.
  */
-package mangadownloader.ult;
+package bbmangadownloader.ult;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import mangadownloader.entity.Chapter;
-import mangadownloader.entity.Manga;
+import bbmangadownloader.entity.Chapter;
+import bbmangadownloader.entity.Manga;
 import org.jsoup.nodes.Node;
 
 /**

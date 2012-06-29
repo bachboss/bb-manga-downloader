@@ -2,15 +2,15 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package mangadownloader.faces;
+package bbmangadownloader.faces;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import mangadownloader.config.ConfigManager;
-import mangadownloader.faces.implement.*;
+import bbmangadownloader.config.ConfigManager;
+import bbmangadownloader.faces.implement.*;
 
 /**
  *

@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package mangadownloader.database.entity;
+package bbmangadownloader.database.entity;
 
 import java.io.Serializable;
 import java.util.List;
@@ -98,7 +98,7 @@ public class Servers implements Serializable {
 
     @Override
     public String toString() {
-        return "mangadownloader.database.entity.Servers[ sId=" + sId + " ]";
+        return "bbmangadownloader.database.entity.Servers[ sId=" + sId + " ]";
     }
     
 }

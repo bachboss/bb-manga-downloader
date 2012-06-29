@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package mangadownloader.ult;
+package bbmangadownloader.ult;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -12,9 +12,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import mangadownloader.entity.Chapter;
-import mangadownloader.entity.Image;
-import mangadownloader.gui.MangaDownloadGUI;
+import bbmangadownloader.entity.Chapter;
+import bbmangadownloader.entity.Image;
+import bbmangadownloader.gui.MangaDownloadGUI;
 
 /**
  *

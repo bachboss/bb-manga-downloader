@@ -2,13 +2,13 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package mangadownloader.entity;
+package bbmangadownloader.entity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import mangadownloader.ult.Heuristic;
+import bbmangadownloader.ult.Heuristic;
 
 /**
  *

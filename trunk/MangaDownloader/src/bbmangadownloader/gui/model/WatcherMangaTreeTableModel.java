@@ -2,15 +2,15 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package mangadownloader.gui.model;
+package bbmangadownloader.gui.model;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.swing.tree.TreePath;
-import mangadownloader.entity.Chapter;
-import mangadownloader.entity.Manga;
-import mangadownloader.ult.DateTimeUtilities;
+import bbmangadownloader.entity.Chapter;
+import bbmangadownloader.entity.Manga;
+import bbmangadownloader.ult.DateTimeUtilities;
 import org.jdesktop.swingx.treetable.AbstractTreeTableModel;
 
 /**

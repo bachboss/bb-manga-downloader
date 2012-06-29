@@ -2,12 +2,12 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package mangadownloader.ult;
+package bbmangadownloader.ult;
 
 import java.io.File;
 import java.net.MalformedURLException;
-import mangadownloader.entity.Chapter;
-import mangadownloader.entity.Image;
+import bbmangadownloader.entity.Chapter;
+import bbmangadownloader.entity.Image;
 
 /**
  *

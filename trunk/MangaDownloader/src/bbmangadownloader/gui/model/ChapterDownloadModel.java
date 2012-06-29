@@ -2,14 +2,14 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package mangadownloader.gui.model;
+package bbmangadownloader.gui.model;
 
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
-import mangadownloader.bus.model.data.DownloadTask;
-import mangadownloader.entity.Chapter;
-import mangadownloader.ult.MyUtilities;
+import bbmangadownloader.bus.model.data.DownloadTask;
+import bbmangadownloader.entity.Chapter;
+import bbmangadownloader.ult.MyUtilities;
 
 /**
  *

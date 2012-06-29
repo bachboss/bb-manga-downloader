@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package mangadownloader.bus;
+package bbmangadownloader.bus;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -10,12 +10,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import mangadownloader.bus.description.IBusOnePage;
-import mangadownloader.entity.Chapter;
-import mangadownloader.entity.Image;
-import mangadownloader.entity.Manga;
-import mangadownloader.entity.Server;
-import mangadownloader.ult.HttpDownloadManager;
+import bbmangadownloader.bus.description.IBusOnePage;
+import bbmangadownloader.entity.Chapter;
+import bbmangadownloader.entity.Image;
+import bbmangadownloader.entity.Manga;
+import bbmangadownloader.entity.Server;
+import bbmangadownloader.ult.HttpDownloadManager;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;

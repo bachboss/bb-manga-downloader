@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package mangadownloader.gui.bus;
+package bbmangadownloader.gui.bus;
 
 import java.io.File;
 import java.net.MalformedURLException;
@@ -13,15 +13,15 @@ import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.table.AbstractTableModel;
-import mangadownloader.bus.model.data.DownloadTask;
-import mangadownloader.entity.Chapter;
-import mangadownloader.entity.Image;
-import mangadownloader.faces.IFacadeMangaServer;
-import mangadownloader.gui.MangaDownloadGUI;
-import mangadownloader.ult.FileManager;
-import mangadownloader.ult.GUIUtilities;
-import mangadownloader.ult.MultitaskJob;
-import mangadownloader.ult.MyLogger;
+import bbmangadownloader.bus.model.data.DownloadTask;
+import bbmangadownloader.entity.Chapter;
+import bbmangadownloader.entity.Image;
+import bbmangadownloader.faces.IFacadeMangaServer;
+import bbmangadownloader.gui.MangaDownloadGUI;
+import bbmangadownloader.ult.FileManager;
+import bbmangadownloader.ult.GUIUtilities;
+import bbmangadownloader.ult.MultitaskJob;
+import bbmangadownloader.ult.MyLogger;
 
 /**
  *

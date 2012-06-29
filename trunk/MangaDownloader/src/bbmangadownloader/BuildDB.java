@@ -4,6 +4,16 @@
  */
 package bbmangadownloader;
 
+import bbmangadownloader.config.ConfigManager;
+import bbmangadownloader.database.Database;
+import bbmangadownloader.database.controller.exceptions.NonexistentEntityException;
+import bbmangadownloader.database.controller.exceptions.PreexistingEntityException;
+import bbmangadownloader.database.entity.LinkMangaServer;
+import bbmangadownloader.database.entity.Mangas;
+import bbmangadownloader.database.entity.Servers;
+import bbmangadownloader.entity.Manga;
+import bbmangadownloader.entity.Server;
+import bbmangadownloader.faces.ServerManager;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -14,18 +24,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import mangadownloader.config.ConfigManager;
-import mangadownloader.database.Database;
-import mangadownloader.database.controller.exceptions.NonexistentEntityException;
-import mangadownloader.database.controller.exceptions.PreexistingEntityException;
-import mangadownloader.database.entity.LinkMangaServer;
-import mangadownloader.database.entity.Mangas;
-import mangadownloader.database.entity.Servers;
-import mangadownloader.entity.Manga;
-import mangadownloader.entity.Server;
-import mangadownloader.faces.IFacadeMangaServer;
-import mangadownloader.faces.ServerFacadeManager;
-import mangadownloader.faces.ServerManager;
 import org.apache.derby.jdbc.EmbeddedSimpleDataSource;
 
 /**
@@ -70,7 +68,7 @@ public class BuildDB {
     public static void main(String[] args) {
 
         String[] arrPU = new String[]{
-            "MangaDownloaderDerbyPU", "MangaDownloaderSQLPU"
+            "bbmangadownloaderDerbyPU", "bbmangadownloaderSQLPU"
         };
         Database.persitenceUnitPU = arrPU[0];
 
