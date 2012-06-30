@@ -72,8 +72,12 @@ public class Watcher {
             float f = -1;
             for (Manga m : lstManga) {
                 m.doSortChapters(true);
-                float f2 = m.getListChapter().get(0).getChapterNumber();
-                f = Math.max(f, f2);
+                try {
+                    float f2 = m.getListChapter().get(0).getChapterNumber();
+                    f = Math.max(f, f2);
+                } catch (NullPointerException | IndexOutOfBoundsException ex) {
+                    System.out.println("Null: " + m.getUrl());
+                }
             }
             return f;
         } else {
@@ -94,20 +98,21 @@ public class Watcher {
         this.watcherStatus = WatcherStatus.Loading;
         // Solution 1: Use Multi Thread: 11.5s (Naruto - 8 hosts)
         List<Manga> lstTemp = getLstManga();
-        List<Callable<Boolean>> lstTask = new ArrayList<>();
+        if (!lstTemp.isEmpty()) {
+            List<Callable<Boolean>> lstTask = new ArrayList<>();
 
-        for (final Manga m : lstTemp) {
-            lstTask.add(new Callable<Boolean>() {
+            for (final Manga m : lstTemp) {
+                lstTask.add(new Callable<Boolean>() {
 
-                @Override
-                public Boolean call() throws Exception {
-                    m.loadChapter();
-                    return true;
-                }
-            });
+                    @Override
+                    public Boolean call() throws Exception {
+                        m.loadChapter();
+                        return true;
+                    }
+                });
+            }
+            MultitaskJob.doTask(lstTask.size(), lstTask);
         }
-
-        MultitaskJob.doTask(lstTask.size(), lstTask);
         // Solution 2: Use Multi Thread: 7.2s (Naruto - 8 hosts)
 //        {
 //            List<Manga> lstTemp = getLstManga();

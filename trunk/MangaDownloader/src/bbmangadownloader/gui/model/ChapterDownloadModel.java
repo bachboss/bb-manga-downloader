@@ -9,7 +9,8 @@ import java.util.List;
 import javax.swing.table.AbstractTableModel;
 import bbmangadownloader.bus.model.data.DownloadTask;
 import bbmangadownloader.entity.Chapter;
-import bbmangadownloader.ult.MyUtilities;
+import bbmangadownloader.ult.GUIUtilities;
+import bbmangadownloader.ult.MathUtilities;
 
 /**
  *
@@ -53,7 +54,7 @@ public class ChapterDownloadModel extends AbstractTableModel implements MyTableM
     public Object getDisplayDataAtColumn(int column, DownloadTask task) {
         switch (column) {
             case (0):
-                return MyUtilities.getStringFromFloat(task.getChapter().getChapterNumber());
+                return GUIUtilities.getStringFromFloat(task.getChapter().getChapterNumber());
             case (1):
                 return task.getChapter().getDisplayName();
             case (2):

@@ -15,6 +15,7 @@ import java.util.logging.Logger;
 import bbmangadownloader.entity.Chapter;
 import bbmangadownloader.entity.Image;
 import bbmangadownloader.gui.MangaDownloadGUI;
+import java.io.*;
 
 /**
  *
@@ -74,7 +75,7 @@ public class MyLogger {
         } catch (IOException ex) {
             Logger.getLogger(MangaDownloadGUI.class.getName()).log(Level.SEVERE, null, ex);
             try {
-                MyLogger.log(MyUtilities.getStacktrace(ex));
+                MyLogger.log(MyLogger.getStacktrace(ex));
             } catch (Exception ex2) {
                 Logger.getLogger(MangaDownloadGUI.class.getName()).log(Level.SEVERE, null, ex2);
             }
@@ -85,5 +86,11 @@ public class MyLogger {
             Logger.getLogger(MangaDownloadGUI.class.getName()).log(Level.SEVERE, null, ex);
         }
         MyLogger.log("----------------------------------------------------------------------------------------------------");
+    }
+
+    public static String getStacktrace(Exception ex) {
+        StringWriter sw = new StringWriter();
+        ex.printStackTrace(new PrintWriter(sw));
+        return sw.toString();
     }
 }

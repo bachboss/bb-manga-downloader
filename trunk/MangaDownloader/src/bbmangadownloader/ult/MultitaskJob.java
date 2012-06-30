@@ -19,14 +19,17 @@ import java.util.logging.Logger;
 public class MultitaskJob {
 
     public static <V> List<Future<V>> doTask(int poolSize, List<? extends Callable<V>> listTask) {
-        ExecutorService execSvc = Executors.newFixedThreadPool(poolSize);
-        try {
-            List<Future<V>> lstReturn = execSvc.invokeAll(listTask);
-            execSvc.shutdown();
-            return lstReturn;
-        } catch (InterruptedException ex) {
-            Logger.getLogger(MultitaskJob.class.getName()).log(Level.SEVERE, null, ex);
-            return null;
+        if (poolSize != 0) {
+            ExecutorService execSvc = Executors.newFixedThreadPool(poolSize);
+            try {
+                List<Future<V>> lstReturn = execSvc.invokeAll(listTask);
+                execSvc.shutdown();
+                return lstReturn;
+            } catch (InterruptedException ex) {
+                Logger.getLogger(MultitaskJob.class.getName()).log(Level.SEVERE, null, ex);
+                return null;
+            }
         }
+        return null;
     }
 }

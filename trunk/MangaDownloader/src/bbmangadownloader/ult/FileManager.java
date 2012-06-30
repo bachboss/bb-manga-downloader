@@ -61,7 +61,7 @@ public class FileManager {
     public static File getFileForImage(File folderOutput, Image img) throws MalformedURLException {
         File fileImage = new File(folderOutput,
                 String.format("%03d-%s", img.getImgOrder(),
-                normalizeFileName(MyUtilities.getFileNameViaUrl(img.getURL()))));
+                normalizeFileName(FileUtilities.getFileNameViaUrl(img.getURL()))));
 //        String fileUrl = img.getURL().getFile();
 //        File fileImage = new File(folderOutput, img.getImgOrder() + fileUrl.substring(fileUrl.lastIndexOf('.')));
         String fName = fileImage.getAbsolutePath();

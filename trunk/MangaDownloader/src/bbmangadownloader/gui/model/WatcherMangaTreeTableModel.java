@@ -4,13 +4,14 @@
  */
 package bbmangadownloader.gui.model;
 
+import bbmangadownloader.entity.Chapter;
+import bbmangadownloader.entity.Manga;
+import bbmangadownloader.ult.DateTimeUtilities;
+import bbmangadownloader.ult.GUIUtilities;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.swing.tree.TreePath;
-import bbmangadownloader.entity.Chapter;
-import bbmangadownloader.entity.Manga;
-import bbmangadownloader.ult.DateTimeUtilities;
 import org.jdesktop.swingx.treetable.AbstractTreeTableModel;
 
 /**
@@ -53,7 +54,7 @@ public class WatcherMangaTreeTableModel extends AbstractTreeTableModel {
                 case 4:
                     return m.manga.getURL();
                 default:
-                    return "---";
+                    return "--";
             }
         } else if (o instanceof Chapter) {
             Chapter c = (Chapter) o;
@@ -63,10 +64,10 @@ public class WatcherMangaTreeTableModel extends AbstractTreeTableModel {
                 case 0:
                     return c.getDisplayName();
                 case 1:
-                    return c.getChapterNumber();
+                    return GUIUtilities.getStringFromFloat(c.getChapterNumber());
                 case 2:
                     Date d = c.getUploadDate();
-                    return (d == null ? null : DateTimeUtilities.getStringFromDate(d, DEFAULT_DATETIME_FORMAT));
+                    return (d == null ? "--" : DateTimeUtilities.getStringFromDate(d, DEFAULT_DATETIME_FORMAT));
                 case 3:
                     return c.getTranslator();
                 case 4:

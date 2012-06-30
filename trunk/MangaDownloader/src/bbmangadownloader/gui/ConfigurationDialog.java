@@ -4,15 +4,13 @@
  */
 package bbmangadownloader.gui;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import bbmangadownloader.config.ConfigManager;
-import bbmangadownloader.ult.HttpDownloadManager;
 import bbmangadownloader.ult.FileManager;
 import bbmangadownloader.ult.GUIUtilities;
+import bbmangadownloader.ult.HttpDownloadManager;
+import java.io.File;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *

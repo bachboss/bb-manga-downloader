@@ -4,12 +4,12 @@
  */
 package bbmangadownloader.bus.description;
 
-import java.io.IOException;
-import java.util.List;
 import bbmangadownloader.entity.Chapter;
 import bbmangadownloader.entity.Image;
 import bbmangadownloader.entity.Manga;
 import bbmangadownloader.entity.Server;
+import java.io.IOException;
+import java.util.List;
 
 /**
  *

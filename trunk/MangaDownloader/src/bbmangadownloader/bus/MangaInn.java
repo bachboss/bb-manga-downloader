@@ -4,6 +4,9 @@
  */
 package bbmangadownloader.bus;
 
+import bbmangadownloader.bus.description.ABusPageBasedDefaultChapImage;
+import bbmangadownloader.entity.*;
+import bbmangadownloader.ult.DateTimeUtilities;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -11,9 +14,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import bbmangadownloader.bus.description.ABusPageBasedDefaultChapImage;
-import bbmangadownloader.entity.*;
-import bbmangadownloader.ult.DateTimeUtilities;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;

@@ -4,8 +4,11 @@
  */
 package bbmangadownloader;
 
-import bbmangadownloader.config.ConfigManager;
-import bbmangadownloader.faces.ServerManager;
+import bbmangadownloader.ult.HttpDownloadManager;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 /**
  *
@@ -14,8 +17,22 @@ import bbmangadownloader.faces.ServerManager;
 public class TestCode {
 
     public static void main(String[] args) throws Exception {
-        ConfigManager.loadOnStartUp();
-        ServerManager.loadServer();
+//        ConfigManager.loadOnStartUp();
+//        ServerManager.loadServer();
+//        
+//        String url = "http://localhost/mangastream.airgear.357.html";
+//
+//        Document doc = HttpDownloadManager.getDocument(url);
+//        System.out.println("--------------------------------------------------------------------------------");
+//        Elements xmlNodes = doc.select("div[id=controls] a").not("a[href~=javascript]");
+//        for (Element e : xmlNodes) {
+//            System.out.println(e);
+//            System.out.println("--------------------------------------------------------------------------------");
+//        }
+//
+//        Element e = doc.select("div[id=page] img").first();
+//        System.out.println(e);
+//        System.out.println("--------------------------------------------------------------------------------");
 //        Server server = ServerManager.getServerByName("VnSharing");
 //        IFacadeMangaServer facade = server.getMangaServer();
 //
@@ -33,7 +50,6 @@ public class TestCode {
 //        for (Chapter c : lstC) {
 //            System.out.format("%-60s\t%-15s\t%s\n", c.getDisplayName(), c.getTranslator(), c.getUrl());
 //        }
-
 //        Database.getMangaLikeName("Naruto");
 //        System.out.println("--------------------------------------------------");
 //        System.out.println("        START QUERY ");
@@ -56,8 +72,6 @@ public class TestCode {
 //            System.out.format("Found: %-3d record(s) for %s\n", x, name);
 //            System.out.println("--------------------------------------------------");
 //        }
-
-
         //        MangaInn m = new MangaInn();
         //        List<Chapter> lst = m.getAllChapters(new Manga(
         //                new Server(new FacadeMangaInn()), "", "http://localhost/mangainn.hunter.html"));
@@ -67,19 +81,9 @@ public class TestCode {
         //        }
         //        System.out.println("--------------------------------------------------------------------------------");
         //        System.out.println("Total: " + lst.size());
-        //        String url = "http://localhost/truyentranhtuan.list.html";
-        //
-        //        Document doc = HttpDownloadManager.getDocument(url);
-        //
-        //        Elements xmlNodes = doc.select("div[id=content-main] table tr[class]");
-        //        for (Element e : xmlNodes) {
-        ////            System.out.println(e);
-        ////            System.out.println("--------------------------------------------------------------------------------");
-        //        }
-        //        System.out.println(xmlNodes.first());
-        //
-        //        System.out.println(xmlNodes.size());
-        //        System.out.println("Total: " + xmlNodes.size());
-        //       
+//        System.out.println(xmlNodes.first());
+//
+//        System.out.println(xmlNodes.size());
+//        System.out.println("Total: " + xmlNodes.size());
     }
 }

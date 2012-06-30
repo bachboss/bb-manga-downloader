@@ -4,6 +4,7 @@
  */
 package bbmangadownloader.gui.model;
 
+import bbmangadownloader.ult.GUIUtilities;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
@@ -52,7 +53,9 @@ public class WatcherTableModel extends AbstractTableModel implements MyTableMode
                 return w.getName() + " (" + w.getMangaCount() + ")";
             case (1):
                 WatcherStatus s = w.getWatcherStatus();
-                return (s == WatcherStatus.Loaded) ? w.getNewestChapter() : s.toString();
+                return (s == WatcherStatus.Loaded)
+                        ? GUIUtilities.getStringFromFloat(w.getNewestChapter())
+                        : s.toString();
         }
         return null;
     }

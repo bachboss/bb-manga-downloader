@@ -65,7 +65,6 @@ public class Database {
                 "SELECT m FROM Mangas m WHERE UPPER(m.mName) LIKE UPPER(:mName)").
                 setParameter("mName", name).
                 getResultList();
-
         if (lst != null && !lst.isEmpty()) {
             return lst;
         } else {

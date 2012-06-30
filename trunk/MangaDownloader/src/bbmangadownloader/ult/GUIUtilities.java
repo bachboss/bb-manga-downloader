@@ -7,9 +7,7 @@ package bbmangadownloader.ult;
 import java.awt.Component;
 import java.awt.Desktop;
 import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.text.DecimalFormat;
 import javax.swing.JOptionPane;
 
 /**
@@ -17,6 +15,12 @@ import javax.swing.JOptionPane;
  * @author Bach
  */
 public class GUIUtilities {
+
+    private static final DecimalFormat DECIMAL_FORMATER = new DecimalFormat("#.#");
+
+    public static String getStringFromFloat(float f) {
+        return DECIMAL_FORMATER.format(f);
+    }
 
     public static void showDialog(Component parent, String text) {
         JOptionPane.showMessageDialog(parent, text);

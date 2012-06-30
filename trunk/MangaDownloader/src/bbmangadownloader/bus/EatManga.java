@@ -4,11 +4,11 @@
  */
 package bbmangadownloader.bus;
 
+import bbmangadownloader.bus.description.ABusPageBasedDefaultChapPageImage;
+import bbmangadownloader.entity.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import bbmangadownloader.bus.description.ABusPageBasedDefaultChapPageImage;
-import bbmangadownloader.entity.*;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;

@@ -84,7 +84,8 @@ public class BuildDB {
             //            "http://mangainn.com",
             //            "http://www.mangareader.net",
             //            "http://truyentranhtuan.com",
-            "http://truyen.vnsharing.net"
+            //            "http://truyen.vnsharing.net",
+            "http://mangastream.com/"
         };
         String[] serverNames = {
             //            "Batoto",
@@ -94,7 +95,8 @@ public class BuildDB {
             //            "MangaInn",
             //            "MangaReader",
             //            "TruyenTranhTuan",
-            "VnSharing"
+            //            "VnSharing",
+            "MangaStream"
         };
         int mangaCounter = 0;
         for (int i = 0; i < serverNames.length; i++) {
@@ -168,7 +170,7 @@ public class BuildDB {
                     lE.setLMsUrl(manga.getUrl());
                     try {
                         Database.createLinkMangaServer(lE);
-                        //                    System.out.println("\tCreate Link Manga-Server: ID = " + lE.getLMsId());
+                        System.out.println("\tCreate Link Manga-Server: ID = " + lE.getLMsId());
                     } catch (PreexistingEntityException ex) {
                         Logger.getLogger(BuildDB.class.getName()).log(Level.SEVERE, null, ex);
                     } catch (Exception ex) {
@@ -180,7 +182,8 @@ public class BuildDB {
                     lE.setLMsUrl(manga.getUrl());
                     try {
                         Database.updateLinkMangaServer(lE);
-                        //                    System.out.println("\tLink update: ID = " + lE.getLMsId() + "\t" + oldTime + " -> " + lE.getLMsLastupdate());
+                        System.out.println("\tLink update: ID = " + lE.getLMsId() + "\t" + oldTime + " -> " + lE.getLMsLastupdate() + "\t"
+                                + manga.getMangaName());
                     } catch (NonexistentEntityException ex) {
                         Logger.getLogger(BuildDB.class.getName()).log(Level.SEVERE, null, ex);
                     } catch (Exception ex) {

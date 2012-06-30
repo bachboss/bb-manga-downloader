@@ -24,12 +24,13 @@ public class BBMangaDownloader {
         ConfigManager.loadOnStartUp();
         ServerManager.loadServer();
         // TODO: Remove later;
-//        CacheLoader.loadMangas();
+        CacheLoader.loadMangas();
 
         java.awt.EventQueue.invokeLater(new Runnable() {
 
             @Override
             public void run() {
+//                new MangaDownloadGUI().setVisible(true);
                 new MangaWatcherGUI().setVisible(true);
             }
         });

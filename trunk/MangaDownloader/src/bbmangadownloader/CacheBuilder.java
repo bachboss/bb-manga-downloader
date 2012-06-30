@@ -10,7 +10,7 @@ import bbmangadownloader.entity.Server;
 import bbmangadownloader.faces.IFacadeMangaServer;
 import bbmangadownloader.faces.ServerManager;
 import bbmangadownloader.faces.SupportType;
-import bbmangadownloader.ult.MyUtilities;
+import bbmangadownloader.ult.MathUtilities;
 import java.io.*;
 import java.util.List;
 
@@ -24,8 +24,8 @@ public class CacheBuilder {
         ConfigManager.loadOnStartUp();
         ServerManager.loadServer();
 
-        String serverUrl = "http://truyen.vnsharing.net/";
-        String serverName = "VnSharing";
+        String serverUrl = "http://mangastream.com/";
+        String serverName = "MangaStream";
 
         File folderCache = new File("D:\\Manga\\Cache\\", serverName);
         folderCache.mkdirs();
@@ -53,7 +53,7 @@ public class CacheBuilder {
                 List<Manga> l = (List<Manga>) o;
                 System.out.println("Loaded: " + l.size() + " record(s)");
                 for (int i = 0; i < 10; i++) {
-                    System.out.println("Random record : " + l.get(MyUtilities.getRandom(0, l.size() - 1)).getUrl());
+                    System.out.println("Random record : " + l.get(MathUtilities.getRandom(0, l.size() - 1)).getUrl());
                 }
             }
         } else {

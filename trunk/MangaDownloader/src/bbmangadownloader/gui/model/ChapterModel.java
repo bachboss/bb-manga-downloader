@@ -4,12 +4,13 @@
  */
 package bbmangadownloader.gui.model;
 
+import bbmangadownloader.entity.Chapter;
+import bbmangadownloader.ult.DateTimeUtilities;
+import bbmangadownloader.ult.GUIUtilities;
+import bbmangadownloader.ult.MathUtilities;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
-import bbmangadownloader.entity.Chapter;
-import bbmangadownloader.ult.DateTimeUtilities;
-import bbmangadownloader.ult.MyUtilities;
 
 /**
  *
@@ -54,7 +55,7 @@ public class ChapterModel extends AbstractTableModel implements MyTableModelSort
     public Object getDisplayDataAtColumn(int column, Chapter chapter) {
         switch (column) {
             case (0):
-                return MyUtilities.getStringFromFloat(chapter.getChapterNumber());
+                return GUIUtilities.getStringFromFloat(chapter.getChapterNumber());
             case (1):
                 return chapter.getDisplayName();
             case (2):
