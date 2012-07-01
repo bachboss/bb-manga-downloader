@@ -7,7 +7,8 @@ package bbmangadownloader.gui.model;
 import bbmangadownloader.entity.Chapter;
 import bbmangadownloader.ult.DateTimeUtilities;
 import bbmangadownloader.ult.GUIUtilities;
-import bbmangadownloader.ult.MathUtilities;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
@@ -18,7 +19,6 @@ import javax.swing.table.AbstractTableModel;
  */
 public class ChapterModel extends AbstractTableModel implements MyTableModelSortable<Chapter> {
 
-    private static final String DEFAULT_DATETIME_FORMAT = "yyyy-MM-dd";
     // remove the creat-code later
     private List<Chapter> listChapter;
     private static String[] COLUMNS = {"Chapter", "Display Name", "Upload Date", "Uploader", "URL"};
@@ -59,8 +59,7 @@ public class ChapterModel extends AbstractTableModel implements MyTableModelSort
             case (1):
                 return chapter.getDisplayName();
             case (2):
-                return DateTimeUtilities.getStringFromDate(
-                        chapter.getUploadDate(), DEFAULT_DATETIME_FORMAT);
+                return chapter.getUploadDate();
             case (3):
                 return chapter.getTranslator();
             case (4):

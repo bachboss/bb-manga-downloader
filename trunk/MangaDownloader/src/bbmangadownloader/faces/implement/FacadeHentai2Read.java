@@ -6,14 +6,14 @@ package bbmangadownloader.faces.implement;
 
 import bbmangadownloader.bus.Hentai2Read;
 import bbmangadownloader.bus.description.IBus;
-import bbmangadownloader.faces.AFacadeMangaServerPreLstImgLoad;
+import bbmangadownloader.faces.AFacadeDefault;
 import bbmangadownloader.faces.SupportType;
 
 /**
  *
  * @author Bach
  */
-public class FacadeHentai2Read extends AFacadeMangaServerPreLstImgLoad {
+public class FacadeHentai2Read extends AFacadeDefault {
 
     public FacadeHentai2Read() {
     }

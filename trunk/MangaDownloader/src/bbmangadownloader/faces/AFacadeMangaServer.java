@@ -4,11 +4,11 @@
  */
 package bbmangadownloader.faces;
 
+import bbmangadownloader.bus.description.IBus;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import bbmangadownloader.bus.description.IBus;
 
 /**
  *

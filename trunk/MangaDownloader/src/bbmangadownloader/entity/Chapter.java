@@ -4,6 +4,7 @@
  */
 package bbmangadownloader.entity;
 
+import bbmangadownloader.entity.data.MangaDateTime;
 import bbmangadownloader.ult.Heuristic;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -19,7 +20,7 @@ public class Chapter extends HtmlDocument implements Comparable<Chapter>, Serial
     private Manga manga;
     private float chapterNumber;
     private String displayName;
-    private Date uploadDate;
+    private MangaDateTime uploadDate;
     private List<Image> listImage;
     private List<Page> listPage;
     private String translator;
@@ -34,7 +35,7 @@ public class Chapter extends HtmlDocument implements Comparable<Chapter>, Serial
         }
     }
 
-    public Chapter(float chapterNumber, String displayName, String url, Manga manga, String translator, Date uploadDate) {
+    public Chapter(float chapterNumber, String displayName, String url, Manga manga, String translator, MangaDateTime uploadDate) {
         this.chapterNumber = chapterNumber;
         this.displayName = displayName.trim();
         this.url = url;
@@ -78,11 +79,11 @@ public class Chapter extends HtmlDocument implements Comparable<Chapter>, Serial
         this.displayName = displayName;
     }
 
-    public Date getUploadDate() {
+    public MangaDateTime getUploadDate() {
         return uploadDate;
     }
 
-    public void setUploadDate(Date uploadDate) {
+    public void setUploadDate(MangaDateTime uploadDate) {
         this.uploadDate = uploadDate;
     }
 

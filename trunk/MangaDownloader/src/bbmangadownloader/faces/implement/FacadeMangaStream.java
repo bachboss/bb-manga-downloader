@@ -6,14 +6,14 @@ package bbmangadownloader.faces.implement;
 
 import bbmangadownloader.bus.MangaStream;
 import bbmangadownloader.bus.description.IBus;
-import bbmangadownloader.faces.AFacadeMangaServerPreLstImgLoad;
+import bbmangadownloader.faces.AFacadeDefault;
 import bbmangadownloader.faces.SupportType;
 
 /**
  *
  * @author Bach
  */
-public class FacadeMangaStream extends AFacadeMangaServerPreLstImgLoad {
+public class FacadeMangaStream extends AFacadeDefault {
 
     public FacadeMangaStream() {
     }

@@ -7,12 +7,15 @@ package bbmangadownloader.bus;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import bbmangadownloader.bus.description.ABusPageBasedDefaultChapPageImage;
 import bbmangadownloader.entity.*;
+import bbmangadownloader.entity.data.MangaDateTime;
 import bbmangadownloader.ult.DateTimeUtilities;
+import bbmangadownloader.ult.NumberUtilities;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -24,7 +27,7 @@ import org.jsoup.select.Elements;
 public class Batoto extends ABusPageBasedDefaultChapPageImage { // Done
 
     private static final String URL_LIST_MANGA = "http://www.batoto.net/search_ajax?&p=";
-    private static final String DATE_FORMAT_UPLOAD = "dd MMM yyyy - hh:mm a";
+    private static final DateFormat DATE_FORMAT_UPLOAD = new SimpleDateFormat("dd MMM yyyy - hh:mm a", Locale.US);
 
     @Override
     public List<Manga> getAllMangas(Server s) throws IOException {
@@ -75,12 +78,12 @@ public class Batoto extends ABusPageBasedDefaultChapPageImage { // Done
         if (nodes.size() == 5) {
             Element aTag = nodes.first().select("a").first();
             String dateText = nodes.get(4).text();
-            Date uploadDate = null;
+            MangaDateTime uploadDate;
             try {
-                uploadDate = DateTimeUtilities.getDate(dateText, DATE_FORMAT_UPLOAD, Locale.US);
+                uploadDate = new MangaDateTime(DateTimeUtilities.getDate(dateText, DATE_FORMAT_UPLOAD));
             } catch (ParseException ex) {
                 //TODO:  Improve this later, some how like x hours ago :|
-                uploadDate = new Date();
+                uploadDate = new MangaDateTime(dateText);
             }
 
             return new Chapter(
@@ -97,7 +100,8 @@ public class Batoto extends ABusPageBasedDefaultChapPageImage { // Done
 
     @Override
     protected Page getPageFromTag(Element htmlTag, Chapter c) {
-        return new Page(htmlTag.attr("value"), c);
+        return new Page(htmlTag.attr("value"), c, NumberUtilities.getNumber(htmlTag.text()),
+                htmlTag.attributes().hasKey("selected"));
     }
 
     @Override

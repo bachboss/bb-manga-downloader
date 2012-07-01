@@ -20,8 +20,8 @@ public class ServerManager {
 
     public static void loadServer() {
         System.out.println("Loading servers...");
-        ServerFacadeManager.loadData();
-        Set<Entry<String, IFacadeMangaServer>> set = ServerFacadeManager.MAP_HOST.entrySet();
+        FacadeManager.loadData();
+        Set<Entry<String, IFacadeMangaServer>> set = FacadeManager.MAP_HOST.entrySet();
         for (Entry<String, IFacadeMangaServer> entry : set) {
             Server s = new Server(entry.getValue());
             mapServer.put(entry.getKey(), s);
@@ -33,7 +33,7 @@ public class ServerManager {
     }
 
     public static Server getServerByUrl(String url) {
-        IFacadeMangaServer facade = ServerFacadeManager.getServerFacadeByUrl(url);
+        IFacadeMangaServer facade = FacadeManager.getServerFacadeByUrl(url);
         return getServerByName(facade.getServerName());
     }
 }

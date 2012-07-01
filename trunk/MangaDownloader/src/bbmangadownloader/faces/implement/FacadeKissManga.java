@@ -6,14 +6,14 @@ package bbmangadownloader.faces.implement;
 
 import bbmangadownloader.bus.KissManga;
 import bbmangadownloader.bus.description.IBus;
-import bbmangadownloader.faces.AFacadeMangaServerPreLstImgLoad;
+import bbmangadownloader.faces.AFacadeDefault;
 import bbmangadownloader.faces.SupportType;
 
 /**
  *
  * @author Bach
  */
-public class FacadeKissManga extends AFacadeMangaServerPreLstImgLoad {
+public class FacadeKissManga extends AFacadeDefault {
 
     public FacadeKissManga() {
     }

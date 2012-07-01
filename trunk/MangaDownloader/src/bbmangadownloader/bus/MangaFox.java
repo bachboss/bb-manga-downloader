@@ -9,7 +9,11 @@ import java.text.ParseException;
 import java.util.*;
 import bbmangadownloader.bus.description.ABusPageBasedDefaultChapImage;
 import bbmangadownloader.entity.*;
+import bbmangadownloader.entity.data.MangaDateTime;
 import bbmangadownloader.ult.DateTimeUtilities;
+import bbmangadownloader.ult.NumberUtilities;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -22,7 +26,7 @@ public class MangaFox extends ABusPageBasedDefaultChapImage { // Done
 
     private static final String URL_LIST_MANGA = "http://mangafox.me/manga/";
     //
-    private static final String DATE_FORMAT_UPLOAD = "MMMM dd, yyyy";
+    private static final DateFormat DATE_FORMAT_UPLOAD = new SimpleDateFormat("MMMM dd, yyyy", Locale.US);
     private static final String DEFAULT_TRANS = "MangaFox";
 
     @Override
@@ -55,13 +59,14 @@ public class MangaFox extends ABusPageBasedDefaultChapImage { // Done
         if (aTags != null && !aTags.isEmpty()) {
             Element aTag = aTags.first();
 
-            Date date = null;
+            MangaDateTime date;
+            String strDate = htmlTag.select("span[class=date]").first().text();
             try {
-                date = DateTimeUtilities.getDate(
-                        htmlTag.select("span[class=date]").first().text(), DATE_FORMAT_UPLOAD, Locale.US);
+                date = new MangaDateTime(DateTimeUtilities.getDate(
+                        strDate, DATE_FORMAT_UPLOAD));
             } catch (ParseException ex) {
                 // TODO: Improve: x Hours ago, fuck !;
-                date = new Date();
+                date = new MangaDateTime(strDate);
             }
 
             return new Chapter(-1, aTag.html(), aTag.attr("href"), m, DEFAULT_TRANS, date);
@@ -87,7 +92,9 @@ public class MangaFox extends ABusPageBasedDefaultChapImage { // Done
         Iterator<Element> iElement = xmlNode.iterator();
         while (iElement.hasNext()) {
             Element e = iElement.next();
-            Page p = new Page(baseLink + e.attr("value") + ".html", chapter);
+            Page p = new Page(baseLink + e.attr("value") + ".html", chapter,
+                    NumberUtilities.getNumber(e.text()),
+                    e.attributes().hasKey("selected"));
             lstPage.add(p);
         }
 

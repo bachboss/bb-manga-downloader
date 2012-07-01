@@ -10,7 +10,6 @@ import javax.swing.table.AbstractTableModel;
 import bbmangadownloader.bus.model.data.DownloadTask;
 import bbmangadownloader.entity.Chapter;
 import bbmangadownloader.ult.GUIUtilities;
-import bbmangadownloader.ult.MathUtilities;
 
 /**
  *

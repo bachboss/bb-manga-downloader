@@ -4,11 +4,11 @@
  */
 package bbmangadownloader.faces;
 
-import java.util.List;
 import bbmangadownloader.entity.Chapter;
 import bbmangadownloader.entity.Image;
 import bbmangadownloader.entity.Manga;
 import bbmangadownloader.entity.Server;
+import java.util.List;
 
 /**
  *
@@ -21,8 +21,6 @@ public interface IFacadeMangaServer extends Cloneable {
     public List<Chapter> getAllChapters(Manga manga) throws Exception;
 
     public List<Image> getAllImages(Chapter chapter) throws Exception;
-
-    public int getNumberOfImages(Chapter chapter) throws Exception;
 
     public IFacadeMangaServer clone();
 

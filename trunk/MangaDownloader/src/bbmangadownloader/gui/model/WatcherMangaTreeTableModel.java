@@ -20,7 +20,6 @@ import org.jdesktop.swingx.treetable.AbstractTreeTableModel;
  */
 public class WatcherMangaTreeTableModel extends AbstractTreeTableModel {
 
-    private static final String DEFAULT_DATETIME_FORMAT = "yyyy-MM-dd";
     //
     private List<MangaWrapper> listMangaWrapper;
     private static String[] COLUMNS = {"Display Name", "Chapter", "Upload Date", "Uploader", "URL"};
@@ -66,8 +65,7 @@ public class WatcherMangaTreeTableModel extends AbstractTreeTableModel {
                 case 1:
                     return GUIUtilities.getStringFromFloat(c.getChapterNumber());
                 case 2:
-                    Date d = c.getUploadDate();
-                    return (d == null ? "--" : DateTimeUtilities.getStringFromDate(d, DEFAULT_DATETIME_FORMAT));
+                    return c.getUploadDate();
                 case 3:
                     return c.getTranslator();
                 case 4:

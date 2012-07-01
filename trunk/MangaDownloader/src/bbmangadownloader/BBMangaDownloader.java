@@ -1,9 +1,8 @@
 package bbmangadownloader;
 
-import bbmangadownloader.cache.CacheLoader;
 import bbmangadownloader.config.ConfigManager;
 import bbmangadownloader.faces.ServerManager;
-import bbmangadownloader.gui.MangaWatcherGUI;
+import bbmangadownloader.gui.MangaDownloadGUI;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.UIManager;
@@ -24,14 +23,14 @@ public class BBMangaDownloader {
         ConfigManager.loadOnStartUp();
         ServerManager.loadServer();
         // TODO: Remove later;
-        CacheLoader.loadMangas();
+//        CacheLoader.loadMangas();
 
         java.awt.EventQueue.invokeLater(new Runnable() {
 
             @Override
             public void run() {
-//                new MangaDownloadGUI().setVisible(true);
-                new MangaWatcherGUI().setVisible(true);
+                new MangaDownloadGUI().setVisible(true);
+//                new MangaWatcherGUI().setVisible(true);
             }
         });
     }

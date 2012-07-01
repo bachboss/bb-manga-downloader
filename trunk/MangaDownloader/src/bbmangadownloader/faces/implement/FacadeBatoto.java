@@ -5,21 +5,21 @@
 package bbmangadownloader.faces.implement;
 
 import bbmangadownloader.bus.Batoto;
-import bbmangadownloader.bus.description.IBusPageBased;
-import bbmangadownloader.faces.AFacadeMangaServerPreLstImgLoad;
+import bbmangadownloader.bus.description.IBus;
+import bbmangadownloader.faces.AFacadeDefault;
 import bbmangadownloader.faces.SupportType;
 
 /**
  *
  * @author Bach
  */
-public class FacadeBatoto extends AFacadeMangaServerPreLstImgLoad {
+public class FacadeBatoto extends AFacadeDefault {
 
     public FacadeBatoto() {
     }
 
     @Override
-    protected IBusPageBased getCurrentBUS() {
+    protected IBus getCurrentBUS() {
         return new Batoto();
     }
 

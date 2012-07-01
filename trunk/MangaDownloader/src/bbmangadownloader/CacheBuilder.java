@@ -10,7 +10,7 @@ import bbmangadownloader.entity.Server;
 import bbmangadownloader.faces.IFacadeMangaServer;
 import bbmangadownloader.faces.ServerManager;
 import bbmangadownloader.faces.SupportType;
-import bbmangadownloader.ult.MathUtilities;
+import bbmangadownloader.ult.NumberUtilities;
 import java.io.*;
 import java.util.List;
 
@@ -53,7 +53,7 @@ public class CacheBuilder {
                 List<Manga> l = (List<Manga>) o;
                 System.out.println("Loaded: " + l.size() + " record(s)");
                 for (int i = 0; i < 10; i++) {
-                    System.out.println("Random record : " + l.get(MathUtilities.getRandom(0, l.size() - 1)).getUrl());
+                    System.out.println("Random record : " + l.get(NumberUtilities.getRandom(0, l.size() - 1)).getUrl());
                 }
             }
         } else {

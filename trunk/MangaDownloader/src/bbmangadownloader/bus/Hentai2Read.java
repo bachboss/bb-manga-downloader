@@ -12,6 +12,7 @@ import java.util.regex.Pattern;
 import bbmangadownloader.bus.description.ABusPageBasedDefaultChapImage;
 import bbmangadownloader.entity.*;
 import bbmangadownloader.ult.HttpDownloadManager;
+import bbmangadownloader.ult.NumberUtilities;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -64,7 +65,8 @@ public class Hentai2Read extends ABusPageBasedDefaultChapImage {
         }
         Elements xmlNodes = xmlNode.select("option");
         for (Element e : xmlNodes) {
-            Page p = new Page(url + e.attr("value") + "/", chapter);
+            Page p = new Page(url + e.attr("value") + "/", chapter, NumberUtilities.getNumber(e.text()),
+                    e.attributes().hasKey("selected"));
             lstPage.add(p);
         }
 

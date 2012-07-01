@@ -6,14 +6,14 @@ package bbmangadownloader.faces.implement;
 
 import bbmangadownloader.bus.VnSharing;
 import bbmangadownloader.bus.description.IBus;
-import bbmangadownloader.faces.AFacadeMangaServerPreLstImgLoad;
+import bbmangadownloader.faces.AFacadeDefault;
 import bbmangadownloader.faces.SupportType;
 
 /**
  *
  * @author Bach
  */
-public class FacadeVnSharing extends AFacadeMangaServerPreLstImgLoad {
+public class FacadeVnSharing extends AFacadeDefault {
 
     public FacadeVnSharing() {
     }

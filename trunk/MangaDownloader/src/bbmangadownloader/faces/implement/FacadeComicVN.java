@@ -6,14 +6,14 @@ package bbmangadownloader.faces.implement;
 
 import bbmangadownloader.bus.ComicVN;
 import bbmangadownloader.bus.description.IBus;
-import bbmangadownloader.faces.AFacadeMangaServerPreLstImgLoad;
+import bbmangadownloader.faces.AFacadeDefault;
 import bbmangadownloader.faces.SupportType;
 
 /**
  *
  * @author Bach
  */
-public class FacadeComicVN extends AFacadeMangaServerPreLstImgLoad {
+public class FacadeComicVN extends AFacadeDefault {
 
     public FacadeComicVN() {
     }

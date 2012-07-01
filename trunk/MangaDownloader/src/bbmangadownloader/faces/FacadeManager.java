@@ -16,7 +16,7 @@ import java.util.logging.Logger;
  *
  * @author Bach
  */
-public class ServerFacadeManager {
+public class FacadeManager {
 
     public static final HashMap<String, IFacadeMangaServer> MAP_HOST = new HashMap<>();
 
@@ -60,7 +60,7 @@ public class ServerFacadeManager {
                 return MAP_HOST.get(checkingHost);
             }
         } catch (MalformedURLException ex) {
-            Logger.getLogger(ServerFacadeManager.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(FacadeManager.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }

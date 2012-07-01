@@ -4,6 +4,12 @@
  */
 package bbmangadownloader.bus;
 
+import bbmangadownloader.config.ConfigManager;
+import bbmangadownloader.entity.Chapter;
+import bbmangadownloader.entity.Manga;
+import bbmangadownloader.entity.data.MangaDateTime;
+import bbmangadownloader.ult.DateTimeUtilities;
+import bbmangadownloader.ult.HttpDownloadManager;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -12,11 +18,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import bbmangadownloader.config.ConfigManager;
-import bbmangadownloader.entity.Chapter;
-import bbmangadownloader.entity.Manga;
-import bbmangadownloader.ult.DateTimeUtilities;
-import bbmangadownloader.ult.HttpDownloadManager;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -135,21 +136,17 @@ public class VnSharing extends KissManga { // Done
             if (e.child(0).tagName().equals("th")) {
                 continue;
             }
-            Element aTag = e.child(0).
-                    child(0);
-
-            Date date;
+            Element aTag = e.child(0).child(0);
             try {
-                date = DateTimeUtilities.getDate(e.child(1).text(), DATE_FORMAT_UPLOAD);
+                MangaDateTime date = new MangaDateTime(DateTimeUtilities.getDate(e.child(1).text(), DATE_FORMAT_UPLOAD));
+                Chapter c = new Chapter(-1, aTag.html(), BASED_URL + aTag.attr("href"), manga,
+                        translator, date);
+                lstChapter.add(c);
             } catch (ParseException ex) {
                 Logger.getLogger(VnSharing.class.getName()).log(Level.SEVERE, null, ex);
                 // Can not error;
                 continue;
             }
-
-            Chapter c = new Chapter(-1, aTag.html(), BASED_URL + aTag.attr("href"), manga,
-                    translator, date);
-            lstChapter.add(c);
         }
         return lstChapter;
     }

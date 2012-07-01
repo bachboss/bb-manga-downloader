@@ -4,6 +4,7 @@
  */
 package bbmangadownloader.gui;
 
+import bbmangadownloader.bus.exception.HtmlParsingException;
 import comichtmlgender.HTMLGenerator;
 import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
@@ -21,7 +22,7 @@ import bbmangadownloader.entity.Chapter;
 import bbmangadownloader.entity.Manga;
 import bbmangadownloader.entity.Server;
 import bbmangadownloader.faces.IFacadeMangaServer;
-import bbmangadownloader.faces.ServerFacadeManager;
+import bbmangadownloader.faces.FacadeManager;
 import bbmangadownloader.gui.bus.ListTaskDownloader;
 import bbmangadownloader.gui.model.ChapterDownloadModel;
 import bbmangadownloader.gui.model.ChapterModel;
@@ -29,6 +30,7 @@ import bbmangadownloader.gui.model.MyColumnSorter;
 import bbmangadownloader.gui.model.MyTableModelSortable;
 import bbmangadownloader.ult.GUIUtilities;
 import bbmangadownloader.ult.HttpDownloadManager;
+import java.io.IOException;
 
 /**
  *
@@ -568,7 +570,7 @@ public class MangaDownloadGUI extends javax.swing.JFrame {
     private void doCheckSupport() {
         String url = txtMangaUrl.getText();
 
-        mangaServer = ServerFacadeManager.getServerFacadeByUrl(url);
+        mangaServer = FacadeManager.getServerFacadeByUrl(url);
 
         modelChapter.clear();
 

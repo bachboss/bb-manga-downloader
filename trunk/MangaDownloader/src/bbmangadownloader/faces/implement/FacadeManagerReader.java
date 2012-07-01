@@ -5,21 +5,21 @@
 package bbmangadownloader.faces.implement;
 
 import bbmangadownloader.bus.MangaReader;
-import bbmangadownloader.bus.description.IBusPageBased;
-import bbmangadownloader.faces.AFacadeMangaServerPreLstImgLoad;
+import bbmangadownloader.bus.description.IBus;
+import bbmangadownloader.faces.AFacadeDefault;
 import bbmangadownloader.faces.SupportType;
 
 /**
  *
  * @author Bach
  */
-public class FacadeManagerReader extends AFacadeMangaServerPreLstImgLoad {
+public class FacadeManagerReader extends AFacadeDefault {
 
     public FacadeManagerReader() {
     }
 
     @Override
-    protected IBusPageBased getCurrentBUS() {
+    protected IBus getCurrentBUS() {
         return new MangaReader();
     }
 

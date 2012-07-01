@@ -6,14 +6,14 @@ package bbmangadownloader.faces.implement;
 
 import bbmangadownloader.bus.TruyenTranhTuan;
 import bbmangadownloader.bus.description.IBus;
-import bbmangadownloader.faces.AFacadeMangaServerPreLstImgLoad;
+import bbmangadownloader.faces.AFacadeDefault;
 import bbmangadownloader.faces.SupportType;
 
 /**
  *
  * @author Bach
  */
-public class FacadeTruyenTranhTuan extends AFacadeMangaServerPreLstImgLoad {
+public class FacadeTruyenTranhTuan extends AFacadeDefault {
 
     public FacadeTruyenTranhTuan() {
     }

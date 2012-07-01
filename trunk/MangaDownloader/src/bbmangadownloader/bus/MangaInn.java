@@ -6,14 +6,15 @@ package bbmangadownloader.bus;
 
 import bbmangadownloader.bus.description.ABusPageBasedDefaultChapImage;
 import bbmangadownloader.entity.*;
+import bbmangadownloader.entity.data.MangaDateTime;
 import bbmangadownloader.ult.DateTimeUtilities;
+import bbmangadownloader.ult.NumberUtilities;
 import java.io.IOException;
+import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -27,7 +28,7 @@ public class MangaInn extends ABusPageBasedDefaultChapImage { // Done
     private static final String PAGE_URL_FORMAT = "http://www.mangainn.com/manga/chapter/%s/page_%s";
     private static final String URL_LIST_MANGA = "http://www.mangainn.com/MangaList";
     //
-    private static final String DATE_FORMAT_UPLOAD = "MM.dd.yyyy";
+    private static final DateFormat DATE_FORMAT_UPLOAD = new SimpleDateFormat("MM.dd.yyyy");
     private static final String DEFAULT_TRANS = "MangaInn";
 
     @Override
@@ -62,18 +63,13 @@ public class MangaInn extends ABusPageBasedDefaultChapImage { // Done
             if (aTags.isEmpty()) {
                 return null;
             }
-
-            Date date;
             try {
-                date = DateTimeUtilities.getDate(htmlTag.child(1).text(), DATE_FORMAT_UPLOAD);
+                MangaDateTime date = new MangaDateTime(DateTimeUtilities.getDate(htmlTag.child(1).text(), DATE_FORMAT_UPLOAD));
+                Element aTag = aTags.first();
+                return new Chapter(-1, aTag.text(), aTag.attr("href"), m,
+                        DEFAULT_TRANS, date);
             } catch (ParseException ex) {
-                // TODO: Error? Rerely !
-                Logger.getLogger(MangaInn.class.getName()).log(Level.SEVERE, null, ex);
-                date = new Date();
             }
-            Element aTag = aTags.first();
-            return new Chapter(-1, aTag.text(), aTag.attr("href"), m,
-                    DEFAULT_TRANS, date);
         }
         return null;
     }
@@ -93,7 +89,9 @@ public class MangaInn extends ABusPageBasedDefaultChapImage { // Done
 
         xmlNodes = doc.select("select[id=cmbpages] option");
         for (Element e : xmlNodes) {
-            Page p = new Page(String.format(PAGE_URL_FORMAT, chapterValue, e.attr("value")), chapter);
+            Page p = new Page(String.format(PAGE_URL_FORMAT, chapterValue, e.attr("value")), chapter,
+                    NumberUtilities.getNumber(e.text()),
+                    e.attributes().hasKey("selected"));
             lstPage.add(p);
         }
         return lstPage;

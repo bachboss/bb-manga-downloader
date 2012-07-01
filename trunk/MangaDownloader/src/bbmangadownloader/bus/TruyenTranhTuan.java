@@ -4,6 +4,14 @@
  */
 package bbmangadownloader.bus;
 
+import bbmangadownloader.bus.description.IBusOnePage;
+import bbmangadownloader.entity.Chapter;
+import bbmangadownloader.entity.Image;
+import bbmangadownloader.entity.Manga;
+import bbmangadownloader.entity.Server;
+import bbmangadownloader.entity.data.MangaDateTime;
+import bbmangadownloader.ult.DateTimeUtilities;
+import bbmangadownloader.ult.HttpDownloadManager;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -12,13 +20,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import bbmangadownloader.bus.description.IBusOnePage;
-import bbmangadownloader.entity.Chapter;
-import bbmangadownloader.entity.Image;
-import bbmangadownloader.entity.Manga;
-import bbmangadownloader.entity.Server;
-import bbmangadownloader.ult.DateTimeUtilities;
-import bbmangadownloader.ult.HttpDownloadManager;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -65,7 +66,7 @@ public class TruyenTranhTuan implements IBusOnePage { // Done
                 try {
                     c = new Chapter(-1, aTag.html(), BASED_URL + aTag.attr("href"), manga,
                             children.get(1).text(),
-                            DateTimeUtilities.getDate(children.get(2).text(), DATE_FORMAT_UPLOAD));
+                            new MangaDateTime(DateTimeUtilities.getDate(children.get(2).text(), DATE_FORMAT_UPLOAD)));
                     lstChapter.add(c);
                 } catch (ParseException ex) {
                     Logger.getLogger(TruyenTranhTuan.class.getName()).log(Level.SEVERE, null, ex);

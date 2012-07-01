@@ -9,11 +9,14 @@ import bbmangadownloader.entity.Chapter;
 import bbmangadownloader.entity.Image;
 import bbmangadownloader.entity.Manga;
 import bbmangadownloader.entity.Server;
+import bbmangadownloader.entity.data.MangaDateTime;
 import bbmangadownloader.ult.DateTimeUtilities;
 import bbmangadownloader.ult.HttpDownloadManager;
 import bbmangadownloader.ult.MultitaskJob;
 import java.io.IOException;
+import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -42,7 +45,7 @@ public class KissManga implements IBusOnePage {  // Done
     private static final String BASED_URL_LIST_MANGA = "http://kissmanga.com/MangaList?page=";
     private static final String URL_LIST_MANGA = "http://kissmanga.com/MangaList";
     //
-    private static final String DATE_FORMAT_UPLOAD = "dd/MM/yyyy";
+    private static final DateFormat DATE_FORMAT_UPLOAD = new SimpleDateFormat("dd/MM/yyyy");
     private static final String DEFAULT_TRANS = "KissManga";
 
     protected Document getDocument(String url) throws IOException {
@@ -118,10 +121,12 @@ public class KissManga implements IBusOnePage {  // Done
             Elements nodes = e.children();
             if (nodes.size() == 2) {
                 Element aTag = nodes.get(0).select("a").first();
-                Date date = null;
+                MangaDateTime date;
                 try {
-                    date = DateTimeUtilities.getDate(nodes.get(1).text(), DATE_FORMAT_UPLOAD);
+                    date = new MangaDateTime(DateTimeUtilities.getDate(nodes.get(1).text(), DATE_FORMAT_UPLOAD));
                 } catch (ParseException ex) {
+                    // TODO: Rarely !
+                    date = new MangaDateTime("-");
                 }
                 Chapter c;
                 c = new Chapter(
