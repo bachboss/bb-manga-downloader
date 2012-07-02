@@ -5,6 +5,7 @@
 package bbmangadownloader.gui;
 
 import bbmangadownloader.database.Database;
+import bbmangadownloader.database.controller.exceptions.NonexistentEntityException;
 import bbmangadownloader.database.entity.LinkWatcherLinkms;
 import bbmangadownloader.database.entity.Watchers;
 import bbmangadownloader.entity.Chapter;
@@ -272,6 +273,11 @@ public class MangaWatcherGUI extends javax.swing.JFrame {
         popWatcher.add(mnWatcherRename);
 
         mnWatcherRemove.setText("Remove");
+        mnWatcherRemove.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnWatcherRemoveActionPerformed(evt);
+            }
+        });
         popWatcher.add(mnWatcherRemove);
 
         mnWatcherAddHost.setText("Add host(s)");
@@ -598,7 +604,7 @@ public class MangaWatcherGUI extends javax.swing.JFrame {
             if (row != -1) {
                 currentWatcher = modelWatcher.getWatcherAt(row);
                 loadWatcher(currentWatcher);
-                loadAllChapterInWatcher(currentWatcher);
+//                loadAllChapterInWatcher(currentWatcher);
             }
         }
     }//GEN-LAST:event_tblWatcherMouseClicked
@@ -703,6 +709,16 @@ public class MangaWatcherGUI extends javax.swing.JFrame {
             spnFrom.setValue(valueTo);
         }
     }//GEN-LAST:event_spnToStateChanged
+
+    private void mnWatcherRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnWatcherRemoveActionPerformed
+        int[] arrTemp = tblWatcher.getSelectedRows();
+        Watcher[] arrWatcher = new Watcher[arrTemp.length];
+        for (int i = 0; i < arrTemp.length; i++) {
+            arrWatcher[i] = modelWatcher.getWatcherAt(arrTemp[i]);
+        }
+
+        deleteWatchers(arrWatcher);
+    }//GEN-LAST:event_mnWatcherRemoveActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddWatcher;
     private org.jdesktop.swingx.JXDatePicker cldFrom;
@@ -874,4 +890,16 @@ public class MangaWatcherGUI extends javax.swing.JFrame {
         }
     }
     private static final int DEFAULT_POOL_LOAD = 3;
+
+    private void deleteWatchers(Watcher[] arrWatcher) {
+        for (int i = 0; i < arrWatcher.length; i++) {
+            try {
+                Database.deleteWatcher(arrWatcher[i].getId());
+                modelWatcher.removeWatcher(arrWatcher[i]);
+            } catch (NonexistentEntityException ex) {
+                Logger.getLogger(MangaWatcherGUI.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        modelWatcher.fireTableDataChanged();
+    }
 }

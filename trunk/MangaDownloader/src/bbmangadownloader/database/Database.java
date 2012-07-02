@@ -136,4 +136,9 @@ public class Database {
         WatchersJpaController wC = new WatchersJpaController(getEntityManagerFactory());
         wC.edit(wE);
     }
+
+    public static void deleteWatcher(int id) throws NonexistentEntityException {
+        WatchersJpaController wC = new WatchersJpaController(getEntityManagerFactory());
+        wC.destroy(id);
+    }
 }

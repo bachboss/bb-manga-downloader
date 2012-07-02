@@ -6,6 +6,7 @@ package bbmangadownloader.bus;
 
 import bbmangadownloader.bus.description.ABusPageBasedDefaultChapPageImage;
 import bbmangadownloader.entity.*;
+import bbmangadownloader.entity.data.MangaDateTime;
 import bbmangadownloader.ult.NumberUtilities;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -23,6 +24,8 @@ public class EatManga extends ABusPageBasedDefaultChapPageImage {  // Done
 
     private static final String BASED_URL = "http://eatmanga.com";
     private static final String URL_LIST_MANGA = "http://eatmanga.com/Manga-Scan/";
+    // 
+    private static final String DEFAULT_TRANS = "EatManga";
 
     @Override
     public List<Manga> getAllMangas(Server s) throws IOException {
@@ -62,7 +65,11 @@ public class EatManga extends ABusPageBasedDefaultChapPageImage {  // Done
         if (url.contains("upcoming")) {
             return null;
         }
-        return new Chapter(-1, htmlTag.html(), BASED_URL + url, m);
+        MangaDateTime date;
+        date = new MangaDateTime(htmlTag.parent().nextElementSibling().text());
+
+        return new Chapter(-1, htmlTag.html(), BASED_URL + url, m,
+                DEFAULT_TRANS, date);
     }
 
     @Override
