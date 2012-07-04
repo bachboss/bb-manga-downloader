@@ -19,19 +19,38 @@ import bbmangadownloader.database.entity.*;
  */
 public class Database {
 
-    private static EntityManagerFactory emf;
+    private static final boolean DEFAULT_CACHE_EM = true;
     public static String persitenceUnitPU = "MangaDownloaderDerbyPU";
+    //
+    private static final Database cI = new Database();
+    private EntityManagerFactory emf;
+    private volatile EntityManager em;
 
-    public synchronized static EntityManagerFactory getEntityManagerFactory() {
-        if (emf == null) {
-            System.out.println("Loading Entity Mangager Factory of " + persitenceUnitPU);
-            emf = Persistence.createEntityManagerFactory(persitenceUnitPU);
-        }
-        return emf;
+    private Database() {
+        emf = Persistence.createEntityManagerFactory(persitenceUnitPU);
     }
 
-    public synchronized static EntityManager getEntityManager() {
-        return getEntityManagerFactory().createEntityManager();
+    public static EntityManagerFactory getEntityManagerFactory() {
+        return cI.emf;
+    }
+
+    public static EntityManager getEntityManager() {
+        return getEntityManager(DEFAULT_CACHE_EM);
+    }
+
+    public static EntityManager getEntityManager(boolean isCached) {
+        if (isCached) {
+            if (cI.em == null) {
+                synchronized (cI) {
+                    if (cI.em == null) {
+                        cI.em = cI.emf.createEntityManager();
+                    }
+                }
+            }
+            return cI.em;
+        } else {
+            return getEntityManagerFactory().createEntityManager();
+        }
     }
 
     public static void createServer(Servers s) throws PreexistingEntityException, Exception {

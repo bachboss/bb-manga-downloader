@@ -5,6 +5,7 @@
 package bbmangadownloader.bus;
 
 import bbmangadownloader.bus.description.IBusOnePage;
+import bbmangadownloader.bus.exception.HtmlParsingException;
 import bbmangadownloader.entity.Chapter;
 import bbmangadownloader.entity.Image;
 import bbmangadownloader.entity.Manga;
@@ -18,7 +19,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
@@ -40,16 +41,21 @@ public class KissManga implements IBusOnePage {  // Done
 
     private static final int DEFAULT_POOL_SIZE_MANGA_DOWNLOAD = 3;
     private static final Pattern PATTERN_IMAGE = Pattern.compile("lstImages.push\\(\"(http://.+)\"\\);");
-    //
+    // 
     private static final String BASED_URL = "http://kissmanga.com";
     private static final String BASED_URL_LIST_MANGA = "http://kissmanga.com/MangaList?page=";
     private static final String URL_LIST_MANGA = "http://kissmanga.com/MangaList";
-    //
+    //    
     private static final DateFormat DATE_FORMAT_UPLOAD = new SimpleDateFormat("dd/MM/yyyy");
     private static final String DEFAULT_TRANS = "KissManga";
 
     protected Document getDocument(String url) throws IOException {
-        return HttpDownloadManager.getDocument(url);
+        return HttpDownloadManager.getDocumentWithCookie(url, new HashMap<String, String>() {
+
+            {
+                put("vns_Adult", "yes");
+            }
+        });
     }
 
     protected String getBasedUrl() {
@@ -110,11 +116,17 @@ public class KissManga implements IBusOnePage {  // Done
     }
 
     @Override
-    public List<Chapter> getAllChapters(Manga manga) throws IOException {
+    public List<Chapter> getAllChapters(Manga manga) throws IOException, HtmlParsingException {
         ArrayList<Chapter> lstChapter = new ArrayList<>();
 
         Document doc = getDocument(manga.getUrl());
+
         Elements xmlNode = doc.select("div[class=barContent chapterList] table[class=listing] tr");
+
+        if (xmlNode.isEmpty()) {
+            throw new HtmlParsingException(manga);
+        }
+
         xmlNode.remove(0);
 
         for (Element e : xmlNode) {
@@ -160,6 +172,8 @@ public class KissManga implements IBusOnePage {  // Done
         }
 
         return lstImage;
+
+
     }
 
     protected class EatMangaMangaLoaderTask implements Callable<List<Manga>> {

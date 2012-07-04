@@ -10,7 +10,6 @@ import bbmangadownloader.entity.Server;
 import bbmangadownloader.faces.IFacadeMangaServer;
 import bbmangadownloader.faces.ServerManager;
 import bbmangadownloader.faces.SupportType;
-import bbmangadownloader.ult.NumberUtilities;
 import java.io.*;
 import java.util.List;
 
@@ -24,40 +23,53 @@ public class CacheBuilder {
         ConfigManager.loadOnStartUp();
         ServerManager.loadServer();
 
-        String serverUrl = "http://mangastream.com/";
-        String serverName = "MangaStream";
+        ServerTempData[] servers = new ServerTempData[]{
+            new ServerTempData("http://www.batoto.net", false),
+            new ServerTempData("http://eatmanga.com", false),
+            new ServerTempData("http://kissmanga.com", false),
+            new ServerTempData("http://mangafox.me", false),
+            new ServerTempData("http://mangainn.com", false),
+            new ServerTempData("http://www.mangareader.net", false),
+            new ServerTempData("http://truyentranhtuan.com", false),
+            new ServerTempData("http://truyen.vnsharing.net", false),
+            new ServerTempData("http://mangastream.com/", false)
+        };
 
-        File folderCache = new File("D:\\Manga\\Cache\\", serverName);
-        folderCache.mkdirs();
-        File fileOutput = new File(folderCache, "file.data");
+        for (ServerTempData sEE : servers) {
+            if (sEE.isDownload) {
+                Server server = ServerManager.getServerByUrl(sEE.serverUrl);
+                IFacadeMangaServer facade = server.getMangaServer();
+                if (facade.getSupportType() == SupportType.Support) {
+                    System.out.println("--------------------------------------------------------------------------------");
+                    System.out.println("Loading Server : " + server.getServerName());
 
-        ConfigManager.loadOnStartUp();
+                    File folderCache = new File("D:\\Manga\\Cache\\", server.getServerName());
+                    folderCache.mkdirs();
+                    File fileOutput = new File(folderCache, "file.data");
 
-        Server server = ServerManager.getServerByUrl(serverUrl);
-        IFacadeMangaServer facade = server.getMangaServer();
-        if (facade.getSupportType() == SupportType.Support) {
-            System.out.println("Loading Server : " + serverName);
-            List<Manga> lstManga = facade.getAllMangas(server);
-            System.out.println("Got Data !");
+                    List<Manga> lstManga = facade.getAllMangas(server);
+                    System.out.println("Parsing Done!");
 
-            for (Manga m : lstManga) {
-                m.setServer(null);
-            }
+                    for (Manga m : lstManga) {
+                        m.setServer(null);
+                    }
 
-            try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(fileOutput))) {
-                System.out.println("Writed: " + lstManga.size() + " record(s)");
-                oos.writeObject(lstManga);
-            }
-            try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(fileOutput))) {
-                Object o = ois.readObject();
-                List<Manga> l = (List<Manga>) o;
-                System.out.println("Loaded: " + l.size() + " record(s)");
-                for (int i = 0; i < 10; i++) {
-                    System.out.println("Random record : " + l.get(NumberUtilities.getRandom(0, l.size() - 1)).getUrl());
+                    try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(fileOutput))) {
+                        System.out.println("Writed: " + lstManga.size() + " record(s)");
+                        oos.writeObject(lstManga);
+                    }
+                    try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(fileOutput))) {
+                        Object o = ois.readObject();
+                        List<Manga> l = (List<Manga>) o;
+                        System.out.println("Loaded: " + l.size() + " record(s)");
+//                    for (int j = 0; j < 10; j++) {
+//                        System.out.println("Random record : " + l.get(NumberUtilities.getRandom(0, l.size() - 1)).getUrl());
+//                    }
+                    }
+                } else {
+                    System.out.println("Host Support = " + facade.getSupportType().toString());
                 }
             }
-        } else {
-            System.out.println("Host Support = " + facade.getSupportType().toString());
         }
     }
 }

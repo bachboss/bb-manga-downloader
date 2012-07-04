@@ -4,15 +4,6 @@
  */
 package bbmangadownloader.gui.bus;
 
-import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.Callable;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.table.AbstractTableModel;
 import bbmangadownloader.bus.model.data.DownloadTask;
 import bbmangadownloader.entity.Chapter;
 import bbmangadownloader.entity.Image;
@@ -22,6 +13,15 @@ import bbmangadownloader.ult.FileManager;
 import bbmangadownloader.ult.GUIUtilities;
 import bbmangadownloader.ult.MultitaskJob;
 import bbmangadownloader.ult.MyLogger;
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.table.AbstractTableModel;
 
 /**
  *
@@ -67,6 +67,7 @@ public class ListTaskDownloader implements Runnable {
                         task.setStatus(DownloadTask.STATUS_PARSING);
                         tableModel.fireTableCellUpdated(0, 2);
                         List<Image> lstImg = usingServer.getAllImages(c);
+                        c.addImages(lstImg);
                         System.out.println("\tGot " + lstImg.size() + " image(s)");
                         // Download...
                         task.setStatus(DownloadTask.STATUS_RUNNING);

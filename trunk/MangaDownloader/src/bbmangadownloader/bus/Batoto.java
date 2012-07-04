@@ -12,10 +12,16 @@ import bbmangadownloader.bus.description.ABusPageBasedDefaultChapPageImage;
 import bbmangadownloader.entity.*;
 import bbmangadownloader.entity.data.MangaDateTime;
 import bbmangadownloader.ult.DateTimeUtilities;
+import bbmangadownloader.ult.MultitaskJob;
 import bbmangadownloader.ult.NumberUtilities;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -26,29 +32,35 @@ import org.jsoup.select.Elements;
  */
 public class Batoto extends ABusPageBasedDefaultChapPageImage { // Done
 
+    private static final int DEFAULT_LOAD_PAGE = 3;
     private static final String URL_LIST_MANGA = "http://www.batoto.net/search_ajax?&p=";
     private static final DateFormat DATE_FORMAT_UPLOAD = new SimpleDateFormat("dd MMM yyyy - hh:mm a", Locale.US);
 
     @Override
-    public List<Manga> getAllMangas(Server s) throws IOException {
+    public List<Manga> getAllMangas(final Server s) throws IOException {
         // TODO: Can improve by using multi thread loading
-        List<Manga> lstReturn = new ArrayList<>();
+        final List<Manga> lstReturn = new ArrayList<>();
         int i = 0;
         boolean isDone = false;
         do {
-            i++;
-            Document doc = getDocument(URL_LIST_MANGA + i);
-            Elements xmlNodes = doc.select("tr").not("tr[class=header]");
-            if (xmlNodes.select("tr[id=show_more_row]").isEmpty()) {
-                isDone = true;
-            } else {
-                for (Element e : xmlNodes) {
-                    if (!e.attr("id").equals("show_more_row")) {
-                        Element el = e.select("a").first();
-                        if (el != null) {
-                            Manga m = new Manga(s, el.text(), el.attr("href"));
-                            lstReturn.add(m);
+            List<Callable<List<Manga>>> lstTask = new ArrayList<>();
+            for (int x = 0; x <= DEFAULT_LOAD_PAGE; x++) {
+                i++;
+                lstTask.add(new CallableImpl(i, s));
+            }
+
+            List<Future<List<Manga>>> lstF = MultitaskJob.doTask(DEFAULT_LOAD_PAGE, lstTask);
+            for (Future<List<Manga>> f : lstF) {
+                if (f.isDone()) {
+                    try {
+                        List<Manga> lstM = f.get();
+                        if (lstM == null) {
+                            isDone = true;
+                            continue;
                         }
+                        lstReturn.addAll(lstM);
+                    } catch (InterruptedException | ExecutionException ex) {
+                        Logger.getLogger(Batoto.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
             }
@@ -107,5 +119,38 @@ public class Batoto extends ABusPageBasedDefaultChapPageImage { // Done
     @Override
     protected Image getImageFromTag(Element imgNode, Chapter c) {
         return new Image(-1, imgNode.attr("src"), c);
+    }
+
+    private class CallableImpl implements Callable<List<Manga>> {
+
+        private final Server s;
+        int i;
+
+        private CallableImpl(int i, Server s) {
+            this.i = i;
+            this.s = s;
+        }
+
+        @Override
+        public List<Manga> call() throws Exception {
+            List<Manga> lstManga = new ArrayList<>();
+            Document doc = getDocument(URL_LIST_MANGA + i);
+            Elements xmlNodes = doc.select("tr").not("tr[class=header]");
+            if (xmlNodes.select("tr[id=show_more_row]").isEmpty()) {
+                return null;
+//                                isDone = true;
+            } else {
+                for (Element e : xmlNodes) {
+                    if (!e.attr("id").equals("show_more_row")) {
+                        Element el = e.select("a").first();
+                        if (el != null) {
+                            Manga m = new Manga(s, el.text(), el.attr("href"));
+                            lstManga.add(m);
+                        }
+                    }
+                }
+            }
+            return lstManga;
+        }
     }
 }

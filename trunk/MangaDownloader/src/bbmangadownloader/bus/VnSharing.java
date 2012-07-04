@@ -13,7 +13,6 @@ import bbmangadownloader.ult.HttpDownloadManager;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
@@ -61,12 +60,13 @@ public class VnSharing extends KissManga { // Done
                     ? 0 : 1;
         }
         if (fromPicasaCookieValue == 0) {
-            return HttpDownloadManager.getDocument(url);
+            return super.getDocument(url);
         } else {
             return HttpDownloadManager.getDocumentWithCookie(url, new HashMap<String, String>() {
 
                 {
                     put(COOKIES_PICASA, Integer.toString(fromPicasaCookieValue));
+                    put("vns_Adult", "yes");
                 }
             });
         }

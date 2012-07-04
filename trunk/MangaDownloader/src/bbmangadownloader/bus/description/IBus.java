@@ -4,6 +4,7 @@
  */
 package bbmangadownloader.bus.description;
 
+import bbmangadownloader.bus.exception.HtmlParsingException;
 import bbmangadownloader.entity.Chapter;
 import bbmangadownloader.entity.Image;
 import bbmangadownloader.entity.Manga;
@@ -17,9 +18,9 @@ import java.util.List;
  */
 public interface IBus {
 
-    public List<Manga> getAllMangas(Server s) throws IOException;
+    public List<Manga> getAllMangas(Server s) throws IOException, HtmlParsingException;
 
-    public List<Chapter> getAllChapters(Manga m) throws IOException;
+    public List<Chapter> getAllChapters(Manga m) throws IOException, HtmlParsingException;
 
-    public List<Image> getAllImages(Chapter c) throws IOException;
+    public List<Image> getAllImages(Chapter c) throws IOException, HtmlParsingException;
 }

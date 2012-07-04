@@ -5,6 +5,7 @@
 package bbmangadownloader.bus;
 
 import bbmangadownloader.bus.description.IBus;
+import bbmangadownloader.bus.exception.HtmlParsingException;
 import bbmangadownloader.entity.Chapter;
 import bbmangadownloader.entity.Image;
 import bbmangadownloader.entity.Manga;
@@ -37,7 +38,7 @@ public class MangaStream implements IBus {
         Elements xmlNodes = doc.select("td strong");
         for (Element e : xmlNodes) {
             String mN = e.text();
-            if (mangaName == null ^ mN.equalsIgnoreCase(mangaName)) {
+            if (mangaName == null || mN.equalsIgnoreCase(mangaName)) {
                 Manga m = new Manga(s, mN, URL_LIST_MANGA);
                 Element e2 = e.nextElementSibling();
                 do {
@@ -64,10 +65,15 @@ public class MangaStream implements IBus {
     }
 
     @Override
-    public List<Chapter> getAllChapters(Manga m) throws IOException {
+    public List<Chapter> getAllChapters(Manga m) throws IOException, HtmlParsingException {
         if (m.getListChapter().isEmpty()) {
             System.out.println("Get for manga: " + m.getMangaName());
-            return getMangas(m.getServer(), m.getMangaName()).get(0).getListChapter();
+            List<Manga> lstManga = getMangas(m.getServer(), m.getMangaName());
+            if (lstManga.isEmpty()) {
+                throw new HtmlParsingException(m);
+            } else {
+                return lstManga.get(0).getListChapter();
+            }
         } else {
             return m.getListChapter();
         }

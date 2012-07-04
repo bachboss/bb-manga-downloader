@@ -48,15 +48,18 @@ public class DownloadTask {
     public String getStatus() {
         switch (status) {
             case (STATUS_PARSING): {
+                int numberOfImage = Math.max(c.getPagesCount(), c.getImagesCount());
                 if (currentImage != c.getPagesCount()) {
-                    return String.format("@ (%.2f", (((float) currentImage) / c.getPagesCount() * 100)) + "%)";
+                    return String.format("@ (%.2f", (((float) currentImage) / numberOfImage * 100)) + "%)";
                 } else {
                     return "100%";
                 }
             }
             case (STATUS_RUNNING):
+                int numberOfImage = Math.max(c.getPagesCount(), c.getImagesCount());
+                System.out.println("numberOfImage = " + numberOfImage);
                 if (currentImage != c.getImagesCount()) {
-                    return String.format("˅ (%.2f", (((float) currentImage) / c.getImagesCount() * 100)) + "%)";
+                    return String.format("˅ (%.2f", (((float) currentImage) / numberOfImage * 100)) + "%)";
                 } else {
                     return "˅ (100%)";
                 }
