@@ -32,7 +32,8 @@ public class CacheBuilder {
             new ServerTempData("http://www.mangareader.net", false),
             new ServerTempData("http://truyentranhtuan.com", false),
             new ServerTempData("http://truyen.vnsharing.net", false),
-            new ServerTempData("http://mangastream.com/", false)
+            new ServerTempData("http://mangastream.com/", false),
+            new ServerTempData("http://mangahere.com/", true)
         };
 
         for (ServerTempData sEE : servers) {

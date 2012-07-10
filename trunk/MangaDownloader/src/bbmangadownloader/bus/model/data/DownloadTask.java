@@ -57,7 +57,7 @@ public class DownloadTask {
             }
             case (STATUS_RUNNING):
                 int numberOfImage = Math.max(c.getPagesCount(), c.getImagesCount());
-                System.out.println("numberOfImage = " + numberOfImage);
+//                System.out.println("numberOfImage = " + numberOfImage);
                 if (currentImage != c.getImagesCount()) {
                     return String.format("˅ (%.2f", (((float) currentImage) / numberOfImage * 100)) + "%)";
                 } else {

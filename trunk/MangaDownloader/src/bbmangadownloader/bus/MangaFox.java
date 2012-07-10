@@ -93,7 +93,7 @@ public class MangaFox extends ABusPageBasedDefaultChapImage { // Done
         while (iElement.hasNext()) {
             Element e = iElement.next();
             Page p = new Page(baseLink + e.attr("value") + ".html", chapter,
-                    NumberUtilities.getNumber(e.text()),
+                    NumberUtilities.getNumberInt(e.text()),
                     e.attributes().hasKey("selected"));
             lstPage.add(p);
         }

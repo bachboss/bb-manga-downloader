@@ -4,13 +4,6 @@
  */
 package bbmangadownloader;
 
-import bbmangadownloader.ult.HttpDownloadManager;
-import java.util.ArrayList;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
-
 /**
  *
  * @author Bach
@@ -21,11 +14,11 @@ public class TestCode {
 //        ConfigManager.loadOnStartUp();
 //        ServerManager.loadServer();
 //        
-//        String url = "http://localhost/mangastream.airgear.357.html";
+//        String url = "http://localhost/mangahere.fairytail.html";
 //
 //        Document doc = HttpDownloadManager.getDocument(url);
 //        System.out.println("--------------------------------------------------------------------------------");
-//        Elements xmlNodes = doc.select("div[id=controls] a").not("a[href~=javascript]");
+//        Elements xmlNodes = doc.select("div[class=detail_list] ul li");
 //        for (Element e : xmlNodes) {
 //            System.out.println(e);
 //            System.out.println("--------------------------------------------------------------------------------");
@@ -73,15 +66,15 @@ public class TestCode {
 //            System.out.format("Found: %-3d record(s) for %s\n", x, name);
 //            System.out.println("--------------------------------------------------");
 //        }
-        //        MangaInn m = new MangaInn();
-        //        List<Chapter> lst = m.getAllChapters(new Manga(
-        //                new Server(new FacadeMangaInn()), "", "http://localhost/mangainn.hunter.html"));
-        //        System.out.println("--------------------------------------------------------------------------------");
-        //        for (Chapter c : lst) {
-        //            System.out.println(c.getDisplayName() + "\t" + c.getUploadDate());
-        //        }
-        //        System.out.println("--------------------------------------------------------------------------------");
-        //        System.out.println("Total: " + lst.size());
+//        MangaHere m = new MangaHere();
+//        List<Chapter> lst = m.getAllChapters(new Manga(
+//                new Server(new FacadeMangaHere()), "", "http://localhost/mangahere.fairytail.html"));
+//        System.out.println("--------------------------------------------------------------------------------");
+//        for (Chapter c : lst) {
+//            System.out.println(c.getDisplayName() + "\t" + c.getUploadDate());
+//        }
+//        System.out.println("--------------------------------------------------------------------------------");
+//        System.out.println("Total: " + lst.size());
 //        System.out.println(xmlNodes.first());
 //
 //        System.out.println(xmlNodes.size());

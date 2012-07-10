@@ -90,7 +90,7 @@ public class MangaInn extends ABusPageBasedDefaultChapImage { // Done
         xmlNodes = doc.select("select[id=cmbpages] option");
         for (Element e : xmlNodes) {
             Page p = new Page(String.format(PAGE_URL_FORMAT, chapterValue, e.attr("value")), chapter,
-                    NumberUtilities.getNumber(e.text()),
+                    NumberUtilities.getNumberInt(e.text()),
                     e.attributes().hasKey("selected"));
             lstPage.add(p);
         }

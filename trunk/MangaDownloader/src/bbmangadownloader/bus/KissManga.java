@@ -46,7 +46,7 @@ public class KissManga implements IBusOnePage {  // Done
     private static final String BASED_URL_LIST_MANGA = "http://kissmanga.com/MangaList?page=";
     private static final String URL_LIST_MANGA = "http://kissmanga.com/MangaList";
     //    
-    private static final DateFormat DATE_FORMAT_UPLOAD = new SimpleDateFormat("dd/MM/yyyy");
+    private static final DateFormat DATE_FORMAT_UPLOAD = new SimpleDateFormat("MM/dd/yyyy");
     private static final String DEFAULT_TRANS = "KissManga";
 
     protected Document getDocument(String url) throws IOException {

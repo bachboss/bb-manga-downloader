@@ -4,11 +4,12 @@
  */
 package bbmangadownloader.bus.description;
 
-import java.io.IOException;
-import java.util.List;
+import bbmangadownloader.bus.exception.HtmlParsingException;
 import bbmangadownloader.entity.Chapter;
 import bbmangadownloader.entity.Image;
 import bbmangadownloader.entity.Page;
+import java.io.IOException;
+import java.util.List;
 
 /**
  *
@@ -16,7 +17,7 @@ import bbmangadownloader.entity.Page;
  */
 public interface IBusPageBased extends IBus {
 
-    public Image getImage(Page p) throws IOException;
+    public Image getImage(Page p) throws IOException, HtmlParsingException;
 
-    List<Page> getAllPages(Chapter c) throws IOException;
+    List<Page> getAllPages(Chapter c) throws IOException, HtmlParsingException;
 }

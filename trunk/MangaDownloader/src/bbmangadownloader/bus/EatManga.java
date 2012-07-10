@@ -75,7 +75,7 @@ public class EatManga extends ABusPageBasedDefaultChapPageImage {  // Done
     @Override
     protected Page getPageFromTag(Element htmlTag, Chapter c) {
         return new Page(BASED_URL + htmlTag.attr("value"), c,
-                NumberUtilities.getNumber(htmlTag.text()),
+                NumberUtilities.getNumberInt(htmlTag.text()),
                 htmlTag.attributes().hasKey("selected"));
     }
 

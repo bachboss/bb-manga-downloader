@@ -85,15 +85,16 @@ public class BuildDB {
         Database.getEntityManager();
 
         ServerTempData[] servers = new ServerTempData[]{
-            new ServerTempData("http://www.batoto.net", true),
-            new ServerTempData("http://eatmanga.com", true),
-            new ServerTempData("http://kissmanga.com", true),
-            new ServerTempData("http://mangafox.me", true),
-            new ServerTempData("http://mangainn.com", true),
-            new ServerTempData("http://www.mangareader.net", true),
-            new ServerTempData("http://truyentranhtuan.com", true),
-            new ServerTempData("http://truyen.vnsharing.net", true),
-            new ServerTempData("http://mangastream.com/", true)
+            new ServerTempData("http://www.batoto.net", false),
+            new ServerTempData("http://eatmanga.com", false),
+            new ServerTempData("http://kissmanga.com", false),
+            new ServerTempData("http://mangafox.me", false),
+            new ServerTempData("http://mangainn.com", false),
+            new ServerTempData("http://www.mangareader.net", false),
+            new ServerTempData("http://truyentranhtuan.com", false),
+            new ServerTempData("http://truyen.vnsharing.net", false),
+            new ServerTempData("http://mangastream.com/", false),
+            new ServerTempData("http://mangahere.com/", true)
         };
 
         List<Callable<Object>> lstTask = new ArrayList<>();

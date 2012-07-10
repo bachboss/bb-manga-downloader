@@ -35,6 +35,7 @@ public class FacadeManager {
         MAP_HOST.put("vnsharing", new FacadeVnSharing());
         MAP_HOST.put("mangainn", new FacadeMangaInn());
         MAP_HOST.put("mangastream", new FacadeMangaStream());
+        MAP_HOST.put("mangahere", new FacadeMangaHere());
 
         if (ConfigManager.getCurrentInstance().isAdult()) {
             MAP_HOST.put("hentai2read", new FacadeHentai2Read());

@@ -4,6 +4,7 @@
  */
 package bbmangadownloader.bus.description;
 
+import bbmangadownloader.bus.exception.HtmlParsingException;
 import bbmangadownloader.entity.Chapter;
 import bbmangadownloader.entity.Image;
 import bbmangadownloader.entity.Page;
@@ -28,7 +29,7 @@ public abstract class ABusPageBasedDefault implements IBusPageBased {
     }
 
     @Override
-    public List<Image> getAllImages(Chapter chapter) throws IOException {
+    public List<Image> getAllImages(Chapter chapter) throws IOException, HtmlParsingException {
         // TODO: Can Improve by using multi thread
         List<Page> lstPage = getAllPages(chapter);
         final List<Image> lstImage = new ArrayList<>();

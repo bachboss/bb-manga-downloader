@@ -140,8 +140,9 @@ public class MangaWatcherGUI extends javax.swing.JFrame {
                     if (isDisable) {
                         setEnableOnMulti(false);
                     }
-                    popWatcher.revalidate();
+//                    popWatcher.revalidate();
                     popWatcher.show(e.getComponent(), e.getX(), e.getY());
+                    popWatcher.repaint();
                     if (isDisable) {
                         setEnableOnMulti(true);
                     }
@@ -635,7 +636,7 @@ public class MangaWatcherGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_mnWatcherCheckActionPerformed
 
     private void mnListAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnListAddActionPerformed
-        addMangasToWatcher();
+        addMangasToWatcher(currentWatcher);
     }//GEN-LAST:event_mnListAddActionPerformed
 
     private void mnWatcherRenameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnWatcherRenameActionPerformed
@@ -651,7 +652,8 @@ public class MangaWatcherGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_mnDownloadStartActionPerformed
 
     private void mnWatcherAddHostActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnWatcherAddHostActionPerformed
-        addMangasToWatcher();
+        int selectedRow = tblWatcher.getSelectedRow();
+        addMangasToWatcher(modelWatcher.getWatcherAt(selectedRow));
     }//GEN-LAST:event_mnWatcherAddHostActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -806,16 +808,16 @@ public class MangaWatcherGUI extends javax.swing.JFrame {
         }
     }
 
-    private void addMangasToWatcher() {
-        if (currentWatcher != null) {
+    private void addMangasToWatcher(Watcher watcher) {
+        if (watcher != null) {
             if (searchManga == null) {
                 searchManga = new SearchMangaDialog(this, true);
             }
-            searchManga.setWatcher(currentWatcher);
+            searchManga.setWatcher(watcher);
             searchManga.setVisible(true);
-            System.out.println("Number of Mangas: " + currentWatcher.getMangaCount());
+            System.out.println("Number of Mangas: " + watcher.getMangaCount());
 
-            for (Manga m : currentWatcher.getLstManga()) {
+            for (Manga m : watcher.getLstManga()) {
                 System.out.println(m.getServer().hashCode() + "\t" + m.getServer().getServerName() + "\t");
             }
         }

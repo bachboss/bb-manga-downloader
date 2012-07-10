@@ -18,12 +18,16 @@ public class NumberUtilities {
     }
     private static final Pattern PATTERN_NUMBER = Pattern.compile("(\\d+)");
 
-    public static int getNumber(String text) {
+    public static int getNumberInt(String text) {
         Matcher m = PATTERN_NUMBER.matcher(text);
         if (m.find()) {
             return Integer.parseInt(m.group(1));
         } else {
             return 0;
         }
+    }
+
+    public static float parseNumberFloat(String text) {
+        return Float.parseFloat(text);
     }
 }

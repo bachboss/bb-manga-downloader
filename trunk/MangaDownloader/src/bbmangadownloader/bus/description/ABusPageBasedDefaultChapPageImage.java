@@ -4,11 +4,12 @@
  */
 package bbmangadownloader.bus.description;
 
+import bbmangadownloader.bus.exception.HtmlParsingException;
+import bbmangadownloader.entity.Chapter;
+import bbmangadownloader.entity.Page;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import bbmangadownloader.entity.Chapter;
-import bbmangadownloader.entity.Page;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -19,12 +20,12 @@ import org.jsoup.select.Elements;
  */
 public abstract class ABusPageBasedDefaultChapPageImage extends ABusPageBasedDefaultChapImage {
 
-    protected abstract Elements getPageQuery(Element htmlTag);
+    protected abstract Elements getPageQuery(Element htmlTag) throws HtmlParsingException;
 
-    protected abstract Page getPageFromTag(Element htmlTag, Chapter c);
+    protected abstract Page getPageFromTag(Element htmlTag, Chapter c) throws HtmlParsingException;
 
     @Override
-    public List<Page> getAllPages(Chapter chapter) throws IOException {
+    public List<Page> getAllPages(Chapter chapter) throws IOException, HtmlParsingException {
         List<Page> lstPage = new ArrayList<>();
 
         Document doc = getDocument(chapter.getUrl());

@@ -65,7 +65,7 @@ public class Hentai2Read extends ABusPageBasedDefaultChapImage {
         }
         Elements xmlNodes = xmlNode.select("option");
         for (Element e : xmlNodes) {
-            Page p = new Page(url + e.attr("value") + "/", chapter, NumberUtilities.getNumber(e.text()),
+            Page p = new Page(url + e.attr("value") + "/", chapter, NumberUtilities.getNumberInt(e.text()),
                     e.attributes().hasKey("selected"));
             lstPage.add(p);
         }

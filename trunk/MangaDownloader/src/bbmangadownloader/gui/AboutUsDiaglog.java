@@ -35,7 +35,7 @@ public class AboutUsDiaglog extends javax.swing.JDialog {
 
         jLabel1.setText("Contact us:");
 
-        jLabel2.setText("Version: 0.2");
+        jLabel2.setText("Version: 0.1.5");
 
         jLabel3.setText("tranbach_93@yahoo.com.vn");
 

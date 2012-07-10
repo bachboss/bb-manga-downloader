@@ -20,6 +20,10 @@ public class HtmlParsingException extends Exception {
         this("Error on parsing: \"" + doc.getUrl() + "\"");
     }
 
+    public HtmlParsingException(HtmlDocument doc, String message) {
+        this("Error on parsing: \"" + doc.getUrl() + "\"\nMessage = " + message);
+    }
+
     public HtmlParsingException(String message) {
         super(message);
     }

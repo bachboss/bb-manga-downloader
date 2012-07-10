@@ -112,7 +112,7 @@ public class Batoto extends ABusPageBasedDefaultChapPageImage { // Done
 
     @Override
     protected Page getPageFromTag(Element htmlTag, Chapter c) {
-        return new Page(htmlTag.attr("value"), c, NumberUtilities.getNumber(htmlTag.text()),
+        return new Page(htmlTag.attr("value"), c, NumberUtilities.getNumberInt(htmlTag.text()),
                 htmlTag.attributes().hasKey("selected"));
     }
 

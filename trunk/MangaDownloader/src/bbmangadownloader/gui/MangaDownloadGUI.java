@@ -4,7 +4,6 @@
  */
 package bbmangadownloader.gui;
 
-import bbmangadownloader.bus.exception.HtmlParsingException;
 import comichtmlgender.HTMLGenerator;
 import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
@@ -30,7 +29,6 @@ import bbmangadownloader.gui.model.MyColumnSorter;
 import bbmangadownloader.gui.model.MyTableModelSortable;
 import bbmangadownloader.ult.GUIUtilities;
 import bbmangadownloader.ult.HttpDownloadManager;
-import java.io.IOException;
 
 /**
  *
@@ -51,6 +49,12 @@ public class MangaDownloadGUI extends javax.swing.JFrame {
         init();
 
         setTitle("BB Managa Downloader");
+        initPopup();
+    }
+
+    private void initPopup() {
+        tblChapters.setComponentPopupMenu(popWatcher);
+        tblChapters.setInheritsPopupMenu(true);
     }
 
     private void addHeaderListener(JTable table) {
@@ -148,6 +152,8 @@ public class MangaDownloadGUI extends javax.swing.JFrame {
         jMenuBar2 = new javax.swing.JMenuBar();
         jMenu5 = new javax.swing.JMenu();
         jMenu6 = new javax.swing.JMenu();
+        popWatcher = new javax.swing.JPopupMenu();
+        mnWatcherViewInBroser = new javax.swing.JMenuItem();
         pnlTop = new javax.swing.JPanel();
         btnFletch = new javax.swing.JButton();
         btnDownload = new javax.swing.JButton();
@@ -182,6 +188,14 @@ public class MangaDownloadGUI extends javax.swing.JFrame {
 
         jMenu6.setText("Edit");
         jMenuBar2.add(jMenu6);
+
+        mnWatcherViewInBroser.setText("View In Browser");
+        mnWatcherViewInBroser.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnWatcherViewInBroserActionPerformed(evt);
+            }
+        });
+        popWatcher.add(mnWatcherViewInBroser);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -533,6 +547,14 @@ public class MangaDownloadGUI extends javax.swing.JFrame {
         ConfigurationDialog form = new ConfigurationDialog(this, true);
         form.setVisible(true);
     }//GEN-LAST:event_jMenuItem4ActionPerformed
+
+    private void mnWatcherViewInBroserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnWatcherViewInBroserActionPerformed
+        int row = tblChapters.getSelectedRow();
+        Chapter c = modelChapter.getChapterAt(row);
+        if (c != null) {
+            GUIUtilities.openLink(c.getUrl());
+        }
+    }//GEN-LAST:event_mnWatcherViewInBroserActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCheckSupport;
     private javax.swing.JButton btnDownload;
@@ -557,8 +579,10 @@ public class MangaDownloadGUI extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator1;
     public static javax.swing.JLabel lblOutput;
     private javax.swing.JLabel lblSupport;
+    private javax.swing.JMenuItem mnWatcherViewInBroser;
     private javax.swing.JPanel pnlBot;
     private javax.swing.JPanel pnlTop;
+    private javax.swing.JPopupMenu popWatcher;
     private javax.swing.JScrollPane sclChapter;
     private javax.swing.JScrollPane sclDownload;
     private javax.swing.JTable tblChapters;

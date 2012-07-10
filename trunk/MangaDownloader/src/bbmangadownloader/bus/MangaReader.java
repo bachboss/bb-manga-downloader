@@ -4,18 +4,15 @@
  */
 package bbmangadownloader.bus;
 
-import java.io.IOException;
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import bbmangadownloader.bus.description.ABusPageBasedDefaultChapPageImage;
 import bbmangadownloader.entity.*;
 import bbmangadownloader.entity.data.MangaDateTime;
 import bbmangadownloader.ult.DateTimeUtilities;
 import bbmangadownloader.ult.NumberUtilities;
+import java.io.IOException;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -77,7 +74,7 @@ public class MangaReader extends ABusPageBasedDefaultChapPageImage { // Done
 
     @Override
     protected Page getPageFromTag(Element htmlTag, Chapter c) {
-        return new Page(BASED_URL + htmlTag.attr("value"), c, NumberUtilities.getNumber(htmlTag.text()),
+        return new Page(BASED_URL + htmlTag.attr("value"), c, NumberUtilities.getNumberInt(htmlTag.text()),
                 htmlTag.attributes().hasKey("selected"));
     }
 
