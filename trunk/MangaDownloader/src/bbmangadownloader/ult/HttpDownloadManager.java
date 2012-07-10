@@ -205,7 +205,7 @@ public class HttpDownloadManager {
                     readTimeOut += DEFAULT_STEP;
                     isTryAgain = true;
                     System.out.println("\t\tSocketTimeOutExcption, re-try (" + tryTime + ") with timeout = " + connectTimeOut);
-//                            Logger.getLogger(MangaDownloader.class.getName()).log(Level.SEVERE, null, ex);
+//                            Logger.getLogger(HttpDownloadManager.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (IOException ex) {
                     lastEx = ex;
                     System.out.println("\t\tIOException: " + ex.getMessage());
@@ -218,13 +218,13 @@ public class HttpDownloadManager {
                         } else {
                             isTryAgain = true;
                             tryTime++;
-                            Logger.getLogger(MangaDownloader.class.getName()).log(Level.SEVERE, null, ex);
+                            Logger.getLogger(HttpDownloadManager.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     } else {
                         // is not HTTP Error (Code >= 400, != 410,400)
                         isTryAgain = true;
                         tryTime++;
-                        Logger.getLogger(MangaDownloader.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(HttpDownloadManager.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
             } while (isTryAgain && tryTime < DEFAULT_ATTEMP);
@@ -235,7 +235,7 @@ public class HttpDownloadManager {
             }
         } catch (URISyntaxException | EncoderException ex) {
             System.out.println("\t\tCan Process this type of error !");
-            Logger.getLogger(MangaDownloader.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(HttpDownloadManager.class.getName()).log(Level.SEVERE, null, ex);
             return null;
         }
     }

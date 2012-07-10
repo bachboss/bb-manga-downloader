@@ -81,7 +81,7 @@ public abstract class AFileDownloader implements Runnable, Callable<Boolean>, IF
                 System.out.println("\t\t\tCreating New File: " + fileOutput);
                 fileOutput.createNewFile();
             } catch (IOException ex) {
-                Logger.getLogger(MangaDownloader.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(AFileDownloader.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         // If only can write to file += file existed!
@@ -146,17 +146,17 @@ public abstract class AFileDownloader implements Runnable, Callable<Boolean>, IF
                             } else if (httpError == 403) {
                                 isTryAgain = false;
                                 System.out.println("\t\t\tStop this, due to HTTP Error = 403");
-//                            Logger.getLogger(MangaDownloader.class.getName()).log(Level.SEVERE, null, ex);
+//                            Logger.getLogger(AFileDownloader.class.getName()).log(Level.SEVERE, null, ex);
                             }
                         } else {
                             // is not HTTP Error (Code >= 400, != 410,400)
-                            Logger.getLogger(MangaDownloader.class.getName()).log(Level.SEVERE, null, ex);
+                            Logger.getLogger(AFileDownloader.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
                 } while (isTryAgain && timOutTryTime < DEFAULT_ATTEMP && (++counterToPreventDeadLock) < DEFAULT_DEADLOCK);
             } catch (URISyntaxException | EncoderException | MalformedURLException ex) {
                 System.out.println("\tCan Process this type of error !");
-                Logger.getLogger(MangaDownloader.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(AFileDownloader.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
 
