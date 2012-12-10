@@ -45,12 +45,10 @@ public class DownloadTask {
     public String getStatus() {
         if (status == DownloadTaskStatus.Downloading) {
             int numberOfImage = c.getImagesCount();
-            System.out.println("Downloading :\t" + numberOfImage + "\t" + currentImage);
-
             if (currentImage == 0) {
                 return ("▼ (0%)");
             } else if (currentImage == c.getImagesCount()) {
-                return ("▼ (100%)");
+                this.status = DownloadTaskStatus.Done;
             } else {
                 return String.format("▼ (%.2f", (((float) currentImage) / numberOfImage * 100)) + "%)";
             }
