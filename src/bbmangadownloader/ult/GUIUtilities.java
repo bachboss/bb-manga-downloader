@@ -7,6 +7,7 @@ package bbmangadownloader.ult;
 import java.awt.Component;
 import java.awt.Desktop;
 import java.awt.event.MouseEvent;
+import java.io.File;
 import java.net.URI;
 import java.text.DecimalFormat;
 import java.util.logging.Level;
@@ -54,20 +55,31 @@ public class GUIUtilities {
      * <code>messageType</code> parameter is primarily used to supply a default
      * icon from the Look and Feel.
      *
-     * @param parentComponent determines the <code>Frame</code> in which the
-     * dialog is displayed; if <code>null</code>, or if
-     * the <code>parentComponent</code> has no <code>Frame</code>, a        default <code>Frame</code> is used.
-     * @param message the <code>Object</code> to display
+     * @param parentComponent determines the
+     * <code>Frame</code> in which the dialog is displayed; if
+     * <code>null</code>, or if the
+     * <code>parentComponent</code> has no
+     * <code>Frame</code>, a default
+     * <code>Frame</code> is used.
+     * @param message the
+     * <code>Object</code> to display
      * @param title the title string for the dialog
      * @param optionType an integer designating the options available on the
-     * dialog: <code>YES_NO_OPTION</code>, <code>YES_NO_CANCEL_OPTION</code>,        or <code>OK_CANCEL_OPTION</code>
+     * dialog:
+     * <code>YES_NO_OPTION</code>,
+     * <code>YES_NO_CANCEL_OPTION</code>, or
+     * <code>OK_CANCEL_OPTION</code>
      * @param messageType an integer designating the kind of message this is;
-     * primarily used to determine the icon from the pluggable Look and
-     * Feel: <code>ERROR_MESSAGE</code>, <code>INFORMATION_MESSAGE</code>,
-     * <code>WARNING_MESSAGE</code>, <code>QUESTION_MESSAGE</code>,        or <code>PLAIN_MESSAGE</code>
+     * primarily used to determine the icon from the pluggable Look and Feel:
+     * <code>ERROR_MESSAGE</code>,
+     * <code>INFORMATION_MESSAGE</code>,
+     * <code>WARNING_MESSAGE</code>,
+     * <code>QUESTION_MESSAGE</code>, or
+     * <code>PLAIN_MESSAGE</code>
      * @return an integer indicating the option selected by the user
      * @exception HeadlessException if
-     * <code>GraphicsEnvironment.isHeadless</code> returns <code>true</code>
+     * <code>GraphicsEnvironment.isHeadless</code> returns
+     * <code>true</code>
      * @see java.awt.GraphicsEnvironment#isHeadless
      */
     public static int showConfirmError(Component parent, String message, String title, int optionType, int messageType) {
@@ -90,6 +102,21 @@ public class GUIUtilities {
             if (desktop.isSupported(Desktop.Action.BROWSE)) {
                 try {
                     desktop.browse(new URI(url));
+                    return true;
+                } catch (Exception ex) {
+                    return false;
+                }
+            }
+        }
+        return false;
+    }
+
+    public static boolean openFile(File f) {
+        if (Desktop.isDesktopSupported()) {
+            Desktop desktop = java.awt.Desktop.getDesktop();
+            if (desktop.isSupported(Desktop.Action.OPEN)) {
+                try {
+                    desktop.open(f);
                     return true;
                 } catch (Exception ex) {
                     return false;

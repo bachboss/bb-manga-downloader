@@ -8,6 +8,7 @@ import bbmangadownloader.config.ConfigManager;
 import bbmangadownloader.ult.FileManager;
 import bbmangadownloader.ult.GUIUtilities;
 import bbmangadownloader.ult.HttpDownloadManager;
+import bbmangadownloader.ult.OSSupport;
 import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;

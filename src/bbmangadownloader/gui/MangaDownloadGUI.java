@@ -5,6 +5,7 @@
 package bbmangadownloader.gui;
 
 import bbmangadownloader.bus.model.data.DownloadTask;
+import bbmangadownloader.bus.model.data.DownloadTask.DownloadTaskStatus;
 import bbmangadownloader.entity.Chapter;
 import bbmangadownloader.entity.Manga;
 import bbmangadownloader.entity.Server;
@@ -22,6 +23,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumnModel;
@@ -54,10 +56,12 @@ public class MangaDownloadGUI extends javax.swing.JFrame {
         setIconImage(bbmangadownloader.BBMangaDownloader.getApplicationIcon());
         initPopup();
         initDecorator();
+        tblDownload.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
 
     private void initDecorator() {
         AutoCompleteDecorator.decorate(cbxScanner, new ObjectToStringConverter() {
+
             @Override
             public String getPreferredStringForItem(Object item) {
                 return item == null ? null : item.toString();
@@ -65,6 +69,7 @@ public class MangaDownloadGUI extends javax.swing.JFrame {
         });
 
         AutoCompleteDecorator.decorate(cbxManga, new ObjectToStringConverter() {
+
             @Override
             public String getPreferredStringForItem(Object item) {
                 return item == null ? null : item.toString();
@@ -89,6 +94,7 @@ public class MangaDownloadGUI extends javax.swing.JFrame {
 
     private void addHeaderListener(JTable table) {
         table.getTableHeader().addMouseListener(new MouseAdapter() {
+
             @Override
             public void mouseClicked(MouseEvent evt) {
                 JTable table = ((JTableHeader) evt.getSource()).getTable();
@@ -188,6 +194,7 @@ public class MangaDownloadGUI extends javax.swing.JFrame {
         mnDownloadStart = new javax.swing.JMenuItem();
         mnDownloadRemove = new javax.swing.JMenuItem();
         mnDownloadViewInBrowser = new javax.swing.JMenuItem();
+        mnDownloadViewFolder = new javax.swing.JMenuItem();
         pnlTop = new javax.swing.JPanel();
         pnlDownloadInformation = new javax.swing.JPanel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
@@ -197,8 +204,8 @@ public class MangaDownloadGUI extends javax.swing.JFrame {
         lblSupport = new javax.swing.JLabel();
         txtMangaUrl = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
         lblLoading = new org.jdesktop.swingx.JXBusyLabel();
+        jLabel7 = new javax.swing.JLabel();
         pnlScaner = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         cbxScanner = new javax.swing.JComboBox();
@@ -271,6 +278,14 @@ public class MangaDownloadGUI extends javax.swing.JFrame {
         });
         popDownload.add(mnDownloadViewInBrowser);
 
+        mnDownloadViewFolder.setText("View Directory");
+        mnDownloadViewFolder.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnDownloadViewFolderActionPerformed(evt);
+            }
+        });
+        popDownload.add(mnDownloadViewFolder);
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         pnlTop.setMinimumSize(new java.awt.Dimension(0, 0));
@@ -286,7 +301,7 @@ public class MangaDownloadGUI extends javax.swing.JFrame {
             }
         });
 
-        lblSupport.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        lblSupport.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
         lblSupport.setForeground(new java.awt.Color(255, 0, 0));
         lblSupport.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblSupport.setText("Support");
@@ -304,15 +319,12 @@ public class MangaDownloadGUI extends javax.swing.JFrame {
 
         jLabel5.setText("Manga");
 
-        jLabel1.setText("Manga URL");
-        jLabel1.setMaximumSize(new java.awt.Dimension(60, 14));
-        jLabel1.setMinimumSize(new java.awt.Dimension(60, 14));
-        jLabel1.setPreferredSize(new java.awt.Dimension(60, 14));
-
         lblLoading.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblLoading.setText("Loading");
         lblLoading.setBusy(true);
         lblLoading.setDirection(org.jdesktop.swingx.painter.BusyPainter.Direction.RIGHT);
+
+        jLabel7.setText("Manga URL");
 
         javax.swing.GroupLayout pnlServerLayout = new javax.swing.GroupLayout(pnlServer);
         pnlServer.setLayout(pnlServerLayout);
@@ -321,44 +333,37 @@ public class MangaDownloadGUI extends javax.swing.JFrame {
             .addGroup(pnlServerLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(pnlServerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel5))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addComponent(jLabel5)
+                    .addComponent(jLabel7))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlServerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlServerLayout.createSequentialGroup()
                         .addComponent(txtMangaName)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnCheckSupport, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(txtMangaUrl, javax.swing.GroupLayout.DEFAULT_SIZE, 481, Short.MAX_VALUE))
+                        .addComponent(btnCheckSupport))
+                    .addComponent(txtMangaUrl, javax.swing.GroupLayout.DEFAULT_SIZE, 474, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlServerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(lblSupport, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lblLoading, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(lblLoading, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lblSupport, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         pnlServerLayout.setVerticalGroup(
             pnlServerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlServerLayout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(pnlServerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(pnlServerLayout.createSequentialGroup()
-                        .addGap(14, 14, 14)
-                        .addGroup(pnlServerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtMangaUrl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(9, 9, 9))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlServerLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(lblLoading, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
-                .addGroup(pnlServerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(pnlServerLayout.createSequentialGroup()
-                        .addComponent(jLabel5)
-                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(lblSupport, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(pnlServerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(txtMangaName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnCheckSupport, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(lblSupport, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(14, 14, 14))
+                        .addComponent(txtMangaUrl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel7)))
+                .addGap(5, 5, 5)
+                .addGroup(pnlServerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtMangaName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnCheckSupport)
+                    .addComponent(jLabel5)
+                    .addComponent(lblLoading, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(26, 26, 26))
         );
 
         jTabbedPane1.addTab("Manga Sites", pnlServer);
@@ -409,9 +414,9 @@ public class MangaDownloadGUI extends javax.swing.JFrame {
                 .addGroup(pnlScanerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlScanerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(cbxManga, 0, 496, Short.MAX_VALUE)
+                    .addComponent(cbxManga, 0, 508, Short.MAX_VALUE)
                     .addComponent(cbxScanner, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlScanerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -444,7 +449,7 @@ public class MangaDownloadGUI extends javax.swing.JFrame {
             pnlDownloadInformationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlDownloadInformationLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 705, Short.MAX_VALUE)
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                 .addContainerGap())
         );
         pnlDownloadInformationLayout.setVerticalGroup(
@@ -494,7 +499,7 @@ public class MangaDownloadGUI extends javax.swing.JFrame {
         );
         pnlChaptersLayout.setVerticalGroup(
             pnlChaptersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(sclChapter, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 127, Short.MAX_VALUE)
+            .addComponent(sclChapter, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 126, Short.MAX_VALUE)
         );
 
         jSplitPane2.setTopComponent(pnlChapters);
@@ -525,7 +530,7 @@ public class MangaDownloadGUI extends javax.swing.JFrame {
         );
         pnlDownloadLayout.setVerticalGroup(
             pnlDownloadLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(sclDownload, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 154, Short.MAX_VALUE)
+            .addComponent(sclDownload, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 149, Short.MAX_VALUE)
         );
 
         jSplitPane2.setRightComponent(pnlDownload);
@@ -706,18 +711,21 @@ public class MangaDownloadGUI extends javax.swing.JFrame {
         if ((cbxScanner.getSelectedItem()) != lastScannerServer) {
             modelManga = new ListComboBoxModel<Manga>(Collections.<Manga>emptyList());
             cbxManga.setModel(modelManga);
-//            modelManga.removeAllElements();
         }
     }//GEN-LAST:event_cbxScannerItemStateChanged
+
+    private void mnDownloadViewFolderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnDownloadViewFolderActionPerformed
+        doOpenDownloadFolder();
+    }//GEN-LAST:event_mnDownloadViewFolderActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCheckSupport;
     private javax.swing.JButton btnScanerFletch;
     private javax.swing.JComboBox cbxManga;
     private javax.swing.JComboBox cbxScanner;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu5;
@@ -740,6 +748,7 @@ public class MangaDownloadGUI extends javax.swing.JFrame {
     private javax.swing.JMenuItem mnChaptersAddToDownload;
     private javax.swing.JMenuItem mnDownloadRemove;
     private javax.swing.JMenuItem mnDownloadStart;
+    private javax.swing.JMenuItem mnDownloadViewFolder;
     private javax.swing.JMenuItem mnDownloadViewInBrowser;
     private javax.swing.JPanel pnlBot;
     private javax.swing.JPanel pnlChapters;
@@ -776,6 +785,7 @@ public class MangaDownloadGUI extends javax.swing.JFrame {
 
     private void doFletch() {
         new Thread(new Runnable() {
+
             @Override
             public void run() {
                 lblLoading.setVisible(true);
@@ -827,7 +837,7 @@ public class MangaDownloadGUI extends javax.swing.JFrame {
             GUIUtilities.showDialog(this, "Already downloading!");
         }
 
-//        GUIUtil.showDialog(this, "Running in the background");
+//        GUIUtil.showDialog(this, "Downloading in the background");
     }
 
     private void doRemoveFromDownload() {
@@ -840,6 +850,7 @@ public class MangaDownloadGUI extends javax.swing.JFrame {
 
     private void doLoadScanner() {
         new Thread(new Runnable() {
+
             @Override
             public void run() {
                 lblScannerLoading.setVisible(true);
@@ -870,6 +881,14 @@ public class MangaDownloadGUI extends javax.swing.JFrame {
                 modelChapter.addChapters(lstChapter);
                 modelChapter.fireTableDataChanged();
             }
+        }
+    }
+
+    private void doOpenDownloadFolder() {
+        DownloadTask task = modelDownload.getTaskAt(tblDownload.getSelectedRow());
+        DownloadTaskStatus s = task.getStatusEnum();
+        if (s == DownloadTaskStatus.Done || s == DownloadTask.DownloadTaskStatus.Downloading) {
+            GUIUtilities.openFile(task.getDownloadTo());
         }
     }
 }

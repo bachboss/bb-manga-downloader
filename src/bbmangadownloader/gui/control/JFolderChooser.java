@@ -12,7 +12,8 @@ import java.io.File;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JTextField;
-import javax.swing.filechooser.FileFilter;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 
 /**
  *
@@ -86,13 +87,14 @@ public class JFolderChooser extends javax.swing.JPanel {
     }
 
     public void setSelectedFile(File file) throws ExceptionInInitializerError {
-        if (file.exists()) {
+        file = new File(FilenameUtils.getFullPath(file.getAbsolutePath()));
+//        if (file.isDirectory()) {
             selectedFile = file;
             fchBrowse.setSelectedFile(file);
             txtFilePath.setText(file.getAbsolutePath());
-        } else {
-            throw new ExceptionInInitializerError("Folder must existed !");
-        }
+//        } else {
+//            throw new ExceptionInInitializerError("inputFile must be directory");
+//        }
     }
 
     public JButton getButtonBrowse() {

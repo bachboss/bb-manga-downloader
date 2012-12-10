@@ -91,6 +91,11 @@ public class ChapterDownloadModel extends AbstractTableModel implements MyTableM
     }
 
     public void addChapter(Chapter c) {
+        for (DownloadTask t : listDownload) {
+            if (t.getChapter() == c) {
+                return;
+            }
+        }
         DownloadTask t = new DownloadTask(c);
         this.addTask(t);
     }
