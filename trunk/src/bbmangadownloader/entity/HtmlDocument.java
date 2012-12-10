@@ -32,4 +32,26 @@ public abstract class HtmlDocument implements Serializable {
         }
         return u;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 97 * hash + (this.url != null ? this.url.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final HtmlDocument other = (HtmlDocument) obj;
+        if ((this.url == null) ? (other.url != null) : !this.url.equals(other.url)) {
+            return false;
+        }
+        return true;
+    }
 }

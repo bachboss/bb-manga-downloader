@@ -10,5 +10,5 @@ package bbmangadownloader.gui.bus;
  */
 public interface IFileDownloader {
 
-    void doOnFinish();
+    public void finishFileDownload();
 }

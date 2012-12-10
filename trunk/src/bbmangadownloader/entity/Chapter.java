@@ -7,8 +7,10 @@ package bbmangadownloader.entity;
 import bbmangadownloader.entity.data.MangaDateTime;
 import bbmangadownloader.ult.Heuristic;
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  *
@@ -20,8 +22,8 @@ public class Chapter extends HtmlDocument implements Comparable<Chapter>, Serial
     private float chapterNumber;
     private String displayName;
     private MangaDateTime uploadDate;
-    private List<Image> listImage;
-    private List<Page> listPage;
+    private Set<Image> setImage;
+    private Set<Page> setPage;
     private String translator;
 
     @Deprecated
@@ -107,61 +109,60 @@ public class Chapter extends HtmlDocument implements Comparable<Chapter>, Serial
         }
     }
 
-    public synchronized List<Image> getListImage() {
-        if (this.listImage == null) {
+    public synchronized Set<Image> getSetImage() {
+        if (this.setImage == null) {
             synchronized (this) {
-                if (this.listImage == null) {
-                    listImage = new ArrayList<Image>();
+                if (this.setImage == null) {
+                    setImage = new HashSet<Image>();
                 }
             }
         }
-        return listImage;
+        return setImage;
     }
 
     public void addImage(Image img) {
-        if (this.listImage == null) {
-            this.listImage = new ArrayList<Image>();
-        }
-        listImage.add(img);
+        getSetImage().add(img);
     }
 
     public int getImagesCount() {
-        return this.listImage == null ? -1 : this.listImage.size();
+        return this.setImage == null ? -1 : this.setImage.size();
     }
 
-    public synchronized List<Page> getListPage() {
-        if (this.listPage == null) {
-            this.listPage = new ArrayList<Page>();
+    public synchronized Set<Page> getSetPage() {
+        if (this.setPage == null) {
+            this.setPage = new HashSet<Page>();
         }
-        return listPage;
+        return setPage;
     }
 
-    public void addPage(Page img) {
-        if (this.listPage == null) {
-            this.listPage = new ArrayList<Page>();
-        }
-        listPage.add(img);
+    public void addPage(Page page) {
+        getSetPage().add(page);
     }
 
     public int getPagesCount() {
-        return this.listPage == null ? -1 : this.listPage.size();
+        return this.setPage == null ? -1 : this.setPage.size();
     }
 
-    public void addImages(List<Image> lstImage) {
-        List<Image> temp = getListImage();
-        temp.addAll(lstImage);
+    /**
+     *
+     * Add images to chapter. All duplicate image (define by hashset) will ve
+     * remove.
+     *
+     * @param images
+     */
+    public void addImages(Collection<Image> images) {
+        getSetImage().addAll(images);
     }
 
-    public void addPages(List<Page> lstPage) {
-        List<Page> temp = getListPage();
-        temp.addAll(lstPage);
+    public void addPages(Collection<Page> pages) {
+        getSetPage().addAll(pages);
     }
 
     public void clearImages() {
-        getListImage().clear();
+        getSetImage().clear();
     }
 
     public void clearPages() {
-        getListPage().clear();
+        getSetPage().clear();
     }
 }

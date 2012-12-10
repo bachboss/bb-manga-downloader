@@ -43,20 +43,16 @@ public class DownloadTask {
     }
 
     public String getStatus() {
-        if (status == DownloadTaskStatus.Parsing) {
-            int numberOfImage = Math.max(c.getPagesCount(), c.getImagesCount());
-            if (currentImage != c.getPagesCount()) {
-                return String.format("◊ (%.2f", (((float) currentImage) / numberOfImage * 100)) + "%)";
+        if (status == DownloadTaskStatus.Downloading) {
+            int numberOfImage = c.getImagesCount();
+            System.out.println("Downloading :\t" + numberOfImage + "\t" + currentImage);
+
+            if (currentImage == 0) {
+                return ("▼ (0%)");
+            } else if (currentImage == c.getImagesCount()) {
+                return ("▼ (100%)");
             } else {
-                return "100%";
-            }
-        } else if (status == DownloadTaskStatus.Downloading) {
-            int numberOfImage = Math.max(c.getPagesCount(), c.getImagesCount());
-//                System.out.println("numberOfImage = " + numberOfImage);
-            if (currentImage != c.getImagesCount()) {
                 return String.format("▼ (%.2f", (((float) currentImage) / numberOfImage * 100)) + "%)";
-            } else {
-                this.status = DownloadTaskStatus.Done;
             }
         }
         return status.getStatus();
@@ -85,6 +81,11 @@ public class DownloadTask {
 
         private String getStatus() {
             return STATUS_ALL[id];
+        }
+
+        @Override
+        public String toString() {
+            return getStatus();
         }
         private static final String[] STATUS_ALL = new String[]{
             "", "Stopped", "Error", "Running", "Parsing", "Done"
