@@ -11,8 +11,8 @@ import bbmangadownloader.entity.Chapter;
 import bbmangadownloader.entity.Image;
 import bbmangadownloader.faces.IFacadeMangaServer;
 import bbmangadownloader.gui.MangaDownloadGUI;
-import bbmangadownloader.ult.HttpDownloadManager.MyConnection;
 import bbmangadownloader.ult.*;
+import bbmangadownloader.ult.HttpDownloadManager.MyConnection;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
@@ -47,7 +47,7 @@ public class ListTaskDownloader implements Runnable {
         try {
             if (!isRunning) {
                 isRunning = true;
-                if (this.listTask == null) {
+                if (listTask == null) {
                     return;
                 }
                 for (DownloadTask task : listTask) {
@@ -58,6 +58,7 @@ public class ListTaskDownloader implements Runnable {
                                 task.setStatus(DownloadTaskStatus.Downloading);
                                 doDownloadChapter(task);
                                 tableModel.fireTableDataChanged();
+                                task.setStatus(DownloadTaskStatus.Done);
                             }
                         }
                     }
@@ -77,22 +78,24 @@ public class ListTaskDownloader implements Runnable {
             try {
                 File fileImage = FileManager.getFileForImage(imageFolder, img);
                 listImageTask.add(new DefaultFileDownloader(task, img.getConnection(), fileImage));
+                tableModel.fireTableDataChanged();
             } catch (MalformedURLException ex) {
                 Logger.getLogger(ListTaskDownloader.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         task.clearCurrentImage();
-
         MultitaskJob.doTask(listImageTask);
     }
 
     private void doDownloadChapter(DownloadTask task) {
+        // Prepare for downloading
         Chapter c = task.getChapter();
         IFacadeMangaServer usingServer = c.getManga().getServer().getMangaServer();
         System.out.println("Loading Chapter: " + c + "\t" + c.getUrl());
         GUIUtilities.showLog("Loading Chapter: " + c + "\t" + GUIUtilities.compressPath(c.getUrl()));
         File imageFolder = FileManager.getFolderForChapter(c);
         if (imageFolder.exists()) {
+            // Check for duplicate folder - May downloaed before
             if (!FileUtilities.isImageFolderEmpty(imageFolder)) {
                 int value = GUIUtilities.showConfirmError(null,
                         "Chapter \"" + c.getDisplayName() + "\" could already been downloaded. "
@@ -109,7 +112,6 @@ public class ListTaskDownloader implements Runnable {
         imageFolder.mkdirs();
         task.setDownloadTo(imageFolder);
         try {
-
             System.out.println("Start Get Image of " + c);
             // Parsing Data...
             task.setStatus(DownloadTaskStatus.Parsing);
@@ -119,14 +121,11 @@ public class ListTaskDownloader implements Runnable {
             System.out.println("\tGot " + lstImg.size() + " image(s)");
             // Download...
             task.setStatus(DownloadTaskStatus.Downloading);
-            tableModel.fireTableCellUpdated(0, 2);
-
+            tableModel.fireTableDataChanged();
             System.out.println("\tSave to: " + imageFolder.getAbsolutePath());
-
             downloadListImages(task, lstImg, imageFolder);
-            // TODO: Turn-off the logger
-//                        MyLogger.log(lstImg, imageFolder.getParentFile(), c);
-
+            // Turn-off the logger
+            //MyLogger.log(lstImg, imageFolder.getParentFile(), c);
             // Download is done. Zip File and do other stuffs
             {
                 ConfigManager config = (ConfigManager.getCurrentInstance());
@@ -157,9 +156,9 @@ public class ListTaskDownloader implements Runnable {
         }
 
         @Override
-        public void doOnFinish() {
+        public void finishFileDownload() {
             task.increaseCurrentImage();
-            tableModel.fireTableCellUpdated(0, 2);
+            tableModel.fireTableDataChanged();
         }
     }
 }

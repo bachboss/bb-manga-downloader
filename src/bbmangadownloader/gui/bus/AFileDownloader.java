@@ -23,6 +23,9 @@ import java.util.logging.Logger;
  */
 public abstract class AFileDownloader implements Runnable, Callable<Boolean>, IFileDownloader {
 
+    /**
+     * This class is abstract class, used to download 1 file at a time
+     */
     private static int DEFAULT_STEP = 10000;
     private static int DEFAULT_CONNECT_TIMEOUT = 10000;
     private static int DEFAULT_READ_TIMEOUT = 10000;
@@ -88,7 +91,7 @@ public abstract class AFileDownloader implements Runnable, Callable<Boolean>, IF
                         saveFile(connection, fileOutput, connectTimeOut, readTimeOut);
                         isTryAgain = false;
                         System.out.println("\t\tDownloaded from " + connection.getUrl());
-                        doOnFinish();
+                        finishFileDownload();
                         return Boolean.TRUE;
                     } catch (SocketTimeoutException ex) {
                         //<editor-fold>
