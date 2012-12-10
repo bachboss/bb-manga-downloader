@@ -5,6 +5,7 @@
 package bbmangadownloader.bus.model.data;
 
 import bbmangadownloader.entity.Chapter;
+import java.io.File;
 
 /**
  *
@@ -12,17 +13,10 @@ import bbmangadownloader.entity.Chapter;
  */
 public class DownloadTask {
 
-    public static final int STATUS_NO = 0;
-    public static final int STATUS_STOPPED = 1;
-    public static final int STATUS_ERROR = 2;
-    public static final int STATUS_RUNNING = 3;
-    public static final int STATUS_PARSING = 4;
-    private static final String[] STATUS_ALL = new String[]{
-        "", "Stoped", "Error", "Running", "Parsing"
-    };
     private Chapter c;
     private int currentImage;
-    private int status;
+    private DownloadTaskStatus status = DownloadTaskStatus.No;
+    private File downloadTo;
 
     public DownloadTask(Chapter c) {
         this.c = c;
@@ -36,37 +30,40 @@ public class DownloadTask {
         return currentImage;
     }
 
-    public void setStatus(int status) {
-        if (status >= 0 && status < 5) {
-            this.status = status;
-        } else {
-            this.status = STATUS_ERROR;
-            System.out.println("Error Here !");
-        }
+    public File getDownloadTo() {
+        return downloadTo;
+    }
+
+    public void setDownloadTo(File downloadTo) {
+        this.downloadTo = downloadTo;
+    }
+
+    public void setStatus(DownloadTaskStatus status) {
+        this.status = status;
     }
 
     public String getStatus() {
-        switch (status) {
-            case (STATUS_PARSING): {
-                int numberOfImage = Math.max(c.getPagesCount(), c.getImagesCount());
-                if (currentImage != c.getPagesCount()) {
-                    return String.format("◊ (%.2f", (((float) currentImage) / numberOfImage * 100)) + "%)";
-                } else {
-                    return "100%";
-                }
+        if (status == DownloadTaskStatus.Parsing) {
+            int numberOfImage = Math.max(c.getPagesCount(), c.getImagesCount());
+            if (currentImage != c.getPagesCount()) {
+                return String.format("◊ (%.2f", (((float) currentImage) / numberOfImage * 100)) + "%)";
+            } else {
+                return "100%";
             }
-            case (STATUS_RUNNING):
-                int numberOfImage = Math.max(c.getPagesCount(), c.getImagesCount());
+        } else if (status == DownloadTaskStatus.Downloading) {
+            int numberOfImage = Math.max(c.getPagesCount(), c.getImagesCount());
 //                System.out.println("numberOfImage = " + numberOfImage);
-                if (currentImage != c.getImagesCount()) {
-                    return String.format("▼ (%.2f", (((float) currentImage) / numberOfImage * 100)) + "%)";
-                } else {
-                    return "▼ (100%)";
-                }
-            default:
-                return STATUS_ALL[status];
+            if (currentImage != c.getImagesCount()) {
+                return String.format("▼ (%.2f", (((float) currentImage) / numberOfImage * 100)) + "%)";
+            } else {
+                this.status = DownloadTaskStatus.Done;
+            }
         }
+        return status.getStatus();
+    }
 
+    public DownloadTaskStatus getStatusEnum() {
+        return status;
     }
 
     public void clearCurrentImage() {
@@ -75,5 +72,22 @@ public class DownloadTask {
 
     public void increaseCurrentImage() {
         this.currentImage++;
+    }
+
+    public static enum DownloadTaskStatus {
+
+        No(0), Stopped(1), Error(2), Downloading(3), Parsing(4), Done(5);
+
+        private DownloadTaskStatus(int id) {
+            this.id = id;
+        }
+        private int id;
+
+        private String getStatus() {
+            return STATUS_ALL[id];
+        }
+        private static final String[] STATUS_ALL = new String[]{
+            "", "Stopped", "Error", "Running", "Parsing", "Done"
+        };
     }
 }

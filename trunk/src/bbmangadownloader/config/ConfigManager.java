@@ -6,6 +6,7 @@ package bbmangadownloader.config;
 
 import bbmangadownloader.ult.FileManager;
 import bbmangadownloader.ult.HttpDownloadManager;
+import bbmangadownloader.ult.OSSupport;
 import java.io.*;
 import java.util.Properties;
 import java.util.logging.Level;
@@ -100,7 +101,10 @@ public class ConfigManager {
     }
 
     public String getOutputFolder() {
-        return getProperty("outputFolder");
+        File f = new File(getProperty("outputFolder"));
+        if (f.isDirectory()) {
+            return f.getAbsolutePath();
+        } else return OSSupport.getDefaultOutputFolder().getAbsolutePath();
     }
 
     public void setOutputFolder(String outputFolder) {

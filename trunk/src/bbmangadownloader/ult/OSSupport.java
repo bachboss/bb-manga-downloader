@@ -4,6 +4,10 @@
  */
 package bbmangadownloader.ult;
 
+import java.io.File;
+import javax.swing.JFileChooser;
+import org.apache.commons.io.FileUtils;
+
 /**
  *
  * @author Bach
@@ -30,6 +34,10 @@ public class OSSupport {
             System.out.println(os + "\t" + CURRENT_OS);
         }
         return CURRENT_OS;
+    }
+
+    public static File getDefaultOutputFolder() {
+        return FileUtils.getFile(FileUtils.getUserDirectory(), "Download", "Manga");
     }
 
     public enum OS {

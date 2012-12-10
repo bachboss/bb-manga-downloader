@@ -5,17 +5,14 @@
 package bbmangadownloader.gui.bus;
 
 import bbmangadownloader.bus.model.data.DownloadTask;
+import bbmangadownloader.bus.model.data.DownloadTask.DownloadTaskStatus;
 import bbmangadownloader.config.ConfigManager;
 import bbmangadownloader.entity.Chapter;
 import bbmangadownloader.entity.Image;
 import bbmangadownloader.faces.IFacadeMangaServer;
 import bbmangadownloader.gui.MangaDownloadGUI;
-import bbmangadownloader.ult.FileManager;
-import bbmangadownloader.ult.FileUtilities;
-import bbmangadownloader.ult.GUIUtilities;
-import bbmangadownloader.ult.HtmlUtilities;
 import bbmangadownloader.ult.HttpDownloadManager.MyConnection;
-import bbmangadownloader.ult.MultitaskJob;
+import bbmangadownloader.ult.*;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
@@ -48,30 +45,25 @@ public class ListTaskDownloader implements Runnable {
     @Override
     public void run() {
         try {
-            isRunning = true;
-            DownloadTask task = null;
-            while (this.listTask != null && !this.listTask.isEmpty()) {
-                synchronized (listTask) {
-                    if (this.listTask != null && !this.listTask.isEmpty()) {
-                        task = listTask.get(0);
-                    } else {
-                        task = null;
+            if (!isRunning) {
+                isRunning = true;
+                if (this.listTask == null) {
+                    return;
+                }
+                for (DownloadTask task : listTask) {
+                    if (task.getStatusEnum() == DownloadTaskStatus.No || task.getStatusEnum() == DownloadTaskStatus.Stopped) {
+                        synchronized (task) {
+                            DownloadTaskStatus status = task.getStatusEnum();
+                            if (status == DownloadTaskStatus.No || status == DownloadTaskStatus.Stopped) {
+                                task.setStatus(DownloadTaskStatus.Downloading);
+                                doDownloadChapter(task);
+                                tableModel.fireTableDataChanged();
+                            }
+                        }
                     }
                 }
-                if (task != null) {
-                    synchronized (task) {
-                        task.setStatus(DownloadTask.STATUS_RUNNING);
-                        doDownloadChapter(task);
-                    }
-                    synchronized (listTask) {
-                        listTask.remove(task);
-                    }
-                    tableModel.fireTableDataChanged();
-                }
+                isRunning = false;
             }
-            GUIUtilities.showLog("Done !");
-            System.out.println("Done !");
-            isRunning = false;
         } catch (Exception ex) {
             GUIUtilities.showException(null, ex);
             Logger.getLogger(ListTaskDownloader.class.getName()).log(Level.SEVERE, null, ex);
@@ -107,25 +99,26 @@ public class ListTaskDownloader implements Runnable {
                         + "Delete it and start new download?",
                         "Directory not empty", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
                 // Cancel
-                if (value == 1) {
+                if (value == JOptionPane.CANCEL_OPTION) {
+                    task.setStatus(DownloadTaskStatus.Stopped);
                     return;
-
                 }
                 FileUtilities.deleteDirector(imageFolder);
             }
         }
         imageFolder.mkdirs();
+        task.setDownloadTo(imageFolder);
         try {
 
             System.out.println("Start Get Image of " + c);
             // Parsing Data...
-            task.setStatus(DownloadTask.STATUS_PARSING);
+            task.setStatus(DownloadTaskStatus.Parsing);
             tableModel.fireTableCellUpdated(0, 2);
             List<Image> lstImg = usingServer.getAllImages(c);
             c.addImages(lstImg);
             System.out.println("\tGot " + lstImg.size() + " image(s)");
             // Download...
-            task.setStatus(DownloadTask.STATUS_RUNNING);
+            task.setStatus(DownloadTaskStatus.Downloading);
             tableModel.fireTableCellUpdated(0, 2);
 
             System.out.println("\tSave to: " + imageFolder.getAbsolutePath());
@@ -149,7 +142,7 @@ public class ListTaskDownloader implements Runnable {
             }
         } catch (Exception ex) {
             Logger.getLogger(MangaDownloadGUI.class.getName()).log(Level.SEVERE, null, ex);
-            task.setStatus(DownloadTask.STATUS_ERROR);
+            task.setStatus(DownloadTaskStatus.Error);
         }
 
     }
