@@ -5,7 +5,7 @@
 package bbmangadownloader.bus;
 
 import bbmangadownloader.bus.description.ADefaultBus;
-import bbmangadownloader.bus.description.IBus;
+import bbmangadownloader.bus.description.IBusOnePage;
 import bbmangadownloader.bus.exception.HtmlParsingException;
 import bbmangadownloader.entity.Chapter;
 import bbmangadownloader.entity.Image;
@@ -22,7 +22,7 @@ import org.jsoup.select.Elements;
  *
  * @author Bach
  */
-public class DragonFlyScans extends ADefaultBus implements IBus {
+public class DragonFlyScans extends ADefaultBus implements IBusOnePage {
 
     private static final String URL_LIST_MANGA = "http://dragonflyscans.org";
     private static final String BASED_URL = "http://dragonflyscans.org";
@@ -83,9 +83,9 @@ public class DragonFlyScans extends ADefaultBus implements IBus {
                 String url = e.attr("href");
                 int order = Integer.parseInt(e.html());
                 Image img;
-                if (order == 1) {                    
+                if (order == 1) {
                     img = getImageFromChapter(doc, order);
-                } else {                    
+                } else {
                     img = getImageFromChapter(url, order);
                 }
                 lstImage.add(img);
