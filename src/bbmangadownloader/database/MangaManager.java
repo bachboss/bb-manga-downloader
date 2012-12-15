@@ -4,10 +4,10 @@
  */
 package bbmangadownloader.database;
 
-import bbmangadownloader.config.ConfigManager;
 import bbmangadownloader.entity.Manga;
 import bbmangadownloader.entity.Server;
 import bbmangadownloader.faces.ServerManager;
+import bbmangadownloader.manager.ConfigManager;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;

@@ -4,7 +4,7 @@
  */
 package bbmangadownloader.bus.description;
 
-import bbmangadownloader.ult.HttpDownloadManager;
+import bbmangadownloader.manager.HttpDownloadManager;
 import java.io.IOException;
 import org.jsoup.nodes.Document;
 

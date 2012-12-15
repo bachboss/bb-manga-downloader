@@ -11,7 +11,7 @@ import bbmangadownloader.entity.Image;
 import bbmangadownloader.entity.Manga;
 import bbmangadownloader.entity.Server;
 import bbmangadownloader.entity.data.MangaDateTime;
-import bbmangadownloader.ult.HttpDownloadManager;
+import bbmangadownloader.manager.HttpDownloadManager;
 import com.google.code.regexp.NamedMatcher;
 import com.google.code.regexp.NamedPattern;
 import java.io.BufferedReader;

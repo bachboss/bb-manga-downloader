@@ -8,7 +8,7 @@ import bbmangadownloader.ult.ExceptionUtilities;
 import bbmangadownloader.ult.FileUtilities;
 import bbmangadownloader.ult.GUIUtilities;
 import bbmangadownloader.ult.HtmlUtilities;
-import bbmangadownloader.ult.HttpDownloadManager.MyConnection;
+import bbmangadownloader.manager.HttpDownloadManager.MyConnection;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;

@@ -4,6 +4,7 @@
  */
 package bbmangadownloader.ult;
 
+import bbmangadownloader.manager.FileManager;
 import bbmangadownloader.entity.Chapter;
 import bbmangadownloader.entity.Image;
 import bbmangadownloader.gui.MangaDownloadGUI;

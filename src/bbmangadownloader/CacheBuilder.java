@@ -4,12 +4,12 @@
  */
 package bbmangadownloader;
 
-import bbmangadownloader.config.ConfigManager;
 import bbmangadownloader.entity.Manga;
 import bbmangadownloader.entity.Server;
 import bbmangadownloader.faces.IFacadeMangaServer;
 import bbmangadownloader.faces.ServerManager;
 import bbmangadownloader.faces.SupportType;
+import bbmangadownloader.manager.ConfigManager;
 import bbmangadownloader.ult.NumberUtilities;
 import java.io.*;
 import java.util.HashMap;
@@ -116,6 +116,17 @@ public class CacheBuilder {
                     System.out.println("Host Support = " + facade.getSupportType().toString());
                 }
             }
+        }
+    }
+
+    private static class ServerTempData {
+
+        public String serverUrl;
+        public boolean isDownload;
+
+        public ServerTempData(boolean isDownload, String serverUrl) {
+            this.serverUrl = serverUrl;
+            this.isDownload = isDownload;
         }
     }
 }

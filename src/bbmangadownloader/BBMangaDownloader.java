@@ -1,10 +1,10 @@
 package bbmangadownloader;
 
-import bbmangadownloader.config.ConfigManager;
 import bbmangadownloader.database.WatcherMangager;
 import bbmangadownloader.faces.ServerManager;
 import bbmangadownloader.gui.MangaDownloadGUI;
 import bbmangadownloader.gui.MangaWatcherGUI;
+import bbmangadownloader.manager.ConfigManager;
 import bbmangadownloader.ult.OSSupport;
 import bbmangadownloader.ult.ReflectionUtilities;
 import java.awt.Dimension;

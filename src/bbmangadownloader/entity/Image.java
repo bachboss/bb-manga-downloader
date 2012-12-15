@@ -4,8 +4,8 @@
  */
 package bbmangadownloader.entity;
 
-import bbmangadownloader.ult.HttpDownloadManager;
-import bbmangadownloader.ult.HttpDownloadManager.MyConnection;
+import bbmangadownloader.manager.HttpDownloadManager;
+import bbmangadownloader.manager.HttpDownloadManager.MyConnection;
 import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.util.logging.Level;
