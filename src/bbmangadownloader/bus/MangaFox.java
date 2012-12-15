@@ -4,16 +4,16 @@
  */
 package bbmangadownloader.bus;
 
-import java.io.IOException;
-import java.text.ParseException;
-import java.util.*;
 import bbmangadownloader.bus.description.ABusPageBasedDefaultChapImage;
 import bbmangadownloader.entity.*;
 import bbmangadownloader.entity.data.MangaDateTime;
 import bbmangadownloader.ult.DateTimeUtilities;
 import bbmangadownloader.ult.NumberUtilities;
+import java.io.IOException;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.*;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;

@@ -5,7 +5,7 @@
 package bbmangadownloader.bus;
 
 import bbmangadownloader.bus.description.ADefaultBus;
-import bbmangadownloader.bus.description.IBus;
+import bbmangadownloader.bus.description.IBusOnePage;
 import bbmangadownloader.bus.exception.HtmlParsingException;
 import bbmangadownloader.entity.Chapter;
 import bbmangadownloader.entity.Image;
@@ -22,7 +22,7 @@ import org.jsoup.select.Elements;
  *
  * @author Bach
  */
-public class MangaStream extends ADefaultBus implements IBus {
+public class MangaStream extends ADefaultBus implements IBusOnePage {
 
     private static final String BASED_URL = "http://mangastream.com";
     private static final String URL_LIST_MANGA = "http://mangastream.com/manga";

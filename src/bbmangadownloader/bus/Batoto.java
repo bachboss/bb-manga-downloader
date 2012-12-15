@@ -5,7 +5,6 @@
 package bbmangadownloader.bus;
 
 import bbmangadownloader.bus.description.ABusPageBasedDefaultChapPageImage;
-import bbmangadownloader.bus.exception.HtmlParsingException;
 import bbmangadownloader.entity.*;
 import bbmangadownloader.entity.data.MangaDateTime;
 import bbmangadownloader.ult.DateTimeUtilities;

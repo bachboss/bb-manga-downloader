@@ -5,10 +5,6 @@
 package bbmangadownloader.bus;
 
 import bbmangadownloader.bus.description.ADefaultBus;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 import bbmangadownloader.bus.description.IBusOnePage;
 import bbmangadownloader.entity.Chapter;
 import bbmangadownloader.entity.Image;
@@ -16,6 +12,10 @@ import bbmangadownloader.entity.Manga;
 import bbmangadownloader.entity.Server;
 import com.google.code.regexp.NamedMatcher;
 import com.google.code.regexp.NamedPattern;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;

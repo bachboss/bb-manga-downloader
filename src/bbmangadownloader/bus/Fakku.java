@@ -97,7 +97,7 @@ public class Fakku extends ADefaultBus {
         return returnValue;
     }
 
-    private static final String imgPath(String x, String basedImgUrl) {
+    private static String imgPath(String x, String basedImgUrl) {
         while (x.length() < 3) {
             x = '0' + x;
         }

@@ -12,8 +12,8 @@ import bbmangadownloader.entity.Image;
 import bbmangadownloader.entity.Manga;
 import bbmangadownloader.entity.Server;
 import bbmangadownloader.entity.data.MangaDateTime;
-import bbmangadownloader.ult.DateTimeUtilities;
 import bbmangadownloader.manager.HttpDownloadManager;
+import bbmangadownloader.ult.DateTimeUtilities;
 import bbmangadownloader.ult.MultitaskJob;
 import java.io.IOException;
 import java.text.DateFormat;
@@ -73,7 +73,7 @@ public class BlogTruyen extends ADefaultBus implements IBusOnePage {
                 }
             });
         }
-        System.out.println("Number Of Page = " + numberOfPage);
+//        System.out.println("Number Of Page = " + numberOfPage);
         for (int i = 2; i <= numberOfPage; i++) {
             final String u = POST_FORM_STR + i;
             listTask.add(new Callable<Object>() {
