@@ -13,7 +13,7 @@ import bbmangadownloader.entity.Manga;
 import bbmangadownloader.entity.Server;
 import bbmangadownloader.entity.data.MangaDateTime;
 import bbmangadownloader.ult.DateTimeUtilities;
-import bbmangadownloader.ult.HttpDownloadManager;
+import bbmangadownloader.manager.HttpDownloadManager;
 import bbmangadownloader.ult.MultitaskJob;
 import com.google.code.regexp.NamedMatcher;
 import com.google.code.regexp.NamedPattern;

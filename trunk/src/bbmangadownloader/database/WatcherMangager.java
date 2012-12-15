@@ -4,9 +4,9 @@
  */
 package bbmangadownloader.database;
 
-import bbmangadownloader.config.ConfigManager;
 import bbmangadownloader.entity.Manga;
 import bbmangadownloader.gui.model.Watcher;
+import bbmangadownloader.manager.ConfigManager;
 import bbmangadownloader.ult.DatabaseUtilities;
 import java.io.File;
 import java.io.FileWriter;

@@ -14,7 +14,7 @@ import bbmangadownloader.faces.IFacadeMangaServer;
 import bbmangadownloader.gui.bus.ListTaskDownloader;
 import bbmangadownloader.gui.model.*;
 import bbmangadownloader.ult.GUIUtilities;
-import bbmangadownloader.ult.HttpDownloadManager;
+import bbmangadownloader.manager.HttpDownloadManager;
 import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;

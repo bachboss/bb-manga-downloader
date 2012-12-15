@@ -4,8 +4,8 @@
  */
 package bbmangadownloader.faces;
 
-import bbmangadownloader.config.ConfigManager;
 import bbmangadownloader.faces.implement.*;
+import bbmangadownloader.manager.ConfigManager;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;

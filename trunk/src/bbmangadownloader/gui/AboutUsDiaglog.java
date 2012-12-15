@@ -4,7 +4,7 @@
  */
 package bbmangadownloader.gui;
 
-import bbmangadownloader.config.ConfigManager;
+import bbmangadownloader.manager.ConfigManager;
 
 /**
  *

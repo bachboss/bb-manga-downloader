@@ -4,12 +4,12 @@
  */
 package bbmangadownloader.bus;
 
-import bbmangadownloader.config.ConfigManager;
 import bbmangadownloader.entity.Chapter;
 import bbmangadownloader.entity.Manga;
 import bbmangadownloader.entity.data.MangaDateTime;
+import bbmangadownloader.manager.ConfigManager;
 import bbmangadownloader.ult.DateTimeUtilities;
-import bbmangadownloader.ult.HttpDownloadManager;
+import bbmangadownloader.manager.HttpDownloadManager;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;

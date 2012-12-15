@@ -4,11 +4,10 @@
  */
 package bbmangadownloader.gui;
 
-import bbmangadownloader.config.ConfigManager;
-import bbmangadownloader.ult.FileManager;
+import bbmangadownloader.manager.ConfigManager;
+import bbmangadownloader.manager.FileManager;
+import bbmangadownloader.manager.HttpDownloadManager;
 import bbmangadownloader.ult.GUIUtilities;
-import bbmangadownloader.ult.HttpDownloadManager;
-import bbmangadownloader.ult.OSSupport;
 import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;

@@ -4,15 +4,16 @@
  */
 package bbmangadownloader.gui.bus;
 
+import bbmangadownloader.manager.FileManager;
 import bbmangadownloader.bus.model.data.DownloadTask;
 import bbmangadownloader.bus.model.data.DownloadTask.DownloadTaskStatus;
-import bbmangadownloader.config.ConfigManager;
 import bbmangadownloader.entity.Chapter;
 import bbmangadownloader.entity.Image;
 import bbmangadownloader.faces.IFacadeMangaServer;
 import bbmangadownloader.gui.MangaDownloadGUI;
+import bbmangadownloader.manager.ConfigManager;
 import bbmangadownloader.ult.*;
-import bbmangadownloader.ult.HttpDownloadManager.MyConnection;
+import bbmangadownloader.manager.HttpDownloadManager.MyConnection;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
