@@ -42,7 +42,6 @@ public class ComicVN extends ADefaultBus implements IBusOnePage {
         ArrayList<Chapter> lstChapter = new ArrayList<Chapter>();
 
         Document doc = getDocument(manga.getUrl());
-//        Elements xmlNode = doc.select("div[class=tblog-post] center a[href*=.html]").not("a[href~=jpg|adf.ly]");
         Elements xmlNode = doc.select("div[id=list_table_truyen] table[class=listing] tr[class=table_body]");
 
         Iterator<Element> iChapter = xmlNode.iterator();
