@@ -28,7 +28,7 @@ public class BBMangaDownloader {
     private static final int MODE_WATCHER = 0;
     private static final int MODE_DOWNLOADER = 1;
     //
-    private static final int MODE = 1;
+    private static final int MODE = MODE_DOWNLOADER;
 
     public static void main(String[] args) {
         if (OSSupport.getOS() == OSSupport.OS.MAC_OS) {
@@ -57,7 +57,7 @@ public class BBMangaDownloader {
                 }
             }
             startUpPanel.setVisible(true);
-            
+
             try {
                 UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
             } catch (Exception ex) {
@@ -94,7 +94,6 @@ public class BBMangaDownloader {
     }
 
     private static void configForMacOS() {
-
         System.setProperty("apple.laf.useScreenMenuBar", "true");
         System.setProperty("com.apple.mrj.application.apple.menu.about.name", APPLICATION_NAME);
         try {
