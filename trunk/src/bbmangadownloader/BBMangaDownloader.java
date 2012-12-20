@@ -29,6 +29,7 @@ public class BBMangaDownloader {
     private static final int MODE_DOWNLOADER = 1;
     //
     private static final int MODE = MODE_DOWNLOADER;
+    public static final boolean TEST = true;
 
     public static void main(String[] args) {
         if (OSSupport.getOS() == OSSupport.OS.MAC_OS) {

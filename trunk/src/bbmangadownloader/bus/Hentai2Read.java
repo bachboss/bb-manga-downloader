@@ -29,12 +29,12 @@ public class Hentai2Read extends ABusPageBasedDefaultChapImage {
 
     @Override
     protected Elements getChapterQuery(Element htmlTag) {
-        return htmlTag.select("div[class=wpm_pag mng_det] div[class=box] div[class=text] ul li a");
+        return htmlTag.select("html body.page div.wrap div#sct_main div#sct_ctt_ara.fl div.con div.wpm_pag div.left div.box div.text ul li a");
     }
 
     @Override
     protected Element getImageQuery(Element imgNode) {
-        return imgNode.select("div[class=prw] img").first();
+        return imgNode.select("div.prw a img[alt][src]").first();
     }
 
     @Override
@@ -43,14 +43,13 @@ public class Hentai2Read extends ABusPageBasedDefaultChapImage {
     }
 
     @Override
-    protected Image getImageFromTag(Element imgNode, Chapter c) {
-        return new Image(-1, imgNode.attr("src"), c);
+    protected Image getImageFromTag(Element imgNode, Chapter c, Page p) {
+        return new Image(p.getPageOrder(), imgNode.attr("src"), c, c.getUrl());
     }
 
     @Override
-    public List<Page> getAllPages(Chapter chapter) throws IOException {
+    public List<Page> getAllPages(Chapter chapter, Document doc) throws IOException {
         List<Page> lstPage = new ArrayList<Page>();
-        Document doc = getDocument(chapter.getUrl());
         Element xmlNode = doc.select("select[class=cbo_wpm_pag]").first();
         String url = xmlNode.attr("onchange");
         NamedMatcher m = PATTERN_URL.matcher(url);

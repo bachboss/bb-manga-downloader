@@ -90,29 +90,41 @@ public class ChapterDownloadModel extends AbstractTableModel implements MyTableM
         return true;
     }
 
-    public void addChapter(Chapter c) {
+    public DownloadTask addChapter(Chapter c) {
         for (DownloadTask t : listDownload) {
             if (t.getChapter() == c) {
-                return;
+                return t;
             }
         }
         DownloadTask t = new DownloadTask(c);
         this.addTask(t);
+        return t;
     }
 
     public void addTask(DownloadTask t) {
         this.listDownload.add(t);
-        this.fireTableDataChanged();
+        this.fireTableRowsInserted(listDownload.size(), listDownload.size());
+//        this.fireTableDataChanged();
     }
 
     public void removeTask(DownloadTask t) {
-        this.listDownload.remove(t);
-        this.fireTableDataChanged();
+        int index = this.listDownload.indexOf(t);
+        removeTaskAt(index);
+    }
+
+    public void removeTaskAt(int index) {
+        this.listDownload.remove(index);
+        this.fireTableRowsDeleted(index, index);
+//        this.fireTableDataChanged();
     }
 
     public void clear() {
         this.listDownload.clear();
         this.fireTableDataChanged();
+    }
+
+    public void fireDownloadTaskStatusUpdated(DownloadTask task) {
+        fireTableCellUpdated(listDownload.indexOf(task), 2);
     }
 
     @Override

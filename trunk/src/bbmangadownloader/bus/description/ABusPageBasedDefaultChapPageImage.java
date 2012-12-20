@@ -25,12 +25,10 @@ public abstract class ABusPageBasedDefaultChapPageImage extends ABusPageBasedDef
     protected abstract Page getPageFromTag(Element htmlTag, Chapter c) throws HtmlParsingException;
 
     @Override
-    public List<Page> getAllPages(Chapter chapter) throws IOException, HtmlParsingException {
+    public List<Page> getAllPages(Chapter chapter, Document doc) throws IOException, HtmlParsingException {
         List<Page> lstPage = new ArrayList<Page>();
-
-        Document doc = getDocument(chapter.getUrl());
+        
         Elements xmlNodes = getPageQuery(doc);
-
         for (Element e : xmlNodes) {
             Page p = getPageFromTag(e, chapter);
             if (p != null) {

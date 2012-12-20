@@ -80,10 +80,10 @@ public class EatManga extends ABusPageBasedDefaultChapPageImage {  // Done
     }
 
     @Override
-    protected Image getImageFromTag(Element imgNode, Chapter c) {
+    protected Image getImageFromTag(Element imgNode, Chapter c, Page p) {
         Element node = imgNode.select("img[alt]").select("[id*=image]").first();
         if (node != null) {
-            return new Image(-1, imgNode.attr("src"), c);
+            return new Image(p.getPageOrder(), imgNode.attr("src"), c);
         } else {
             return null;
         }

@@ -13,6 +13,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.jsoup.nodes.Document;
 
 /**
  *
@@ -21,9 +26,10 @@ import java.util.concurrent.Callable;
 public abstract class ABusPageBasedDefault extends ADefaultBus implements IBusPageBased {
 
     @Override
-    public List<Image> getAllImages(Chapter chapter) throws IOException, HtmlParsingException {
+    public List<Image> getAllImages(final Chapter chapter) throws IOException, HtmlParsingException {
         // TODO: Can Improve by using multi thread
-        List<Page> lstPage = getAllPages(chapter);
+        final Document doc = getDocument(chapter.getUrl());
+        List<Page> lstPage = getAllPages(chapter, doc);
         final List<Image> lstImage = new ArrayList<Image>();
 
         List<Callable<Object>> lstTask = new ArrayList<Callable<Object>>();
@@ -32,17 +38,44 @@ public abstract class ABusPageBasedDefault extends ADefaultBus implements IBusPa
             lstTask.add(new Callable<Object>() {
                 @Override
                 public Object call() throws Exception {
-                    Image img = getImage(p);
-                    if (img != null) {
-                        img.setImgOrder(p.getPageOrder());
-                        lstImage.add(img);
+                    try {
+                        Image img;
+                        if (p.isIsChapterUrl()) {
+                            img = getImage(p, doc);
+                        } else {
+                            Document pageDoc = getDocument(p.getUrl());
+                            img = getImage(p, pageDoc);
+                        }
+
+                        if (img != null) {
+                            if (img.getImgOrder() == -1) {
+                                img.setImgOrder(p.getPageOrder());
+                            }
+                            lstImage.add(img);
+                        }
+                        return null;
+                    } catch (Exception ex) {
+                        return ex;
                     }
-                    return false;
                 }
             });
         }
-        MultitaskJob.doTask(lstTask);
+        List<Future<Object>> lstFuture = MultitaskJob.doTask(lstTask);
+        for (Future<Object> f : lstFuture) {
+            Object o = null;
+            try {
+                o = f.get();
+            } catch (Exception ex) {
+                Logger.getLogger(ABusPageBasedDefault.class.getName()).log(Level.SEVERE, null, ex);
+            }
 
+            if (o instanceof IOException) {
+                throw (IOException) o;
+            }
+            if (o instanceof HtmlParsingException) {
+                throw (HtmlParsingException) o;
+            }
+        }
         return lstImage;
     }
 }

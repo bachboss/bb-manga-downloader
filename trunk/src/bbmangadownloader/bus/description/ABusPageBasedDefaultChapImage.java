@@ -24,7 +24,7 @@ public abstract class ABusPageBasedDefaultChapImage extends ABusPageBasedDefault
 
     protected abstract Element getImageQuery(Element imgNode) throws HtmlParsingException;
 
-    protected abstract Image getImageFromTag(Element imgNode, Chapter c) throws HtmlParsingException;
+    protected abstract Image getImageFromTag(Element imgNode, Chapter c, Page p) throws HtmlParsingException;
 
     protected abstract Elements getChapterQuery(Element htmlTag) throws HtmlParsingException;
 
@@ -48,11 +48,10 @@ public abstract class ABusPageBasedDefaultChapImage extends ABusPageBasedDefault
     }
 
     @Override
-    public Image getImage(Page p) throws IOException, HtmlParsingException {
-        Document doc = getDocument(p.getUrl());
+    public Image getImage(Page page, Document doc) throws IOException, HtmlParsingException {
         Element xmlNode = getImageQuery(doc);
         if (xmlNode != null) {
-            return getImageFromTag(xmlNode, p.getChapter());
+            return getImageFromTag(xmlNode, page.getChapter(), page);
         } else {
             return null;
         }

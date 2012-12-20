@@ -5,6 +5,7 @@
 package bbmangadownloader.bus.model.data;
 
 import bbmangadownloader.entity.Chapter;
+import bbmangadownloader.gui.bus.TaskDownloader;
 import java.io.File;
 
 /**
@@ -17,6 +18,8 @@ public class DownloadTask {
     private int currentImage;
     private DownloadTaskStatus status = DownloadTaskStatus.No;
     private File downloadTo;
+    private TaskDownloader downloader;
+    private boolean isRunning = false;
 
     public DownloadTask(Chapter c) {
         this.c = c;
@@ -42,18 +45,29 @@ public class DownloadTask {
         this.status = status;
     }
 
-    public String getStatus() {
+    public synchronized String getStatus() {
+        if (status == DownloadTaskStatus.No) {
+            return status.getStatus();
+        }
+        String s;
         if (status == DownloadTaskStatus.Downloading) {
             int numberOfImage = c.getImagesCount();
             if (currentImage == 0) {
-                return ("▼ (0%)");
+                s = ("▼ (0%)");
             } else if (currentImage == c.getImagesCount()) {
-                this.status = DownloadTaskStatus.Done;
+                s = ("▼ (100%)");
             } else {
-                return String.format("▼ (%.2f", (((float) currentImage) / numberOfImage * 100)) + "%)";
+                s = String.format("▼ (%.2f", (((float) currentImage) / numberOfImage * 100)) + "%)";
             }
+        } else {
+            s = status.getStatus();
         }
-        return status.getStatus();
+
+        if (isRunning) {
+            return s;
+        } else {
+            return ("Pause: " + s);
+        }
     }
 
     public DownloadTaskStatus getStatusEnum() {
@@ -68,9 +82,26 @@ public class DownloadTask {
         this.currentImage++;
     }
 
+    public TaskDownloader getDownloader() {
+        return downloader;
+    }
+
+    public void setDownloader(TaskDownloader downloader) {
+        this.downloader = downloader;
+    }
+
+    public boolean isIsRunning() {
+        return isRunning;
+    }
+
+    public void setIsRunning(boolean isRunning) {
+        this.isRunning = isRunning;
+    }
+
     public static enum DownloadTaskStatus {
 
-        No(0), Stopped(1), Error(2), Downloading(3), Parsing(4), Done(5);
+        No(0), Checking(1), Parsing(2), Downloading(3), Cleaning(4),
+        Done(5), Error(6), Stopped(7);
 
         private DownloadTaskStatus(int id) {
             this.id = id;
@@ -86,7 +117,8 @@ public class DownloadTask {
             return getStatus();
         }
         private static final String[] STATUS_ALL = new String[]{
-            "", "Stopped", "Error", "Running", "Parsing", "Done"
+            "", "Checking", "Parsing", "Downloading", "Cleaning",
+            "Done", "Error", "Stopped"
         };
     }
 }

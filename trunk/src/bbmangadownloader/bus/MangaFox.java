@@ -76,26 +76,28 @@ public class MangaFox extends ABusPageBasedDefaultChapImage { // Done
     }
 
     @Override
-    protected Image getImageFromTag(Element imgNode, Chapter c) {
-        return new Image(-1, imgNode.attr("src"), c);
+    protected Image getImageFromTag(Element imgNode, Chapter c, Page p) {
+        return new Image(p.getPageOrder(), imgNode.attr("src"), c);
     }
 
     @Override
-    public List<Page> getAllPages(Chapter chapter) throws IOException {
+    public List<Page> getAllPages(Chapter chapter, Document doc) throws IOException {
         ArrayList<Page> lstPage = new ArrayList<Page>();
 
         String url = chapter.getUrl();
         String baseLink = url.substring(0, url.lastIndexOf("/") + 1);
 
-        Document doc = getDocument(chapter.getUrl());
         Elements xmlNode = doc.select("select[class=m]").first().select("option");
         Iterator<Element> iElement = xmlNode.iterator();
         while (iElement.hasNext()) {
             Element e = iElement.next();
-            Page p = new Page(baseLink + e.attr("value") + ".html", chapter,
-                    NumberUtilities.getNumberInt(e.text()),
-                    e.attributes().hasKey("selected"));
-            lstPage.add(p);
+            String page = e.attr("value");
+            if (!page.equals("0")) {
+                Page p = new Page(baseLink + page + ".html", chapter,
+                        NumberUtilities.getNumberInt(e.text()),
+                        e.attributes().hasKey("selected"));
+                lstPage.add(p);
+            }
         }
 
         return lstPage;

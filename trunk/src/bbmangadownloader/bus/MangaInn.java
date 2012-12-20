@@ -75,14 +75,14 @@ public class MangaInn extends ABusPageBasedDefaultChapImage { // Done
     }
 
     @Override
-    protected Image getImageFromTag(Element imgNode, Chapter c) {
-        return new Image(-1, imgNode.attr("src"), c);
+    protected Image getImageFromTag(Element imgNode, Chapter c, Page p) {
+        return new Image(p.getPageOrder(), imgNode.attr("src"), c);
     }
 
     @Override
-    public final List<Page> getAllPages(Chapter chapter) throws IOException {
+    public final List<Page> getAllPages(Chapter chapter, Document doc) throws IOException {
         ArrayList<Page> lstPage = new ArrayList<Page>();
-        Document doc = getDocument(chapter.getUrl());
+
         // s='http://www.mangainn.com/manga/chapter/'+$('#chapters :selected').val()+'/page_'+id;        
         Elements xmlNodes = doc.select("select[id~=chapters] option[selected]");
         String chapterValue = xmlNodes.first().attr("value");
