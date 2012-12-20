@@ -10,11 +10,13 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.Arrays;
 import org.apache.commons.codec.EncoderException;
 import org.apache.commons.codec.net.URLCodec;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.nodes.Node;
 
 /**
  *
@@ -107,6 +109,7 @@ public class HtmlUtilities {
 
         if (folderImages.isDirectory()) {
             File[] lstFile = folderImages.listFiles(FileUtilities.ImageFileNameFilter.getInstance());
+            Arrays.sort(lstFile);
             Document doc = new Document("");
             Element eHtml = doc.appendElement("html");
             Element eHead = eHtml.appendElement("head");
@@ -115,8 +118,9 @@ public class HtmlUtilities {
             Element eBody = eHtml.appendElement("body");
             eBody.attr("style", "text-align:center;background-color:black;");
             for (File f : lstFile) {
-                Element eImage = eBody.appendElement("image");
-                eImage.attr("src", f.getName());
+                eBody.append("<image src=\"" + f.getName() + "\"/>");
+//                Element eImage = eBody.appendElement("image");
+//                eImage.attr("src", f.getName());
             }
 
             FileUtilities.writeStringToFile(doc.toString(), new File(folderImages, "Comic.html"));

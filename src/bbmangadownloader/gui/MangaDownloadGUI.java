@@ -4,17 +4,14 @@
  */
 package bbmangadownloader.gui;
 
-import bbmangadownloader.bus.model.data.DownloadTask;
-import bbmangadownloader.bus.model.data.DownloadTask.DownloadTaskStatus;
 import bbmangadownloader.entity.Chapter;
 import bbmangadownloader.entity.Manga;
 import bbmangadownloader.entity.Server;
 import bbmangadownloader.faces.FacadeManager;
 import bbmangadownloader.faces.IFacadeMangaServer;
-import bbmangadownloader.gui.bus.ListTaskDownloader;
 import bbmangadownloader.gui.model.*;
-import bbmangadownloader.ult.GUIUtilities;
 import bbmangadownloader.manager.HttpDownloadManager;
+import bbmangadownloader.ult.GUIUtilities;
 import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -23,7 +20,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JTable;
-import javax.swing.ListSelectionModel;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumnModel;
@@ -38,9 +34,7 @@ import org.jdesktop.swingx.combobox.ListComboBoxModel;
 public class MangaDownloadGUI extends javax.swing.JFrame {
 
     private ChapterModel modelChapter;
-    private ChapterDownloadModel modelDownload;
     private IFacadeMangaServer mangaServer;
-    private ListTaskDownloader downloadThread;
     private ListComboBoxModel<Manga> modelManga;
     private ScannerComboboxModel modelScanner;
     private Server lastScannerServer;
@@ -56,12 +50,10 @@ public class MangaDownloadGUI extends javax.swing.JFrame {
         setIconImage(bbmangadownloader.BBMangaDownloader.getApplicationIcon());
         initPopup();
         initDecorator();
-        tblDownload.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
 
     private void initDecorator() {
         AutoCompleteDecorator.decorate(cbxScanner, new ObjectToStringConverter() {
-
             @Override
             public String getPreferredStringForItem(Object item) {
                 return item == null ? null : item.toString();
@@ -69,7 +61,6 @@ public class MangaDownloadGUI extends javax.swing.JFrame {
         });
 
         AutoCompleteDecorator.decorate(cbxManga, new ObjectToStringConverter() {
-
             @Override
             public String getPreferredStringForItem(Object item) {
                 return item == null ? null : item.toString();
@@ -88,13 +79,10 @@ public class MangaDownloadGUI extends javax.swing.JFrame {
         tblChapters.setComponentPopupMenu(popChapters);
         tblChapters.setInheritsPopupMenu(true);
 
-        tblDownload.setComponentPopupMenu(popDownload);
-        tblDownload.setInheritsPopupMenu(true);
     }
 
     private void addHeaderListener(JTable table) {
         table.getTableHeader().addMouseListener(new MouseAdapter() {
-
             @Override
             public void mouseClicked(MouseEvent evt) {
                 JTable table = ((JTableHeader) evt.getSource()).getTable();
@@ -148,9 +136,6 @@ public class MangaDownloadGUI extends javax.swing.JFrame {
         this.modelChapter = new ChapterModel();
         tblChapters.setModel(modelChapter);
 
-        this.modelDownload = new ChapterDownloadModel();
-        tblDownload.setModel(modelDownload);
-
         //<editor-fold>
         tblChapters.getColumnModel().getColumn(0).setPreferredWidth(50);
         tblChapters.getColumnModel().getColumn(0).setMaxWidth(100);
@@ -161,18 +146,8 @@ public class MangaDownloadGUI extends javax.swing.JFrame {
         tblChapters.setAutoCreateColumnsFromModel(false);
         //</editor-fold>
 
-        //<editor-fold>
-        tblDownload.getColumnModel().getColumn(0).setPreferredWidth(50);
-        tblDownload.getColumnModel().getColumn(0).setMaxWidth(100);
-        tblDownload.getColumnModel().getColumn(1).setPreferredWidth(200);
-        tblDownload.getColumnModel().getColumn(2).setPreferredWidth(100);
-        tblDownload.getColumnModel().getColumn(2).setMaxWidth(100);
-        tblDownload.getColumnModel().getColumn(3).setPreferredWidth(150);
-        tblDownload.setAutoCreateColumnsFromModel(false);
-        //</editor-fold>
 
         addHeaderListener(tblChapters);
-        addHeaderListener(tblDownload);
     }
 
     /**
@@ -190,11 +165,6 @@ public class MangaDownloadGUI extends javax.swing.JFrame {
         popChapters = new javax.swing.JPopupMenu();
         mnChaptersAddToDownload = new javax.swing.JMenuItem();
         mnChapterViewInBroser = new javax.swing.JMenuItem();
-        popDownload = new javax.swing.JPopupMenu();
-        mnDownloadStart = new javax.swing.JMenuItem();
-        mnDownloadRemove = new javax.swing.JMenuItem();
-        mnDownloadViewInBrowser = new javax.swing.JMenuItem();
-        mnDownloadViewFolder = new javax.swing.JMenuItem();
         pnlTop = new javax.swing.JPanel();
         pnlDownloadInformation = new javax.swing.JPanel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
@@ -218,8 +188,7 @@ public class MangaDownloadGUI extends javax.swing.JFrame {
         sclChapter = new javax.swing.JScrollPane();
         tblChapters = new javax.swing.JTable();
         pnlDownload = new javax.swing.JPanel();
-        sclDownload = new javax.swing.JScrollPane();
-        tblDownload = new javax.swing.JTable();
+        pnlTaskDownload = new bbmangadownloader.gui.control.PanelDownload();
         pnlBot = new javax.swing.JPanel();
         lblOutput = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
@@ -253,38 +222,6 @@ public class MangaDownloadGUI extends javax.swing.JFrame {
             }
         });
         popChapters.add(mnChapterViewInBroser);
-
-        mnDownloadStart.setLabel("Start All Download");
-        mnDownloadStart.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnDownloadStartActionPerformed(evt);
-            }
-        });
-        popDownload.add(mnDownloadStart);
-
-        mnDownloadRemove.setLabel("Remove");
-        mnDownloadRemove.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnDownloadRemoveActionPerformed(evt);
-            }
-        });
-        popDownload.add(mnDownloadRemove);
-
-        mnDownloadViewInBrowser.setText("View In Browser");
-        mnDownloadViewInBrowser.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnDownloadViewInBrowserActionPerformed(evt);
-            }
-        });
-        popDownload.add(mnDownloadViewInBrowser);
-
-        mnDownloadViewFolder.setText("View Directory");
-        mnDownloadViewFolder.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnDownloadViewFolderActionPerformed(evt);
-            }
-        });
-        popDownload.add(mnDownloadViewFolder);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -341,7 +278,7 @@ public class MangaDownloadGUI extends javax.swing.JFrame {
                         .addComponent(txtMangaName)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnCheckSupport))
-                    .addComponent(txtMangaUrl, javax.swing.GroupLayout.DEFAULT_SIZE, 474, Short.MAX_VALUE))
+                    .addComponent(txtMangaUrl, javax.swing.GroupLayout.DEFAULT_SIZE, 493, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlServerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(lblLoading, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -416,7 +353,7 @@ public class MangaDownloadGUI extends javax.swing.JFrame {
                     .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlScanerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(cbxManga, 0, 508, Short.MAX_VALUE)
+                    .addComponent(cbxManga, 0, 510, Short.MAX_VALUE)
                     .addComponent(cbxScanner, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlScanerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -499,7 +436,7 @@ public class MangaDownloadGUI extends javax.swing.JFrame {
         );
         pnlChaptersLayout.setVerticalGroup(
             pnlChaptersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(sclChapter, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 126, Short.MAX_VALUE)
+            .addComponent(sclChapter, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 127, Short.MAX_VALUE)
         );
 
         jSplitPane2.setTopComponent(pnlChapters);
@@ -508,29 +445,17 @@ public class MangaDownloadGUI extends javax.swing.JFrame {
         pnlDownload.setMinimumSize(new java.awt.Dimension(0, 0));
         pnlDownload.setPreferredSize(new java.awt.Dimension(700, 150));
 
-        tblDownload.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        tblDownload.setMinimumSize(new java.awt.Dimension(0, 0));
-        sclDownload.setViewportView(tblDownload);
-
         javax.swing.GroupLayout pnlDownloadLayout = new javax.swing.GroupLayout(pnlDownload);
         pnlDownload.setLayout(pnlDownloadLayout);
         pnlDownloadLayout.setHorizontalGroup(
             pnlDownloadLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(sclDownload, javax.swing.GroupLayout.DEFAULT_SIZE, 713, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlDownloadLayout.createSequentialGroup()
+                .addComponent(pnlTaskDownload, javax.swing.GroupLayout.DEFAULT_SIZE, 703, Short.MAX_VALUE)
+                .addContainerGap())
         );
         pnlDownloadLayout.setVerticalGroup(
             pnlDownloadLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(sclDownload, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 149, Short.MAX_VALUE)
+            .addComponent(pnlTaskDownload, javax.swing.GroupLayout.DEFAULT_SIZE, 154, Short.MAX_VALUE)
         );
 
         jSplitPane2.setRightComponent(pnlDownload);
@@ -640,7 +565,7 @@ public class MangaDownloadGUI extends javax.swing.JFrame {
             int[] selectedRows = tblChapters.getSelectedRows();
             for (int i = 0; i < selectedRows.length; i++) {
                 Chapter c = modelChapter.getChapterAt(selectedRows[i]);
-                modelDownload.addChapter(c);
+                pnlTaskDownload.addChapter(c);
             }
         }
     }//GEN-LAST:event_tblChaptersMouseReleased
@@ -683,22 +608,6 @@ public class MangaDownloadGUI extends javax.swing.JFrame {
         doAddToDownload();
     }//GEN-LAST:event_mnChaptersAddToDownloadActionPerformed
 
-    private void mnDownloadRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnDownloadRemoveActionPerformed
-        doRemoveFromDownload();
-    }//GEN-LAST:event_mnDownloadRemoveActionPerformed
-
-    private void mnDownloadViewInBrowserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnDownloadViewInBrowserActionPerformed
-        int row = tblDownload.getSelectedRow();
-        Chapter c = modelDownload.getTaskAt(row).getChapter();
-        if (c != null) {
-            GUIUtilities.openLink(c.getUrl());
-        }
-    }//GEN-LAST:event_mnDownloadViewInBrowserActionPerformed
-
-    private void mnDownloadStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnDownloadStartActionPerformed
-        doStartAllDownload();
-    }//GEN-LAST:event_mnDownloadStartActionPerformed
-
     private void btnScanerFletchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnScanerFletchActionPerformed
         doLoadScanner();
     }//GEN-LAST:event_btnScanerFletchActionPerformed
@@ -714,9 +623,6 @@ public class MangaDownloadGUI extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_cbxScannerItemStateChanged
 
-    private void mnDownloadViewFolderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnDownloadViewFolderActionPerformed
-        doOpenDownloadFolder();
-    }//GEN-LAST:event_mnDownloadViewFolderActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCheckSupport;
     private javax.swing.JButton btnScanerFletch;
@@ -746,23 +652,17 @@ public class MangaDownloadGUI extends javax.swing.JFrame {
     private javax.swing.JLabel lblSupport;
     private javax.swing.JMenuItem mnChapterViewInBroser;
     private javax.swing.JMenuItem mnChaptersAddToDownload;
-    private javax.swing.JMenuItem mnDownloadRemove;
-    private javax.swing.JMenuItem mnDownloadStart;
-    private javax.swing.JMenuItem mnDownloadViewFolder;
-    private javax.swing.JMenuItem mnDownloadViewInBrowser;
     private javax.swing.JPanel pnlBot;
     private javax.swing.JPanel pnlChapters;
     private javax.swing.JPanel pnlDownload;
     private javax.swing.JPanel pnlDownloadInformation;
     private javax.swing.JPanel pnlScaner;
     private javax.swing.JPanel pnlServer;
+    private bbmangadownloader.gui.control.PanelDownload pnlTaskDownload;
     private javax.swing.JPanel pnlTop;
     private javax.swing.JPopupMenu popChapters;
-    private javax.swing.JPopupMenu popDownload;
     private javax.swing.JScrollPane sclChapter;
-    private javax.swing.JScrollPane sclDownload;
     private javax.swing.JTable tblChapters;
-    private javax.swing.JTable tblDownload;
     private javax.swing.JTextField txtMangaName;
     private javax.swing.JTextField txtMangaUrl;
     // End of variables declaration//GEN-END:variables
@@ -785,7 +685,6 @@ public class MangaDownloadGUI extends javax.swing.JFrame {
 
     private void doFletch() {
         new Thread(new Runnable() {
-
             @Override
             public void run() {
                 lblLoading.setVisible(true);
@@ -808,7 +707,7 @@ public class MangaDownloadGUI extends javax.swing.JFrame {
                     }
 
                     tblChapters.setEnabled(true);
-                    tblDownload.setEnabled(true);
+//                    tblDownload.setEnabled(true);
                 } catch (Exception ex) {
                     Logger.getLogger(MangaDownloadGUI.class.getName()).log(Level.SEVERE, null, ex);
                     GUIUtilities.showException(null, ex);
@@ -823,34 +722,12 @@ public class MangaDownloadGUI extends javax.swing.JFrame {
         for (int i = 0; i < selectedRows.length; i++) {
             Chapter c = modelChapter.getChapterAt(selectedRows[i]);
             modelChapter.fireTableDataChanged();
-            modelDownload.addChapter(c);
-        }
-    }
-
-    private void doStartAllDownload() {
-        if (downloadThread == null) {
-            downloadThread = new ListTaskDownloader(modelDownload.getListDownload(), modelDownload);
-        }
-        if (!downloadThread.isRunning()) {
-            new Thread(downloadThread).start();
-        } else {
-            GUIUtilities.showDialog(this, "Already downloading!");
-        }
-
-//        GUIUtil.showDialog(this, "Downloading in the background");
-    }
-
-    private void doRemoveFromDownload() {
-        int[] selectedRows = tblDownload.getSelectedRows();
-        for (int i = 0; i < selectedRows.length; i++) {
-            DownloadTask t = modelDownload.getTaskAt(selectedRows[i]);
-            modelDownload.removeTask(t);
+            pnlTaskDownload.addChapter(c);
         }
     }
 
     private void doLoadScanner() {
         new Thread(new Runnable() {
-
             @Override
             public void run() {
                 lblScannerLoading.setVisible(true);
@@ -881,14 +758,6 @@ public class MangaDownloadGUI extends javax.swing.JFrame {
                 modelChapter.addChapters(lstChapter);
                 modelChapter.fireTableDataChanged();
             }
-        }
-    }
-
-    private void doOpenDownloadFolder() {
-        DownloadTask task = modelDownload.getTaskAt(tblDownload.getSelectedRow());
-        DownloadTaskStatus s = task.getStatusEnum();
-        if (s == DownloadTaskStatus.Done || s == DownloadTask.DownloadTaskStatus.Downloading) {
-            GUIUtilities.openFile(task.getDownloadTo());
         }
     }
 }

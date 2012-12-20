@@ -7,10 +7,8 @@ package bbmangadownloader.gui;
 import bbmangadownloader.database.Database;
 import bbmangadownloader.entity.Chapter;
 import bbmangadownloader.entity.Manga;
-import bbmangadownloader.gui.bus.ListTaskDownloader;
 import bbmangadownloader.gui.listener.TableMouseListener;
 import bbmangadownloader.gui.listener.TableMouseMenuHandler;
-import bbmangadownloader.gui.model.ChapterDownloadModel;
 import bbmangadownloader.gui.model.Watcher;
 import bbmangadownloader.gui.model.WatcherMangaTreeTableModel;
 import bbmangadownloader.gui.model.WatcherTableModel;
@@ -33,7 +31,6 @@ public class MangaWatcherGUI extends javax.swing.JFrame {
 
     private WatcherTableModel modelWatcher;
     private WatcherMangaTreeTableModel modelManga;
-    private ChapterDownloadModel modelDownload;
     private Watcher currentWatcher;
     private Manga selectingManga;
     private Chapter[] selectingChapers;
@@ -45,7 +42,6 @@ public class MangaWatcherGUI extends javax.swing.JFrame {
         initComponents();
         initWatcherTable();
         initPopUpMenuForItem();
-        initDownloadTable();
         initColumnModel();
 //        initTreeTable();
 //        initColumnForTreeTable();
@@ -61,18 +57,6 @@ public class MangaWatcherGUI extends javax.swing.JFrame {
             TableColumnModel columnModel = tblWatcher.getColumnModel();
             columnModel.getColumn(0).setPreferredWidth(150);
             columnModel.getColumn(1).setPreferredWidth(50);
-            tblDownload.setAutoCreateColumnsFromModel(false);
-        }
-
-        {
-            TableColumnModel columnModel = tblDownload.getColumnModel();
-            columnModel.getColumn(0).setPreferredWidth(50);
-            columnModel.getColumn(0).setMaxWidth(100);
-            columnModel.getColumn(1).setPreferredWidth(200);
-            columnModel.getColumn(2).setPreferredWidth(100);
-            columnModel.getColumn(2).setMaxWidth(100);
-            columnModel.getColumn(3).setPreferredWidth(350);
-            tblDownload.setAutoCreateColumnsFromModel(false);
         }
     }
 
@@ -88,11 +72,6 @@ public class MangaWatcherGUI extends javax.swing.JFrame {
 
     }
 
-    private void initDownloadTable() {
-        this.modelDownload = new ChapterDownloadModel();
-        tblDownload.setModel(modelDownload);
-    }
-
     private void initWatcherTable() {
         modelWatcher = new WatcherTableModel();
         tblWatcher.setModel(modelWatcher);
@@ -100,9 +79,6 @@ public class MangaWatcherGUI extends javax.swing.JFrame {
     }
 
     private void initPopUpMenuForItem() {
-        tblDownload.setComponentPopupMenu(popDownload);
-        tblDownload.setInheritsPopupMenu(true);
-
 //        ttblList.setComponentPopupMenu(popListManga);
 //        ttblList.setInheritsPopupMenu(true);
 
@@ -198,19 +174,19 @@ public class MangaWatcherGUI extends javax.swing.JFrame {
         popChapter = new javax.swing.JPopupMenu();
         mnChapterAdd = new javax.swing.JMenuItem();
         mnChapterViewOnBrowser = new javax.swing.JMenuItem();
-        popDownload = new javax.swing.JPopupMenu();
-        mnDownloadStart = new javax.swing.JMenuItem();
-        mnDownloadStop = new javax.swing.JMenuItem();
         dlgRenameWatcher = new javax.swing.JDialog();
         jLabel1 = new javax.swing.JLabel();
         txtWatcherRename = new javax.swing.JTextField();
         jPanel1 = new javax.swing.JPanel();
         jButton2 = new javax.swing.JButton();
+        jSplitPane1 = new javax.swing.JSplitPane();
         pnlLeft = new javax.swing.JPanel();
         txtWatcherName = new javax.swing.JTextField();
         btnAddWatcher = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblWatcher = new javax.swing.JTable();
+        pnlRight = new javax.swing.JPanel();
+        jSplitPane2 = new javax.swing.JSplitPane();
         pnlRightTop = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
         ttblList = new org.jdesktop.swingx.JXTreeTable();
@@ -222,8 +198,7 @@ public class MangaWatcherGUI extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         pnlRightLeft = new javax.swing.JPanel();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        tblDownload = new javax.swing.JTable();
+        panelDownload = new bbmangadownloader.gui.control.PanelDownload();
         jMenuBar3 = new javax.swing.JMenuBar();
         jMenu5 = new javax.swing.JMenu();
         jMenuItem5 = new javax.swing.JMenuItem();
@@ -330,18 +305,6 @@ public class MangaWatcherGUI extends javax.swing.JFrame {
         });
         popChapter.add(mnChapterViewOnBrowser);
 
-        mnDownloadStart.setText("Start");
-        mnDownloadStart.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnDownloadStartActionPerformed(evt);
-            }
-        });
-        popDownload.add(mnDownloadStart);
-
-        mnDownloadStop.setText("Stop");
-        mnDownloadStop.setEnabled(false);
-        popDownload.add(mnDownloadStop);
-
         jLabel1.setText("New Name");
 
         jButton2.setText("OK");
@@ -377,6 +340,12 @@ public class MangaWatcherGUI extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jSplitPane1.setBorder(null);
+        jSplitPane1.setDividerLocation(250);
+        jSplitPane1.setMinimumSize(new java.awt.Dimension(0, 0));
+        jSplitPane1.setName(""); // NOI18N
+        jSplitPane1.setOneTouchExpandable(true);
+
         btnAddWatcher.setText("+");
         btnAddWatcher.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -398,11 +367,12 @@ public class MangaWatcherGUI extends javax.swing.JFrame {
             .addGroup(pnlLeftLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(pnlLeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addGroup(pnlLeftLayout.createSequentialGroup()
-                        .addComponent(txtWatcherName, javax.swing.GroupLayout.DEFAULT_SIZE, 177, Short.MAX_VALUE)
+                        .addComponent(txtWatcherName, javax.swing.GroupLayout.DEFAULT_SIZE, 142, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnAddWatcher, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
+                        .addComponent(btnAddWatcher, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
         pnlLeftLayout.setVerticalGroup(
             pnlLeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -412,9 +382,16 @@ public class MangaWatcherGUI extends javax.swing.JFrame {
                     .addComponent(txtWatcherName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnAddWatcher))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 528, Short.MAX_VALUE)
                 .addContainerGap())
         );
+
+        jSplitPane1.setLeftComponent(pnlLeft);
+
+        jSplitPane2.setBorder(null);
+        jSplitPane2.setDividerLocation(350);
+        jSplitPane2.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
+        jSplitPane2.setOneTouchExpandable(true);
 
         jScrollPane4.setViewportView(ttblList);
 
@@ -452,14 +429,14 @@ public class MangaWatcherGUI extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(spnFrom, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(spnFrom, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(spnTo, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(spnTo, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButton1)
-                .addGap(0, 16, Short.MAX_VALUE))
+                .addContainerGap())
         );
         pnlFilterLayout.setVerticalGroup(
             pnlFilterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -483,41 +460,57 @@ public class MangaWatcherGUI extends javax.swing.JFrame {
         pnlRightTopLayout.setHorizontalGroup(
             pnlRightTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlRightTopLayout.createSequentialGroup()
-                .addGroup(pnlRightTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 631, Short.MAX_VALUE)
-                    .addGroup(pnlRightTopLayout.createSequentialGroup()
-                        .addComponent(pnlFilter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton3)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                .addComponent(pnlFilter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton3)
+                .addContainerGap(51, Short.MAX_VALUE))
+            .addComponent(jScrollPane4)
         );
         pnlRightTopLayout.setVerticalGroup(
             pnlRightTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlRightTopLayout.createSequentialGroup()
-                .addGroup(pnlRightTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jButton3)
-                    .addComponent(pnlFilter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(pnlRightTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(pnlFilter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(pnlRightTopLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jButton3)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 395, Short.MAX_VALUE))
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 298, Short.MAX_VALUE))
         );
 
-        jScrollPane3.setViewportView(tblDownload);
+        jSplitPane2.setLeftComponent(pnlRightTop);
 
         javax.swing.GroupLayout pnlRightLeftLayout = new javax.swing.GroupLayout(pnlRightLeft);
         pnlRightLeft.setLayout(pnlRightLeftLayout);
         pnlRightLeftLayout.setHorizontalGroup(
             pnlRightLeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlRightLeftLayout.createSequentialGroup()
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 631, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(panelDownload, javax.swing.GroupLayout.DEFAULT_SIZE, 566, Short.MAX_VALUE)
         );
         pnlRightLeftLayout.setVerticalGroup(
             pnlRightLeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlRightLeftLayout.createSequentialGroup()
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 154, Short.MAX_VALUE)
+            .addComponent(panelDownload, javax.swing.GroupLayout.DEFAULT_SIZE, 202, Short.MAX_VALUE)
+        );
+
+        jSplitPane2.setRightComponent(pnlRightLeft);
+
+        javax.swing.GroupLayout pnlRightLayout = new javax.swing.GroupLayout(pnlRight);
+        pnlRight.setLayout(pnlRightLayout);
+        pnlRightLayout.setHorizontalGroup(
+            pnlRightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlRightLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jSplitPane2)
                 .addContainerGap())
         );
+        pnlRightLayout.setVerticalGroup(
+            pnlRightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlRightLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jSplitPane2)
+                .addContainerGap())
+        );
+
+        jSplitPane1.setRightComponent(pnlRight);
 
         jMenu5.setText("File");
 
@@ -578,20 +571,15 @@ public class MangaWatcherGUI extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(pnlLeft, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(pnlRightTop, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(pnlRightLeft, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+            .addGap(0, 800, Short.MAX_VALUE)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlLeft, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(pnlRightTop, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pnlRightLeft, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGap(0, 579, Short.MAX_VALUE)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -644,10 +632,6 @@ public class MangaWatcherGUI extends javax.swing.JFrame {
     private void mnChapterAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnChapterAddActionPerformed
         addToDownloadList();
     }//GEN-LAST:event_mnChapterAddActionPerformed
-
-    private void mnDownloadStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnDownloadStartActionPerformed
-        new Thread(new ListTaskDownloader(modelDownload.getListDownload(), modelDownload)).start();
-    }//GEN-LAST:event_mnDownloadStartActionPerformed
 
     private void mnWatcherAddHostActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnWatcherAddHostActionPerformed
         int selectedRow = tblWatcher.getSelectedRow();
@@ -766,14 +750,13 @@ public class MangaWatcherGUI extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JPopupMenu.Separator jSeparator2;
+    private javax.swing.JSplitPane jSplitPane1;
+    private javax.swing.JSplitPane jSplitPane2;
     private javax.swing.JMenuItem mnChapterAdd;
     private javax.swing.JMenuItem mnChapterViewOnBrowser;
-    private javax.swing.JMenuItem mnDownloadStart;
-    private javax.swing.JMenuItem mnDownloadStop;
     private javax.swing.JMenuItem mnListAdd;
     private javax.swing.JMenuItem mnMangaRemove;
     private javax.swing.JMenuItem mnMangaViewOnBrowser;
@@ -783,17 +766,17 @@ public class MangaWatcherGUI extends javax.swing.JFrame {
     private javax.swing.JMenuItem mnWatcherForceCheck;
     private javax.swing.JMenuItem mnWatcherRemove;
     private javax.swing.JMenuItem mnWatcherRename;
+    private bbmangadownloader.gui.control.PanelDownload panelDownload;
     private javax.swing.JPanel pnlFilter;
     private javax.swing.JPanel pnlLeft;
+    private javax.swing.JPanel pnlRight;
     private javax.swing.JPanel pnlRightLeft;
     private javax.swing.JPanel pnlRightTop;
     private javax.swing.JPopupMenu popChapter;
-    private javax.swing.JPopupMenu popDownload;
     private javax.swing.JPopupMenu popManga;
     private javax.swing.JPopupMenu popWatcher;
     private javax.swing.JSpinner spnFrom;
     private javax.swing.JSpinner spnTo;
-    private javax.swing.JTable tblDownload;
     private javax.swing.JTable tblWatcher;
     private org.jdesktop.swingx.JXTreeTable ttblList;
     private javax.swing.JTextField txtWatcherName;
@@ -827,7 +810,7 @@ public class MangaWatcherGUI extends javax.swing.JFrame {
             return;
         }
         for (Chapter c : selectingChapers) {
-            modelDownload.addChapter(c);
+            panelDownload.addChapter(c);
         }
     }
 

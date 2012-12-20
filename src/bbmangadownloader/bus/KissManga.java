@@ -133,7 +133,6 @@ public class KissManga extends ADefaultBus implements IBusOnePage {  // Done
                 try {
                     date = new MangaDateTime(DateTimeUtilities.getDate(nodes.get(1).text(), DATE_FORMAT_UPLOAD));
                 } catch (ParseException ex) {
-                    // TODO: Rarely !
                     date = new MangaDateTime("-");
                 }
                 Chapter c;

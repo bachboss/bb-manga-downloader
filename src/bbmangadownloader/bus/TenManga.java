@@ -80,7 +80,7 @@ public class TenManga extends ABusPageBasedDefaultChapPageImage {
     }
 
     @Override
-    protected Image getImageFromTag(Element imgNode, Chapter c) throws HtmlParsingException {
-        return new Image(-1, imgNode.attr("src"), c);
+    protected Image getImageFromTag(Element imgNode, Chapter c, Page p) throws HtmlParsingException {
+        return new Image(p.getPageOrder(), imgNode.attr("src"), c);
     }
 }

@@ -4,11 +4,11 @@
  */
 package bbmangadownloader.gui.bus;
 
+import bbmangadownloader.manager.HttpDownloadManager.MyConnection;
 import bbmangadownloader.ult.ExceptionUtilities;
 import bbmangadownloader.ult.FileUtilities;
 import bbmangadownloader.ult.GUIUtilities;
 import bbmangadownloader.ult.HtmlUtilities;
-import bbmangadownloader.manager.HttpDownloadManager.MyConnection;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;

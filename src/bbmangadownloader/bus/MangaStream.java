@@ -86,9 +86,9 @@ public class MangaStream extends ADefaultBus implements IBusOnePage {
                 int order = Integer.parseInt(e.html());
                 Image img;
                 if (order == 1) {
-                    img = getImageFromChapter(doc, order);
+                    img = getImageFromPage(doc, order);
                 } else {
-                    img = getImageFromChapter(url, order);
+                    img = getImageFromPage(url, order);
                 }
                 lstImage.add(img);
             } catch (NumberFormatException ex) {
@@ -97,14 +97,14 @@ public class MangaStream extends ADefaultBus implements IBusOnePage {
         return lstImage;
     }
 
-    private Image getImageFromChapter(Document doc, int order) {
+    private Image getImageFromPage(Document doc, int order) {
         Element e = doc.select("div[id=page] img").first();
         Image img = new Image(order, e.attr("src"), null);
         return img;
     }
 
-    private Image getImageFromChapter(String url, int order) throws IOException {
-        Document doc = getDocument(url);
-        return getImageFromChapter(doc, order);
+    private Image getImageFromPage(String pageUrl, int order) throws IOException {
+        Document doc = getDocument(pageUrl);
+        return getImageFromPage(doc, order);
     }
 }

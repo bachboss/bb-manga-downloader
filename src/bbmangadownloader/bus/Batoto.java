@@ -114,8 +114,8 @@ public class Batoto extends ABusPageBasedDefaultChapPageImage { // Done
     }
 
     @Override
-    protected Image getImageFromTag(Element imgNode, Chapter c) {
-        return new Image(-1, imgNode.attr("src"), c);
+    protected Image getImageFromTag(Element imgNode, Chapter c, Page p) {
+        return new Image(p.getPageOrder(), imgNode.attr("src"), c);
     }
 
     private class CallableImpl implements Callable<Boolean> {

@@ -124,6 +124,10 @@ public class Chapter extends HtmlDocument implements Comparable<Chapter>, Serial
         getSetImage().add(img);
     }
 
+    /**
+     *
+     * @return number of image in this chapter. -1 if not loaded yet
+     */
     public int getImagesCount() {
         return this.setImage == null ? -1 : this.setImage.size();
     }

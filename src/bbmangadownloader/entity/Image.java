@@ -20,6 +20,7 @@ public class Image extends HtmlDocument implements Serializable {
     private Chapter chapter;
     private int imgOrder;
     private MyConnection connection;
+    private boolean isDownloaded = false;
 
     @Deprecated
     /**
@@ -66,6 +67,14 @@ public class Image extends HtmlDocument implements Serializable {
 
     public void setConnection(MyConnection connection) {
         this.connection = connection;
+    }
+
+    public boolean isIsDownloaded() {
+        return isDownloaded;
+    }
+
+    public void setIsDownloaded(boolean isDownloaded) {
+        this.isDownloaded = isDownloaded;
     }
 
     @Override

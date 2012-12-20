@@ -44,10 +44,15 @@ public class FacadeManager {
         MAP_HOST.put("blogtruyen", new FacadeBlogTruyen());
         MAP_HOST.put("tenmanga", new FacadeTenManga());
         MAP_HOST.put("dragonfly", new FacadeDragonFly());
+        MAP_HOST.put("nomanga", new FacadeNoManga());
 
         if (ConfigManager.getCurrentInstance().isAdult()) {
             MAP_HOST.put("hentai2read", new FacadeHentai2Read());
             MAP_HOST.put("fakku", new FacedeFakku());
+        }
+
+        if (bbmangadownloader.BBMangaDownloader.TEST) {
+            MAP_HOST.put("test", new FacadeTest());
         }
     }
 

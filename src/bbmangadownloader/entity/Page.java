@@ -16,10 +16,10 @@ public class Page extends HtmlDocument implements Serializable {
     private boolean isChapterUrl = false;
     private int pageOrder;
 
-//    public Page(String url, Chapter chapter) {
-//        this.url = url;
-//        this.chapter = chapter;
-//    }
+    public Page(String url, Chapter chapter) {
+        this.url = url;
+        this.chapter = chapter;
+    }
 
     public Page(String url, Chapter chapter, int order) {
         this.url = url;

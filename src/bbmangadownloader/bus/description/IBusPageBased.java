@@ -10,6 +10,7 @@ import bbmangadownloader.entity.Image;
 import bbmangadownloader.entity.Page;
 import java.io.IOException;
 import java.util.List;
+import org.jsoup.nodes.Document;
 
 /**
  *
@@ -17,7 +18,9 @@ import java.util.List;
  */
 public interface IBusPageBased extends IBus {
 
-    public Image getImage(Page p) throws IOException, HtmlParsingException;
+//    public Image getImage(Page p) throws IOException, HtmlParsingException;
+    public Image getImage(Page p, Document doc) throws IOException, HtmlParsingException;
 
-    List<Page> getAllPages(Chapter c) throws IOException, HtmlParsingException;
+    public List<Page> getAllPages(Chapter c, Document doc) throws IOException, HtmlParsingException;
+//    List<Page> getAllPages(Chapter c) throws IOException, HtmlParsingException;
 }
