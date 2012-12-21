@@ -22,6 +22,7 @@ public class GenerateHtmlDialog extends javax.swing.JDialog {
      */
     public GenerateHtmlDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
+        setTitle("Generate Html");
         initComponents();
     }
 

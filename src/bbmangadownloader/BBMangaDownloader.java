@@ -4,17 +4,16 @@ import bbmangadownloader.database.WatcherMangager;
 import bbmangadownloader.faces.ServerManager;
 import bbmangadownloader.gui.MangaDownloadGUI;
 import bbmangadownloader.gui.MangaWatcherGUI;
+import bbmangadownloader.gui.StartUpPannel;
 import bbmangadownloader.manager.ConfigManager;
 import bbmangadownloader.ult.OSSupport;
 import bbmangadownloader.ult.ReflectionUtilities;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Toolkit;
 import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.UIManager;
 
 /**
@@ -39,40 +38,37 @@ public class BBMangaDownloader {
         try {
             ConfigManager.loadOnStartUp();
             JFrame startUpPanel = new JFrame("Loading...");
+            //<editor-fold defaultstate="collapsed" desc="Startup Pannel">
             {
                 startUpPanel.setUndecorated(true);
-                JLabel label = new JLabel("Version: " + ConfigManager.getCurrentInstance().getCurrentVersion());
-                Font font = new Font(Font.SANS_SERIF, Font.BOLD, 30);
-                label.setFont(font);
-                startUpPanel.add(label);
+                StartUpPannel panel = new StartUpPannel();
+                panel.setVersion(ConfigManager.getCurrentInstance().getCurrentVersion());
+                startUpPanel.add(panel);
                 {
                     Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
                     double width = dim.getWidth();
                     double height = dim.getHeight();
                     int pWidth = 400;
                     int pHeight = 150;
-                    label.setSize(pWidth, pHeight);
-                    label.setVerticalTextPosition(JLabel.CENTER);
-                    label.setHorizontalTextPosition(JLabel.CENTER);
                     startUpPanel.setBounds(((int) (width - pWidth)) / 2, ((int) (height - pHeight)) / 2, pWidth, pHeight);
                 }
             }
             startUpPanel.setVisible(true);
-
+            //</editor-fold>
+            //<editor-fold defaultstate="collapsed" desc="Set Look&Feel">
             try {
                 UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
             } catch (Exception ex) {
                 Logger.getLogger(BBMangaDownloader.class.getName()).log(Level.SEVERE, null, ex);
             }
+            //</editor-fold>
             ServerManager.loadServer();
             // Load Watcher...
             if (MODE == MODE_WATCHER) {
 //                MangaManager.lazyLoadAllMangas();
                 WatcherMangager.loadOnStartup();
             }
-            // Invoke GUI !
-            startUpPanel.setVisible(false);
-            startUpPanel.dispose();
+            // Invoke GUI !            
             java.awt.EventQueue.invokeLater(new Runnable() {
                 @Override
                 public void run() {
@@ -83,6 +79,9 @@ public class BBMangaDownloader {
                     }
                 }
             });
+
+            startUpPanel.setVisible(false);
+            startUpPanel.dispose();
         } catch (Exception ex) {
             Logger.getLogger(BBMangaDownloader.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -111,6 +110,5 @@ public class BBMangaDownloader {
         } catch (Exception ex) {
             Logger.getLogger(BBMangaDownloader.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }
 }
