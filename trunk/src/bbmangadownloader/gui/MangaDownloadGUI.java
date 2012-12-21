@@ -9,6 +9,7 @@ import bbmangadownloader.entity.Manga;
 import bbmangadownloader.entity.Server;
 import bbmangadownloader.faces.FacadeManager;
 import bbmangadownloader.faces.IFacadeMangaServer;
+import bbmangadownloader.gui.HelpDialog.IHelpListener;
 import bbmangadownloader.gui.model.*;
 import bbmangadownloader.manager.HttpDownloadManager;
 import bbmangadownloader.ult.GUIUtilities;
@@ -31,7 +32,7 @@ import org.jdesktop.swingx.combobox.ListComboBoxModel;
  *
  * @author Bach
  */
-public class MangaDownloadGUI extends javax.swing.JFrame {
+public class MangaDownloadGUI extends javax.swing.JFrame implements IHelpListener {
 
     private ChapterModel modelChapter;
     private IFacadeMangaServer mangaServer;
@@ -176,6 +177,7 @@ public class MangaDownloadGUI extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         lblLoading = new org.jdesktop.swingx.JXBusyLabel();
         jLabel7 = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
         pnlScaner = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         cbxScanner = new javax.swing.JComboBox();
@@ -263,6 +265,15 @@ public class MangaDownloadGUI extends javax.swing.JFrame {
 
         jLabel7.setText("Manga URL");
 
+        jLabel1.setForeground(new java.awt.Color(11, 22, 204));
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("<html><u>Help?</u></html>");
+        jLabel1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel1MouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnlServerLayout = new javax.swing.GroupLayout(pnlServer);
         pnlServer.setLayout(pnlServerLayout);
         pnlServerLayout.setHorizontalGroup(
@@ -274,11 +285,12 @@ public class MangaDownloadGUI extends javax.swing.JFrame {
                     .addComponent(jLabel7))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlServerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(pnlServerLayout.createSequentialGroup()
-                        .addComponent(txtMangaName)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnCheckSupport))
-                    .addComponent(txtMangaUrl, javax.swing.GroupLayout.DEFAULT_SIZE, 493, Short.MAX_VALUE))
+                    .addComponent(txtMangaUrl, javax.swing.GroupLayout.DEFAULT_SIZE, 426, Short.MAX_VALUE)
+                    .addComponent(txtMangaName))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(pnlServerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnCheckSupport))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlServerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(lblLoading, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -290,10 +302,11 @@ public class MangaDownloadGUI extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlServerLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(pnlServerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblSupport, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lblSupport, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(pnlServerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(txtMangaUrl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel7)))
+                        .addComponent(jLabel7)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(5, 5, 5)
                 .addGroup(pnlServerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtMangaName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -623,11 +636,15 @@ public class MangaDownloadGUI extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_cbxScannerItemStateChanged
 
+    private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseClicked
+        doShowHelp();
+    }//GEN-LAST:event_jLabel1MouseClicked
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCheckSupport;
     private javax.swing.JButton btnScanerFletch;
     private javax.swing.JComboBox cbxManga;
     private javax.swing.JComboBox cbxScanner;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -759,5 +776,20 @@ public class MangaDownloadGUI extends javax.swing.JFrame {
                 modelChapter.fireTableDataChanged();
             }
         }
+    }
+    private HelpDialog helpDialog;
+
+    private void doShowHelp() {
+        if (helpDialog == null) {
+            helpDialog = new HelpDialog(this, false);
+            helpDialog.setListener(this);
+        }
+        helpDialog.setVisible(true);
+    }
+
+    @Override
+    public void doAddSampleUrl(String url) {
+        txtMangaUrl.setText(url);
+        helpDialog.setVisible(false);
     }
 }

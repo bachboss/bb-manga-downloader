@@ -5,7 +5,9 @@
 package bbmangadownloader.faces;
 
 import bbmangadownloader.entity.Server;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -47,5 +49,9 @@ public class ServerManager {
 
     public static Map<String, Server> getMapScannerClone() {
         return (Map<String, Server>) mapScaner.clone();
+    }
+
+    public static Collection<Server> getAllServer() {
+        return mapServer.values();
     }
 }

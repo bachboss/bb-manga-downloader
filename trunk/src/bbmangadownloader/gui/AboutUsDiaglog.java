@@ -17,6 +17,7 @@ public class AboutUsDiaglog extends javax.swing.JDialog {
      */
     public AboutUsDiaglog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
+        setTitle("About us");
         initComponents();
         lblVersion.setText(ConfigManager.getCurrentInstance().getCurrentVersion());
     }
