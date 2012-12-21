@@ -34,9 +34,10 @@ import org.jsoup.select.Elements;
  */
 public class BlogTruyen extends ADefaultBus implements IBusOnePage {
 
-    private static final String URL_LIST_MANGA = "http://blogtruyen.com/DanhSach/TatCa/DanhSach/changePage";
+    private static final String URL_LIST_MANGA = "http://blogtruyen.com/partialDanhSach/listtruyen/";
+    private static final String URL_LIST_MANGA_COUNT = "http://blogtruyen.com/danhsach/tatca";
     private static final String BASED_URL = "http://blogtruyen.com";
-    private static final String POST_FORM_STR = "key=TatCa&orderBy=AB&X-Requested-With=XMLHttpRequest&page=";
+    private static final String POST_FORM_STR = "listOrCate=list&orderBy=title&key=tatca&page=";
     private static final String DEFAULT_TRANS = "BlogTruyen";
     private static final DateFormat DATE_FORMAT_UPLOAD = new SimpleDateFormat("dd/MM/yyyy");
 
@@ -58,7 +59,7 @@ public class BlogTruyen extends ADefaultBus implements IBusOnePage {
         final ArrayList<Manga> returnValue = new ArrayList<Manga>();
         int numberOfPage = 1;
         {
-            final Document doc = getDocumentPostForm(URL_LIST_MANGA, POST_FORM_STR + "1");
+            final Document doc = getDocument(URL_LIST_MANGA_COUNT);
             String str = doc.select("div[class=paging] span[class=page]").last().child(0).attr("href");
             str = str.substring(str.indexOf('(') + 1, str.indexOf(')'));
             try {

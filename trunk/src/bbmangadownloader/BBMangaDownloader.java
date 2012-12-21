@@ -22,12 +22,14 @@ import javax.swing.UIManager;
  */
 public class BBMangaDownloader {
 
-    public static final String APPLICATION_NAME = "BB Manga Watcher";
+    private static final String VERSION = "1.2";
     //
+    private static final String[] APPLICATION_NAMES = new String[]{"BB Manga Watcher", "BB Manga Downloader"};
     private static final int MODE_WATCHER = 0;
     private static final int MODE_DOWNLOADER = 1;
     //
-    private static final int MODE = MODE_DOWNLOADER;
+    private static final int MODE = MODE_WATCHER;
+    public static final String APPLICATION_NAME = APPLICATION_NAMES[MODE];
     public static final boolean TEST = true;
 
     public static void main(String[] args) {
@@ -42,7 +44,7 @@ public class BBMangaDownloader {
             {
                 startUpPanel.setUndecorated(true);
                 StartUpPannel panel = new StartUpPannel();
-                panel.setVersion(ConfigManager.getCurrentInstance().getCurrentVersion());
+                panel.setVersion(getVersion());
                 startUpPanel.add(panel);
                 {
                     Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
@@ -110,5 +112,9 @@ public class BBMangaDownloader {
         } catch (Exception ex) {
             Logger.getLogger(BBMangaDownloader.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    public static String getVersion() {
+        return VERSION;
     }
 }

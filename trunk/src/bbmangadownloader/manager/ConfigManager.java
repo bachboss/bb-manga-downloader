@@ -102,7 +102,9 @@ public class ConfigManager {
         File f = new File(getProperty("outputFolder"));
         if (f.isDirectory()) {
             return f.getAbsolutePath();
-        } else return OSSupport.getDefaultOutputFolder().getAbsolutePath();
+        } else {
+            return OSSupport.getDefaultOutputFolder().getAbsolutePath();
+        }
     }
 
     public void setOutputFolder(String outputFolder) {
@@ -137,10 +139,6 @@ public class ConfigManager {
 
     public boolean isAdult() {
         return ConfigManager.getYesNo(getProperty("abc"));
-    }
-
-    public String getCurrentVersion() {
-        return getProperty("currentVersion");
     }
 
     public boolean isZip() {
