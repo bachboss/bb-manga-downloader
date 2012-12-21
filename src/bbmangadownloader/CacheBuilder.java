@@ -10,7 +10,6 @@ import bbmangadownloader.faces.IFacadeMangaServer;
 import bbmangadownloader.faces.ServerManager;
 import bbmangadownloader.faces.SupportType;
 import bbmangadownloader.manager.ConfigManager;
-import bbmangadownloader.ult.NumberUtilities;
 import java.io.*;
 import java.util.HashMap;
 import java.util.List;
@@ -41,8 +40,8 @@ public class CacheBuilder {
             new ServerTempData(false, "http://mangahere.com/"),
             new ServerTempData(false, "http://cococomic.com/"),
             new ServerTempData(false, "http://99770.cc/"),
-            new ServerTempData(true, "http://manga24h.com/"),
-            new ServerTempData(false, "http://blogtruyen.com/")
+            new ServerTempData(false, "http://manga24h.com/"),
+            new ServerTempData(true, "http://blogtruyen.com/")
         };
 
         for (ServerTempData sEE : servers) {
@@ -53,7 +52,7 @@ public class CacheBuilder {
                     System.out.println("--------------------------------------------------------------------------------");
                     System.out.println("Loading Server : " + server.getServerName());
 
-                    File folderCache = new File("D:\\Manga\\Cache\\", server.getServerName());
+                    File folderCache = new File("H:\\Manga\\Cache\\", server.getServerName());
                     folderCache.mkdirs();
                     File fileOutput = new File(folderCache, "file.data");
 
@@ -85,33 +84,33 @@ public class CacheBuilder {
                         } catch (Exception ex) {
                         }
                     }
-                    ObjectOutputStream oos = null;
-                    try {
-                        oos = new ObjectOutputStream(new FileOutputStream(fileOutput));
-                        System.out.println("Writed: " + lstManga.size() + " record(s)");
-                        oos.writeObject(lstManga);
-                    } finally {
-                        try {
-                            oos.close();
-                        } catch (Exception ex) {
-                        }
-                    }
-                    try {
-                        ObjectInputStream ois = new ObjectInputStream(new FileInputStream(fileOutput));
-                        Object o = ois.readObject();
-                        List<Manga> l = (List<Manga>) o;
-                        System.out.println("Loaded: " + l.size() + " record(s)");
-                        for (int j = 0; j < 10; j++) {
-                            Manga m = l.get(NumberUtilities.getRandom(0, l.size() - 1));
-                            System.out.println("Random record : "
-                                    + m.getUrl() + "\t" + m.getMangaName());
-                        }
-                    } finally {
-                        try {
-                            oos.close();
-                        } catch (Exception ex) {
-                        }
-                    }
+//                    ObjectOutputStream oos = null;
+//                    try {
+//                        oos = new ObjectOutputStream(new FileOutputStream(fileOutput));
+//                        System.out.println("Writed: " + lstManga.size() + " record(s)");
+//                        oos.writeObject(lstManga);
+//                    } finally {
+//                        try {
+//                            oos.close();
+//                        } catch (Exception ex) {
+//                        }
+//                    }
+//                    try {
+//                        ObjectInputStream ois = new ObjectInputStream(new FileInputStream(fileOutput));
+//                        Object o = ois.readObject();
+//                        List<Manga> l = (List<Manga>) o;
+//                        System.out.println("Loaded: " + l.size() + " record(s)");
+//                        for (int j = 0; j < 10; j++) {
+//                            Manga m = l.get(NumberUtilities.getRandom(0, l.size() - 1));
+//                            System.out.println("Random record : "
+//                                    + m.getUrl() + "\t" + m.getMangaName());
+//                        }
+//                    } finally {
+//                        try {
+//                            oos.close();
+//                        } catch (Exception ex) {
+//                        }
+//                    }
                 } else {
                     System.out.println("Host Support = " + facade.getSupportType().toString());
                 }

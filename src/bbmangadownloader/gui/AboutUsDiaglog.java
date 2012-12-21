@@ -4,8 +4,6 @@
  */
 package bbmangadownloader.gui;
 
-import bbmangadownloader.manager.ConfigManager;
-
 /**
  *
  * @author Bach
@@ -19,7 +17,7 @@ public class AboutUsDiaglog extends javax.swing.JDialog {
         super(parent, modal);
         setTitle("About us");
         initComponents();
-        lblVersion.setText(ConfigManager.getCurrentInstance().getCurrentVersion());
+        lblVersion.setText(bbmangadownloader.BBMangaDownloader.getVersion());
     }
 
     /**
