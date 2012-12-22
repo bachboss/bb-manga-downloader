@@ -57,4 +57,27 @@ public class Server extends HtmlDocument implements Serializable {
     public String toString() {
         return serverName;
     }
+
+    @Override
+    public int hashCode() {
+        return getIdHashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Server other = (Server) obj;
+        if (this.mangaServer != other.mangaServer && (this.mangaServer == null || !this.mangaServer.equals(other.mangaServer))) {
+            return false;
+        }
+        if ((this.serverName == null) ? (other.serverName != null) : !this.serverName.equals(other.serverName)) {
+            return false;
+        }
+        return true;
+    }
 }

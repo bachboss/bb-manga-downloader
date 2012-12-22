@@ -45,6 +45,7 @@ public class FacadeManager {
         MAP_HOST.put("tenmanga", new FacadeTenManga());
         MAP_HOST.put("dragonfly", new FacadeDragonFly());
         MAP_HOST.put("nomanga", new FacadeNoManga());
+//        MAP_HOST.put("cxcscans", new FacadeCxcScans());
 
         if (ConfigManager.getCurrentInstance().isAdult()) {
             MAP_HOST.put("hentai2read", new FacadeHentai2Read());

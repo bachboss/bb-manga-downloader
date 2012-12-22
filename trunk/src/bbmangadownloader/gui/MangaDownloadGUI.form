@@ -201,8 +201,8 @@
                   </Properties>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-                      <JTabbedPaneConstraints tabName="Manga Sites">
-                        <Property name="tabTitle" type="java.lang.String" value="Manga Sites"/>
+                      <JTabbedPaneConstraints tabName="Directory Sites">
+                        <Property name="tabTitle" type="java.lang.String" value="Directory Sites"/>
                       </JTabbedPaneConstraints>
                     </Constraint>
                   </Constraints>
@@ -340,8 +340,8 @@
                 <Container class="javax.swing.JPanel" name="pnlScaner">
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-                      <JTabbedPaneConstraints tabName="Scanner Sites">
-                        <Property name="tabTitle" type="java.lang.String" value="Scanner Sites"/>
+                      <JTabbedPaneConstraints tabName="Others">
+                        <Property name="tabTitle" type="java.lang.String" value="Others"/>
                       </JTabbedPaneConstraints>
                     </Constraint>
                   </Constraints>
@@ -414,6 +414,7 @@
                       </Properties>
                       <Events>
                         <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="cbxScannerItemStateChanged"/>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cbxScannerActionPerformed"/>
                       </Events>
                     </Component>
                     <Component class="javax.swing.JLabel" name="jLabel6">
