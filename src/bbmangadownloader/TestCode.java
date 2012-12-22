@@ -61,28 +61,41 @@ public class TestCode {
 //            System.out.println(str);
 //        }
 //
-
-        Document doc = getDocument("http://dragonflyscans.org/manga/amai_akuma_ga_warau/023/");
-        Elements elements = doc.select("div.controls[style~=width] div.wrapper").first().select("a");
-        for (Element e : elements) {
-            try {
-                String url = e.attr("href");
-                int order = Integer.parseInt(e.html());
-                Image img;
-                if (order == 1) {
-                    System.out.println("Current doc " + order);
-//                    img = getImageFromChapter(doc, order);
-                } else {
-                    System.out.println(url + "\t" + order);
-//                    img = getImageFromChapter(url, order);
-                }
-//                System.out.println(img.get);
-//                lstImage.add(img);
-            } catch (NumberFormatException ex) {
-            }
-        }
-
-
+//        Document doc = getDocument("http://manga.cxcscans.com/reader/read/bamboo_blade/en/14/102/page/4");
+//        Elements elements = doc.select("script[type=text/javascript]");
+////        for (Element e : elements) {
+////            try {
+////                String url = e.attr("href");
+////                int order = Integer.parseInt(e.html());
+////                Image img;
+////                if (order == 1) {
+////                    System.out.println("Current doc " + order);
+//////                    img = getImageFromChapter(doc, order);
+////                } else {
+////                    System.out.println(url + "\t" + order);
+//////                    img = getImageFromChapter(url, order);
+////                }
+//////                System.out.println(img.get);
+//////                lstImage.add(img);
+////            } catch (NumberFormatException ex) {
+////            }
+////        }
+//        System.out.println(elements.size());
+//        for (Element e : elements) {
+//            if (e.html().contains("var pages =")) {
+//                String text = e.html();
+//                text = text.substring(text.indexOf("var pages = [") + 13);
+//                text = text.substring(0, text.indexOf("];"));
+//                String[] strs = text.split("\\},\\{");
+//                for (String str : strs) {
+//                    str = str.substring(str.indexOf("\"url\":") + 7);
+//                    str = str.substring(0, str.indexOf('"'));
+//                    str = str.replaceAll("\\\\/", "/");
+//                    System.out.println(str);
+//                }
+//                break;
+//            }
+//        }
 
 
 

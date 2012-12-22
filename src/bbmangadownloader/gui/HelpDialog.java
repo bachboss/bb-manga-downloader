@@ -21,9 +21,6 @@ public class HelpDialog extends javax.swing.JDialog {
 
     private DefaultComboBoxModel<ServerUrl> modelServer;
 
-    /**
-     * Creates new form HelpDialog
-     */
     public HelpDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         setTitle("Help");
@@ -94,6 +91,7 @@ public class HelpDialog extends javax.swing.JDialog {
         jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setResizable(false);
 
         jLabel1.setText("Supported host:");
 
@@ -106,7 +104,9 @@ public class HelpDialog extends javax.swing.JDialog {
 
         jLabel2.setText("Sample manga url:");
 
-        lblLink.setText("jXHyperlink1");
+        lblLink.setText("lblLink");
+
+        jPanel1.setMaximumSize(new java.awt.Dimension(125, 33));
 
         jButton1.setText("Add to manga url");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
