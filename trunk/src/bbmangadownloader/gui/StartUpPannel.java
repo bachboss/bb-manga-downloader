@@ -29,7 +29,7 @@ public class StartUpPannel extends javax.swing.JPanel {
         jLabel1 = new javax.swing.JLabel();
         lblVersion = new javax.swing.JLabel();
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/bbmangadownloader/resources/icon/Icon-128.png"))); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/bbmangadownloader/resources/icon/icon-128.png"))); // NOI18N
 
         lblVersion.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         lblVersion.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);

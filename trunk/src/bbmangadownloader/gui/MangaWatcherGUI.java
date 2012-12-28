@@ -698,7 +698,7 @@ public class MangaWatcherGUI extends javax.swing.JFrame {
     private void mnWatcherRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnWatcherRemoveActionPerformed
         int[] arrTemp = tblWatcher.getSelectedRows();
         Watcher[] arrWatcher = new Watcher[arrTemp.length];
-        for (int i = 0; i < arrTemp.length; i++) {
+        for (int i = arrTemp.length - 1; i >= 0; i--) {
             arrWatcher[i] = modelWatcher.getWatcherAt(arrTemp[i]);
         }
 

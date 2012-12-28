@@ -28,7 +28,7 @@ public class BBMangaDownloader {
     private static final int MODE_WATCHER = 0;
     private static final int MODE_DOWNLOADER = 1;
     //
-    private static final int MODE = MODE_DOWNLOADER;
+    private static final int MODE = MODE_WATCHER;
     public static final String APPLICATION_NAME = APPLICATION_NAMES[MODE];
     public static final boolean TEST = true;
 
@@ -90,8 +90,12 @@ public class BBMangaDownloader {
         }
     }
 
+    public static URL getResource(String resourceUrl) {
+        return BBMangaDownloader.class.getClassLoader().getResource(resourceUrl);
+    }
+
     public static java.awt.Image getApplicationIcon() {
-        URL imageURL = BBMangaDownloader.class.getClassLoader().getResource("bbmangadownloader/resources/icon/icon.png");
+        URL imageURL = getResource("bbmangadownloader/resources/icon/icon.png");
         java.awt.Image image = Toolkit.getDefaultToolkit().getImage(imageURL);
         return image;
     }
