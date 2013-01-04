@@ -24,6 +24,11 @@ public class Heuristic {
     public static final String PATTERN_CHAPTER_REGEX_CHINESE = "(集)";
     public static final String PATTERN_SPACE = "(\\s|\\.)+";///"[\\s|.]+";
     public static final String PATTERN_NUMBER_REGEX = "(?<cN>(\\d+(.?\\d+)?))";//"(?<cN>\\d+[\\.?\\d+])";
+    public static final String PATTERN_VOL = "vol";
+    //
+    private static final NamedPattern DEFAULT_PATTERN_VOL =
+            NamedPattern.compile(PATTERN_VOL + PATTERN_SPACE + PATTERN_NUMBER_REGEX);
+    //
     private static final NamedPattern[] DEFAULT_CHAPTER_LIST = {
         NamedPattern.compile(PATTERN_CHAPTER_REGEX_ENGLISH + PATTERN_SPACE + PATTERN_NUMBER_REGEX),
         NamedPattern.compile(PATTERN_CHAPTER_REGEX_VNESE + PATTERN_SPACE + PATTERN_NUMBER_REGEX),
@@ -208,5 +213,10 @@ public class Heuristic {
 
     public static String repairXML(String text) {
         return text.replaceAll("</([A-Za-z]+)<([A-Za-z]+)", "</$1><$2");
+    }
+
+    public static boolean isVolumne(String text) {
+        NamedMatcher m = DEFAULT_PATTERN_VOL.matcher(text.toLowerCase());
+        return (m.find());
     }
 }

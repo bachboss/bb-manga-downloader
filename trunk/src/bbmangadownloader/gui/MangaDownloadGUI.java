@@ -282,16 +282,16 @@ public class MangaDownloadGUI extends javax.swing.JFrame implements IHelpListene
             .addGroup(pnlServerLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(pnlServerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel5)
-                    .addComponent(jLabel7))
+                    .addComponent(jLabel7)
+                    .addComponent(jLabel5))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlServerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtMangaUrl, javax.swing.GroupLayout.DEFAULT_SIZE, 426, Short.MAX_VALUE)
-                    .addComponent(txtMangaName))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(pnlServerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnCheckSupport))
+                    .addComponent(txtMangaName)
+                    .addComponent(txtMangaUrl, javax.swing.GroupLayout.DEFAULT_SIZE, 424, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pnlServerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnCheckSupport, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlServerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(lblLoading, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -537,6 +537,7 @@ public class MangaDownloadGUI extends javax.swing.JFrame implements IHelpListene
         });
         jMenu7.add(jMenuItem1);
 
+        jMenuItem4.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_COMMA, java.awt.event.InputEvent.CTRL_MASK));
         jMenuItem4.setText("Configuration");
         jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -599,6 +600,7 @@ public class MangaDownloadGUI extends javax.swing.JFrame implements IHelpListene
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void btnCheckSupportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCheckSupportActionPerformed
+        doNormalizeUrl();
         doCheckSupport();
     }//GEN-LAST:event_btnCheckSupportActionPerformed
 
@@ -744,7 +746,7 @@ public class MangaDownloadGUI extends javax.swing.JFrame implements IHelpListene
 
                     tblChapters.setEnabled(true);
 //                    tblDownload.setEnabled(true);
-                } catch (Exception ex) {
+                } catch (Throwable ex) {
                     Logger.getLogger(MangaDownloadGUI.class.getName()).log(Level.SEVERE, null, ex);
                     GUIUtilities.showException(null, ex);
                 }
@@ -810,5 +812,13 @@ public class MangaDownloadGUI extends javax.swing.JFrame implements IHelpListene
     public void doAddSampleUrl(String url) {
         txtMangaUrl.setText(url);
         helpDialog.setVisible(false);
+    }
+
+    private void doNormalizeUrl() {
+        String url = txtMangaUrl.getText();
+        if (url.indexOf(':') == -1) {
+            url = "http://" + url;
+        }
+        txtMangaUrl.setText(url);
     }
 }

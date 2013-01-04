@@ -22,13 +22,13 @@ import javax.swing.UIManager;
  */
 public class BBMangaDownloader {
 
-    private static final String VERSION = "1.2.1";
+    private static final String VERSION = "1.2.2";
     //
     private static final String[] APPLICATION_NAMES = new String[]{"BB Manga Watcher", "BB Manga Downloader"};
     private static final int MODE_WATCHER = 0;
     private static final int MODE_DOWNLOADER = 1;
     //
-    private static final int MODE = MODE_WATCHER;
+    private static final int MODE = MODE_DOWNLOADER;
     public static final String APPLICATION_NAME = APPLICATION_NAMES[MODE];
     public static final boolean TEST = true;
 
