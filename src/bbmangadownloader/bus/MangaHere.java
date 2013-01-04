@@ -9,6 +9,8 @@ import bbmangadownloader.bus.exception.HtmlParsingException;
 import bbmangadownloader.entity.*;
 import bbmangadownloader.entity.data.MangaDateTime;
 import bbmangadownloader.ult.DateTimeUtilities;
+import bbmangadownloader.ult.Heuristic;
+import bbmangadownloader.ult.JsoupUltilities;
 import bbmangadownloader.ult.NumberUtilities;
 import java.io.IOException;
 import java.text.DateFormat;
@@ -61,15 +63,47 @@ public class MangaHere extends ABusPageBasedDefaultChapPageImage {
         return imgNode.select("img[id=image]").first();
     }
 
+    private StringBuilder fixChapterName(StringBuilder chapterName) {
+        for (int i = 0; i < chapterName.length() - 1; i++) {
+            if (Character.isDigit(chapterName.charAt(i)) && Character.isUpperCase(chapterName.charAt(i + 1))) {
+                chapterName.insert(i + 1, ": ");
+            }
+        }
+        return chapterName;
+    }
+
+    private String getChapterName(Element spanTag) {
+        StringBuilder returnValue = new StringBuilder();
+        ArrayList<String> lstText = JsoupUltilities.getTexts(spanTag);
+        ArrayList<String> lstText2 = (ArrayList<String>) lstText.clone();
+        for (String txt : lstText) {
+            if (Heuristic.isVolumne(txt)) {
+                lstText2.remove(txt);
+                returnValue.append(txt);
+                break;
+            }
+        }
+        for (String txt : lstText2) {
+            if (!txt.isEmpty()) {
+                if (returnValue.length() != 0) {
+                    returnValue.append(": ");
+                }
+                returnValue.append(txt);
+            }
+        }
+        return returnValue.toString();
+    }
+
     @Override
     protected Chapter getChapterFromTag(Element htmlTag, Manga m) throws HtmlParsingException {
-        Element pTag = htmlTag.select("span[class=left]").first();
-        if (pTag != null) {
-            Element aTag = pTag.select("a[href]").first();
+        Element spanTag = htmlTag.select("span[class=left]").first();
+        if (spanTag != null) {
+            Element aTag = spanTag.select("a[href]").first();
             Element dateTag = htmlTag.select("span[class=right]").first();
             try {
                 MangaDateTime date = new MangaDateTime(DateTimeUtilities.getDate(dateTag.html(), DATE_FORMAT_UPLOAD));
-                String chapterName = pTag.text().substring(aTag.text().length());
+//                String chapterName = pTag.text().substring(aTag.text().length());                                
+                String chapterName = getChapterName(spanTag);
                 float chapterNumber = NumberUtilities.parseNumberFloat(aTag.text().substring((aTag.text().lastIndexOf(' '))));
                 return new Chapter(chapterNumber, chapterName, aTag.attr("href"), m, DEFAULT_TRANS, date);
             } catch (ParseException ex) {

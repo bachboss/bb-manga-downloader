@@ -27,6 +27,7 @@ public class MyColumnSorter<T> implements Comparator<T> {
         if (o1 == null) {
             return (o2 == null ? 0 : -1);
         }
+        // if (o1!= null) && (o2==null)
         if (o2 == null) {
             return +1;
         }
@@ -34,8 +35,8 @@ public class MyColumnSorter<T> implements Comparator<T> {
         if (o1 instanceof Comparable) {
             value = ((Comparable) o1).compareTo(o2);
         } else {
-            System.out.println("Hash Code of " + o1.getClass());
-            value = (o1.hashCode()) - (o2.hashCode());
+//            System.out.println("Hash Code of " + o1.getClass());
+            value = (o1.toString()).compareTo(o2.toString());
         }
         return (tableModel.getIsAsc() ? value : (-value));
     }

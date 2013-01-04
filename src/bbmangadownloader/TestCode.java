@@ -6,6 +6,7 @@ package bbmangadownloader;
 
 import bbmangadownloader.entity.Image;
 import bbmangadownloader.manager.HttpDownloadManager;
+import bbmangadownloader.ult.JsoupUltilities;
 import java.io.IOException;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -38,7 +39,7 @@ public class TestCode {
         return getImageFromChapter(doc, order);
     }
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws Exception {        
 //        String BASED_URL = "http://www.fakku.net";
 //
 //        String script = FileUtilities.loadFromFile(new File("D:\\Temp.js"));

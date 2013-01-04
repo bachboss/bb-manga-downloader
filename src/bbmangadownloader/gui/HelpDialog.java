@@ -91,7 +91,8 @@ public class HelpDialog extends javax.swing.JDialog {
         jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setResizable(false);
+        setMaximumSize(new java.awt.Dimension(2147483647, 100));
+        setMinimumSize(new java.awt.Dimension(600, 90));
 
         jLabel1.setText("Supported host:");
 
@@ -131,7 +132,7 @@ public class HelpDialog extends javax.swing.JDialog {
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(cbxSupportedHost, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(lblLink, javax.swing.GroupLayout.DEFAULT_SIZE, 374, Short.MAX_VALUE))))
+                            .addComponent(lblLink, javax.swing.GroupLayout.DEFAULT_SIZE, 474, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
