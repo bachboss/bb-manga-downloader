@@ -22,7 +22,7 @@ import javax.swing.UIManager;
  */
 public class BBMangaDownloader {
 
-    private static final String VERSION = "1.2.2";
+    private static final String CURR_VERSION = "1.2.2";
     //
     private static final String[] APPLICATION_NAMES = new String[]{"BB Manga Watcher", "BB Manga Downloader"};
     private static final int MODE_WATCHER = 0;
@@ -31,6 +31,10 @@ public class BBMangaDownloader {
     private static final int MODE = MODE_DOWNLOADER;
     public static final String APPLICATION_NAME = APPLICATION_NAMES[MODE];
     public static final boolean TEST = true;
+
+    public static boolean isModeDownloader() {
+        return MODE == MODE_DOWNLOADER;
+    }
 
     public static void main(String[] args) {
         if (OSSupport.getOS() == OSSupport.OS.MAC_OS) {
@@ -43,7 +47,7 @@ public class BBMangaDownloader {
             {
                 startUpPanel.setUndecorated(true);
                 StartUpPannel panel = new StartUpPannel();
-                panel.setVersion(getVersion());
+                panel.setVersion(getCurrentVersion());
                 startUpPanel.add(panel);
                 {
                     Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
@@ -56,7 +60,6 @@ public class BBMangaDownloader {
             }
             startUpPanel.setVisible(true);
             //</editor-fold>
-
             ConfigManager.loadOnStartUp();
             //<editor-fold defaultstate="collapsed" desc="Set Look&Feel">
             try {
@@ -65,9 +68,14 @@ public class BBMangaDownloader {
                 Logger.getLogger(BBMangaDownloader.class.getName()).log(Level.SEVERE, null, ex);
             }
             //</editor-fold>
+            //<editor-fold defaultstate="collapsed" desc="Update Service">
+            if (ConfigManager.getCurrentInstance().isCheckUpdateOnStartUp()) {
+                UpdateService.loadOnStartUp();
+            }
+            //</editor-fold>
             ServerManager.loadServer();
             // Load Watcher...
-            if (MODE == MODE_WATCHER) {
+            if (!isModeDownloader()) {
 //                MangaManager.lazyLoadAllMangas();
                 WatcherMangager.loadOnStartup();
             }
@@ -75,10 +83,10 @@ public class BBMangaDownloader {
             java.awt.EventQueue.invokeLater(new Runnable() {
                 @Override
                 public void run() {
-                    if (MODE == MODE_WATCHER) {
-                        new MangaWatcherGUI().setVisible(true);
-                    } else {
+                    if (isModeDownloader()) {
                         new MangaDownloadGUI().setVisible(true);
+                    } else {
+                        new MangaWatcherGUI().setVisible(true);
                     }
                     startUpPanel.setVisible(false);
                     startUpPanel.dispose();
@@ -119,7 +127,7 @@ public class BBMangaDownloader {
         }
     }
 
-    public static String getVersion() {
-        return VERSION;
+    public static String getCurrentVersion() {
+        return CURR_VERSION;
     }
 }

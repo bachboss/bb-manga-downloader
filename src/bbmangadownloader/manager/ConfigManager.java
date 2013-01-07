@@ -61,11 +61,17 @@ public class ConfigManager {
         softwareConfig.store(new FileOutputStream(CONFIG_PATH), null);
     }
 
-    public String getProperty(String propertyName) {
-        return softwareConfig.getProperty(propertyName);
+    public String getProperty(String propertyName) throws ConfigNotFoundException {
+        String returnValue = softwareConfig.getProperty(propertyName);
+        if (returnValue == null) {
+            throw new ConfigNotFoundException("Config " + propertyName + " not found");
+
+        } else {
+            return returnValue;
+        }
     }
 
-    public boolean getBooleanProperty(String propertyName) {
+    public boolean getBooleanProperty(String propertyName) throws ConfigNotFoundException {
         return ConfigManager.getYesNo(softwareConfig.getProperty(propertyName));
     }
 
@@ -73,103 +79,7 @@ public class ConfigManager {
         softwareConfig.setProperty(propertyName, value);
     }
 
-    public String getProxyAddress() {
-        return getProperty("proxyAddress");
-    }
-
-    public void setProxyAddress(String address) {
-        setProperty("proxyAddress", address);
-    }
-
-    public int getProxyPort() {
-        String port = getProperty("proxyPort");
-        if (port == null) {
-            return 0;
-        } else {
-            try {
-                return Integer.parseInt(port);
-            } catch (Exception ex) {
-                return 0;
-            }
-        }
-    }
-
-    public void setProxyPort(int port) {
-        setProperty("proxyPort", String.valueOf(port));
-    }
-
-    public String getOutputFolder() {
-        File f = new File(getProperty("outputFolder"));
-        if (f.isDirectory()) {
-            return f.getAbsolutePath();
-        } else {
-            return OSSupport.getDefaultOutputFolder().getAbsolutePath();
-        }
-    }
-
-    public void setOutputFolder(String outputFolder) {
-        setProperty("outputFolder", outputFolder);
-    }
-
-    public boolean getIsUsingProxy() {
-        return ConfigManager.getYesNo(getProperty("useProxy"));
-    }
-
-    public void setIsUsingProxy(boolean isUseProxy) {
-        setYesNo("useProxy", isUseProxy);
-    }
-
-    public String getWatcherFile() {
-        String watcherFile = getProperty("watcherFile");
-        if (watcherFile == null) {
-            return "watcher.xml";
-        } else {
-            return watcherFile;
-        }
-    }
-
-    public String getCacheFolder() {
-        String cacheFolder = getProperty("cacheFolder");
-        if (cacheFolder == null) {
-            return "Cache";
-        } else {
-            return cacheFolder;
-        }
-    }
-
-    public boolean isAdult() {
-        return ConfigManager.getYesNo(getProperty("abc"));
-    }
-
-    public boolean isZip() {
-        return getYesNo(getProperty("zip"));
-    }
-
-    public void setZip(boolean isZip) {
-        setYesNo("zip", isZip);
-    }
-
-    public boolean isDeleteAfterZip() {
-        return getYesNo(getProperty("deleteAfterZip"));
-    }
-
-    public void setDeleteAfterZip(boolean isDelete) {
-        setYesNo("deleteAfterZip", isDelete);
-    }
-
-    public boolean isGenerateHtml() {
-        return getYesNo(getProperty("generateHtml"));
-    }
-
-    public void setGenerateHtml(boolean isGenerate) {
-        setYesNo("generateHtml", isGenerate);
-    }
-
     private static boolean getYesNo(String value) {
-        if (value == null) {
-            System.out.println("Get Yes No of " + value + " return null !");
-            return false;
-        }
         if ("yes".equals(value)) {
             return true;
         }
@@ -181,6 +91,144 @@ public class ConfigManager {
             setProperty(key, "yes");
         } else {
             setProperty(key, "no");
+        }
+    }
+
+    public String getProxyAddress() {
+        try {
+            return getProperty("proxyAddress");
+        } catch (ConfigNotFoundException ex) {
+            return "";
+        }
+    }
+
+    public void setProxyAddress(String address) {
+        setProperty("proxyAddress", address);
+    }
+
+    public int getProxyPort() {
+        String port;
+        try {
+            port = getProperty("proxyPort");
+            try {
+                return Integer.parseInt(port);
+            } catch (Exception ex) {
+                return 0;
+            }
+        } catch (ConfigNotFoundException ex) {
+            return 0;
+        }
+    }
+
+    public void setProxyPort(int port) {
+        setProperty("proxyPort", String.valueOf(port));
+    }
+
+    public String getOutputFolder() {
+        try {
+            File f = new File(getProperty("outputFolder"));
+            if (f.isDirectory()) {
+                return f.getAbsolutePath();
+            } else {
+                return OSSupport.getDefaultOutputFolder().getAbsolutePath();
+            }
+        } catch (ConfigNotFoundException ex) {
+            return OSSupport.getDefaultOutputFolder().getAbsolutePath();
+        }
+    }
+
+    public void setOutputFolder(String outputFolder) {
+        setProperty("outputFolder", outputFolder);
+    }
+
+    public boolean getIsUsingProxy() {
+        try {
+            return ConfigManager.getYesNo(getProperty("useProxy"));
+        } catch (ConfigNotFoundException ex) {
+            return false;
+        }
+    }
+
+    public void setIsUsingProxy(boolean isUseProxy) {
+        setYesNo("useProxy", isUseProxy);
+    }
+
+    public String getWatcherFile() {
+        try {
+            return getProperty("watcherFile");
+        } catch (ConfigNotFoundException ex) {
+            return "watcher.xml";
+        }
+    }
+
+    public String getCacheFolder() {
+        try {
+            return getProperty("cacheFolder");
+        } catch (ConfigNotFoundException ex) {
+            return "Cache";
+        }
+    }
+
+    public boolean isAdult() {
+        try {
+            return ConfigManager.getYesNo(getProperty("abc"));
+        } catch (ConfigNotFoundException ex) {
+            return false;
+        }
+    }
+
+    public boolean isZip() {
+        try {
+            return getYesNo(getProperty("zip"));
+        } catch (ConfigNotFoundException ex) {
+            return false;
+        }
+    }
+
+    public void setZip(boolean isZip) {
+        setYesNo("zip", isZip);
+    }
+
+    public boolean isDeleteAfterZip() {
+        try {
+            return getYesNo(getProperty("deleteAfterZip"));
+        } catch (ConfigNotFoundException ex) {
+            return false;
+        }
+    }
+
+    public void setDeleteAfterZip(boolean isDelete) {
+        setYesNo("deleteAfterZip", isDelete);
+    }
+
+    public boolean isGenerateHtml() {
+        try {
+            return getYesNo(getProperty("generateHtml"));
+        } catch (ConfigNotFoundException ex) {
+            return false;
+        }
+    }
+
+    public void setGenerateHtml(boolean isGenerate) {
+        setYesNo("generateHtml", isGenerate);
+    }
+
+    public void setCheckUpdateOnStartUp(boolean value) {
+        setYesNo("updateOnStartup", value);
+    }
+
+    public boolean isCheckUpdateOnStartUp() {
+        try {
+            return getYesNo(getProperty("updateOnStartup"));
+        } catch (ConfigNotFoundException ex) {
+            return true;
+        }
+    }
+
+    public static class ConfigNotFoundException extends Exception {
+
+        public ConfigNotFoundException(String message) {
+            super(message);
         }
     }
 }
