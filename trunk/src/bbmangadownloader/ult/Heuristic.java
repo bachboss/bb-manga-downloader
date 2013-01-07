@@ -9,7 +9,12 @@ import bbmangadownloader.entity.Chapter;
 import bbmangadownloader.entity.Manga;
 import com.google.code.regexp.NamedMatcher;
 import com.google.code.regexp.NamedPattern;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import org.jsoup.nodes.Node;
 
@@ -35,6 +40,25 @@ public class Heuristic {
         NamedPattern.compile(PATTERN_SPACE + PATTERN_NUMBER_REGEX + PATTERN_CHAPTER_REGEX_CHINESE)
     };
     public static int DEFAULT_MIN_ACCECPT = 60;
+    //
+    private static final String PATTERN_YEARS_REGEX = ("year(s)?");
+    private static final String PATTERN_MONTH_REGEX = ("month(s)?");
+    private static final String PATTERN_DAY_REGEX = ("day(s)?");
+    private static final String PATTERN_WEEK_REGEX = ("week(s)?");
+    private static final String PATTERN_HOUR_REGEX = ("hour(s)?");
+    private static final String PATTERN_MINUTE_REGEX = ("minute(s)?");
+    private static final String PATTERN_SECOND_REGEX = ("second(s)?");
+    private static final String PATTERN_NUMBER_OR_A = ("(?<cN>(\\d+|a(n)?))");
+    //
+    private static final NamedPattern[] DEFAULT_PATTERN_TIME = new NamedPattern[]{
+        NamedPattern.compile(PATTERN_NUMBER_OR_A + PATTERN_SPACE + PATTERN_YEARS_REGEX),
+        NamedPattern.compile(PATTERN_NUMBER_OR_A + PATTERN_SPACE + PATTERN_MONTH_REGEX),
+        NamedPattern.compile(PATTERN_NUMBER_OR_A + PATTERN_SPACE + PATTERN_WEEK_REGEX),
+        NamedPattern.compile(PATTERN_NUMBER_OR_A + PATTERN_SPACE + PATTERN_DAY_REGEX),
+        NamedPattern.compile(PATTERN_NUMBER_OR_A + PATTERN_SPACE + PATTERN_HOUR_REGEX),
+        NamedPattern.compile(PATTERN_NUMBER_OR_A + PATTERN_SPACE + PATTERN_MINUTE_REGEX),
+        NamedPattern.compile(PATTERN_NUMBER_OR_A + PATTERN_SPACE + PATTERN_SECOND_REGEX)
+    };
 
     //private static NamedPattern PATTERN_NUMBER = NamedPattern.compile("\\d+");
     public static String[] doSplitHeuristic(String text) {
@@ -208,7 +232,6 @@ public class Heuristic {
         } else {
             return lstInteger.get(0);
         }
-
     }
 
     public static String repairXML(String text) {
@@ -219,4 +242,64 @@ public class Heuristic {
         NamedMatcher m = DEFAULT_PATTERN_VOL.matcher(text.toLowerCase());
         return (m.find());
     }
+
+    /**
+     *
+     * @param relativeTime
+     * @return null if can not parse string. Does not count leap years
+     */
+    public static Date getDate(String relativeTime) {
+        String text = relativeTime.toLowerCase();
+        final int before = (text.contains("ago") || text.contains("past")) ? -1 : +1;
+        int[] time = new int[6];// year - month - week - day - hour - minute - second
+        boolean isNull = true;
+        boolean isParse = true;
+        if (text.contains("today")) {
+            isNull = false;
+            isParse = false;
+        } else if (text.contains("yesterday")) {
+            isParse = false;
+            time[3] = -1;
+            isNull = false;
+        } else {
+            // Last ?   
+        }
+
+        if (isParse) {            
+            for (int i = 0; i < DEFAULT_PATTERN_TIME.length; i++) {
+                NamedMatcher matcher = DEFAULT_PATTERN_TIME[i].matcher(text);
+                if (matcher.find()) {
+                    isNull = false;
+                    String number = matcher.group("cN");
+                    if (number.contains("a")) {
+                        time[i] = before;
+                    } else {
+                        try {
+                            time[i] = NumberUtilities.getNumberInt(number) * before;
+                        } catch (NumberFormatException ex) {
+                            return null;
+                        }
+                    }
+                }
+            }
+        }
+        if (isNull) {
+            return null;
+        } else {
+            Calendar c = new GregorianCalendar();
+            for (int i = 0; i < time.length; i++) {
+                c.add(ARRAY_TIME_FIELD[i], time[i]);
+            }
+            return c.getTime();
+        }
+    }
+    private static final int[] ARRAY_TIME_FIELD = new int[]{
+        Calendar.YEAR,
+        Calendar.MONTH,
+        Calendar.WEEK_OF_YEAR,
+        Calendar.DAY_OF_YEAR,
+        Calendar.HOUR_OF_DAY,
+        Calendar.MINUTE,
+        Calendar.SECOND
+    };
 }

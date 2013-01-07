@@ -6,6 +6,8 @@ package bbmangadownloader.entity;
 
 import java.io.Serializable;
 import java.net.URL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -28,7 +30,7 @@ public abstract class HtmlDocument implements Serializable {
         try {
             this.u = new URL(url);
         } catch (Exception ex) {
-            ex.printStackTrace();
+            Logger.getLogger(HtmlDocument.class.getName()).log(Level.SEVERE, null, ex);
         }
         return u;
     }

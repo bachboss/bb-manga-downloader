@@ -18,7 +18,7 @@ import java.util.logging.Logger;
  *
  * @author Bach
  */
-public class Manga extends HtmlDocument implements Serializable {
+public final class Manga extends HtmlDocument implements Serializable {
 
     private int id = -1;
     private String mangaName;
@@ -114,7 +114,7 @@ public class Manga extends HtmlDocument implements Serializable {
     public void setMangaName(String mangaName) {
         this.mangaName = mangaName.trim();
         this.nameSplited = Heuristic.doSplitHeuristic(mangaName);
-        this.lowerCaseName = mangaName.toLowerCase();
+//        this.lowerCaseName = mangaName.toLowerCase();
     }
 
     public int getNumberOfDigitInMangaName() {
@@ -181,7 +181,7 @@ public class Manga extends HtmlDocument implements Serializable {
     }
     private int d = -1;
     private String[] nameSplited;
-    private String lowerCaseName;
+//    private String lowerCaseName;
 
     @Override
     public int hashCode() {

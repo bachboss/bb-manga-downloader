@@ -54,7 +54,7 @@ public class CacheBuilder {
 
                     File folderCache = new File("H:\\Manga\\Cache\\", server.getServerName());
                     folderCache.mkdirs();
-                    File fileOutput = new File(folderCache, "file.data");
+//                    File fileOutput = new File(folderCache, "file.data");
 
                     List<Manga> lstManga = facade.getAllMangas(server);
                     System.out.println("Parsing Done!");

@@ -5,7 +5,6 @@
 package bbmangadownloader.ult;
 
 import java.io.File;
-import javax.swing.JFileChooser;
 import org.apache.commons.io.FileUtils;
 
 /**
@@ -14,25 +13,25 @@ import org.apache.commons.io.FileUtils;
  */
 public class OSSupport {
 
-    private static OS CURRENT_OS;
+    private static final OS CURRENT_OS;
+
+    static {
+        String os = System.getProperty("os.name").toLowerCase();
+        if (os.indexOf("win") >= 0) {
+            CURRENT_OS = OS.WINDOWS;
+        } else if ((os.indexOf("mac") >= 0)) {
+            CURRENT_OS = OS.MAC_OS;
+        } else if ((os.indexOf("nix") >= 0 || os.indexOf("nux") >= 0)) {
+            CURRENT_OS = OS.UNIX;
+        } else if (os.indexOf("sunos") >= 0) {
+            CURRENT_OS = OS.SOLARIS;
+        } else {
+            CURRENT_OS = OS.UNDETECTED;
+        }
+        System.out.println(os + "\t" + CURRENT_OS);
+    }
 
     public static synchronized OS getOS() {
-        if (CURRENT_OS == null) {
-            String os = System.getProperty("os.name").toLowerCase();
-
-            if (os.indexOf("win") >= 0) {
-                CURRENT_OS = OS.WINDOWS;
-            } else if ((os.indexOf("mac") >= 0)) {
-                CURRENT_OS = OS.MAC_OS;
-            } else if ((os.indexOf("nix") >= 0 || os.indexOf("nux") >= 0)) {
-                CURRENT_OS = OS.UNIX;
-            } else if (os.indexOf("sunos") >= 0) {
-                CURRENT_OS = OS.SOLARIS;
-            } else {
-                CURRENT_OS = OS.UNDETECTED;
-            }
-            System.out.println(os + "\t" + CURRENT_OS);
-        }
         return CURRENT_OS;
     }
 

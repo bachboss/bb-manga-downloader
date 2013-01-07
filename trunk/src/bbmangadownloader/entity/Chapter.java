@@ -9,7 +9,6 @@ import bbmangadownloader.ult.Heuristic;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -53,6 +52,7 @@ public class Chapter extends HtmlDocument implements Comparable<Chapter>, Serial
         if (chapterNumber < 0) {
             this.chapterNumber = Heuristic.tryGetChapterNumber(this);
         }
+        this.setImage = new HashSet<Image>();
     }
 
     public String getTranslator() {
@@ -109,14 +109,7 @@ public class Chapter extends HtmlDocument implements Comparable<Chapter>, Serial
         }
     }
 
-    public synchronized Set<Image> getSetImage() {
-        if (this.setImage == null) {
-            synchronized (this) {
-                if (this.setImage == null) {
-                    setImage = new HashSet<Image>();
-                }
-            }
-        }
+    public Set<Image> getSetImage() {
         return setImage;
     }
 
@@ -132,9 +125,11 @@ public class Chapter extends HtmlDocument implements Comparable<Chapter>, Serial
         return this.setImage == null ? -1 : this.setImage.size();
     }
 
-    public synchronized Set<Page> getSetPage() {
-        if (this.setPage == null) {
-            this.setPage = new HashSet<Page>();
+    public Set<Page> getSetPage() {
+        synchronized (this) {
+            if (this.setPage == null) {
+                this.setPage = new HashSet<Page>();
+            }
         }
         return setPage;
     }
