@@ -91,7 +91,6 @@ public class Batoto extends ABusPageBasedDefaultChapPageImage { // Done
             try {
                 uploadDate = new MangaDateTime(DateTimeUtilities.getDate(dateText, DATE_FORMAT_UPLOAD));
             } catch (ParseException ex) {
-                //TODO:  Improve this later, some how like x hours ago :|
                 uploadDate = new MangaDateTime(dateText);
             }
 

@@ -100,15 +100,16 @@ public class MangaHere extends ABusPageBasedDefaultChapPageImage {
         if (spanTag != null) {
             Element aTag = spanTag.select("a[href]").first();
             Element dateTag = htmlTag.select("span[class=right]").first();
+            MangaDateTime date;
             try {
-                MangaDateTime date = new MangaDateTime(DateTimeUtilities.getDate(dateTag.html(), DATE_FORMAT_UPLOAD));
-//                String chapterName = pTag.text().substring(aTag.text().length());                                
-                String chapterName = getChapterName(spanTag);
-                float chapterNumber = NumberUtilities.parseNumberFloat(aTag.text().substring((aTag.text().lastIndexOf(' '))));
-                return new Chapter(chapterNumber, chapterName, aTag.attr("href"), m, DEFAULT_TRANS, date);
+                date = new MangaDateTime(DateTimeUtilities.getDate(dateTag.html(), DATE_FORMAT_UPLOAD));
             } catch (ParseException ex) {
-                return null;
+                date = new MangaDateTime(dateTag.html());
             }
+            //                String chapterName = pTag.text().substring(aTag.text().length());                                
+            String chapterName = getChapterName(spanTag);
+            float chapterNumber = NumberUtilities.parseNumberFloat(aTag.text().substring((aTag.text().lastIndexOf(' '))));
+            return new Chapter(chapterNumber, chapterName, aTag.attr("href"), m, DEFAULT_TRANS, date);
         } else {
             return null;
         }

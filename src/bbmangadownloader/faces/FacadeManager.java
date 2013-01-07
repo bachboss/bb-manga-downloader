@@ -57,32 +57,6 @@ public class FacadeManager {
         }
     }
 
-//    public static void loadData() {
-//        System.out.println("Loading Facade...");
-//        // Add Data
-//        MAP_HOST.put("vechai.info", new FacadeVeChai());
-//        MAP_HOST.put("eatmanga.com", new FacadeEatManga());
-//        MAP_HOST.put("truyentranhtuan.com", new FacadeTruyenTranhTuan());
-//        MAP_HOST.put("mangafox.me", new FacadeMangafox());
-//        MAP_HOST.put("www.mangareader.net", new FacadeManagerReader());
-//        MAP_HOST.put("www.batoto.net", new FacadeBatoto());
-//        MAP_HOST.put("truyen.vietboom.com", new FacadeVietBoom());
-//        MAP_HOST.put("truyen.comicvn.net", new FacadeComicVN());
-//        MAP_HOST.put("kissmanga.com", new FacadeKissManga());
-//        MAP_HOST.put("truyen.vnsharing.net", new FacadeVnSharing());
-//        MAP_HOST.put("www.mangainn.com", new FacadeMangaInn());
-//        MAP_HOST.put("mangastream.com", new FacadeMangaStream());
-//        MAP_HOST.put("www.mangahere.com", new FacadeMangaHere());
-//        MAP_HOST.put("www.cococomic.com", new FacadeCococomic());
-//        MAP_HOST.put("mh.99770.com", new Facade99770());
-//        MAP_HOST.put("manga24h.com", new FacadeManga24h());
-////        MAP_HOST.put("comic.veryim.com", new FacadeVeryim());
-//        MAP_HOST.put("blogtruyen.com", new FacadeBlogTruyen());
-//
-//        if (ConfigManager.getCurrentInstance().isAdult()) {
-//            MAP_HOST.put("hentai2read.com", new FacadeHentai2Read());
-//        }
-//    }
     @Deprecated
     public static IFacadeMangaServer getServerFacadeByName(String name) {
         if (name == null) {

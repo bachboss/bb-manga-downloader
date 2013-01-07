@@ -6,6 +6,7 @@ package bbmangadownloader.ult;
 
 import bbmangadownloader.entity.Chapter;
 import bbmangadownloader.entity.Manga;
+import java.text.SimpleDateFormat;
 import org.junit.*;
 import static org.junit.Assert.*;
 
@@ -217,4 +218,19 @@ public class HeuristicTest {
 //        // TODO review the generated test code and remove the default call to fail.
 //        fail("The test case is a prototype.");
 //    }
+
+    @Test
+    public void testGetDate() {
+        System.out.println("testGetDate");
+        String[] data = new String[]{
+            "A year ago", "A month ago", "A week ago", "A day ago", "An hour ago", "A minute ago",
+            "2 years ago", " 2 months ago", "2 week ago", "10 days ago", "10 hours ago", "10 minutes ago"
+        };
+
+        for (String str : data) {
+            String s = DateTimeUtilities.getStringFromDate(Heuristic.getDate(str),
+                    new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
+            System.out.println(str + "\t" + s);
+        }
+    }
 }

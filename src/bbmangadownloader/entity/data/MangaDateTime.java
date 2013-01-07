@@ -5,6 +5,7 @@
 package bbmangadownloader.entity.data;
 
 import bbmangadownloader.ult.DateTimeUtilities;
+import bbmangadownloader.ult.Heuristic;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -18,19 +19,38 @@ public class MangaDateTime {//implements Comparable<MangaDateTime> {
     private static final DateFormat DEFAULT_DATETIME_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
     private Date date;
     private String relativeTime;
+    private boolean isRelative = false;
 
     public MangaDateTime(Date date) {
         this.date = date;
     }
 
-    public MangaDateTime(String strRelativeTime) {
-        this.relativeTime = strRelativeTime;
+    /**
+     *
+     * Construct datetime
+     *
+     * @param relativeTimeString Text to display as string
+     */
+    public MangaDateTime(String relativeTimeString) {
+        isRelative = true;
+        this.relativeTime = relativeTimeString;
+        Date d = Heuristic.getDate(relativeTime);
+        if (d != null) {
+            this.date = d;
+        } else {
+            this.relativeTime = relativeTimeString;
+        }
     }
 
     @Override
     public String toString() {
         if (date != null) {
-            return DateTimeUtilities.getStringFromDate(date, DEFAULT_DATETIME_FORMAT);
+            String str = DateTimeUtilities.getStringFromDate(date, DEFAULT_DATETIME_FORMAT);
+            if (isRelative) {
+                return str + " (~)";
+            } else {
+                return str;
+            }
         } else if (relativeTime != null) {
             return relativeTime;
         } else {
