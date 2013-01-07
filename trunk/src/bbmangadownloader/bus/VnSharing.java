@@ -8,6 +8,7 @@ import bbmangadownloader.entity.Chapter;
 import bbmangadownloader.entity.Manga;
 import bbmangadownloader.entity.data.MangaDateTime;
 import bbmangadownloader.manager.ConfigManager;
+import bbmangadownloader.manager.ConfigManager.ConfigNotFoundException;
 import bbmangadownloader.manager.HttpDownloadManager;
 import bbmangadownloader.ult.DateTimeUtilities;
 import java.io.IOException;
@@ -55,9 +56,14 @@ public class VnSharing extends KissManga { // Done
     @Override
     protected Document getDocument(String url) throws IOException {
         if (fromPicasaCookieValue == -1) {
-            fromPicasaCookieValue =
-                    (ConfigManager.getCurrentInstance().getBooleanProperty(CONFIG_PICASA))
-                    ? 0 : 1;
+
+            try {
+                fromPicasaCookieValue =
+                        (ConfigManager.getCurrentInstance().getBooleanProperty(CONFIG_PICASA))
+                        ? 0 : 1;
+            } catch (ConfigNotFoundException ex) {
+                fromPicasaCookieValue = 1;
+            }
         }
         if (fromPicasaCookieValue == 0) {
             return super.getDocument(url);

@@ -26,7 +26,7 @@ public class AboutUsDiaglog extends javax.swing.JDialog {
         super(parent, modal);
         setTitle("About us");
         initComponents();
-        lblVersion.setText(bbmangadownloader.BBMangaDownloader.getVersion());
+        lblVersion.setText(bbmangadownloader.BBMangaDownloader.getCurrentVersion());
         try {
             lblEmail.setURI(new URI("mailto:" + EMAIL));
         } catch (URISyntaxException ex) {

@@ -203,6 +203,7 @@ public class MangaDownloadGUI extends javax.swing.JFrame implements IHelpListene
         jMenuItem4 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jMenuItem2 = new javax.swing.JMenuItem();
+        jMenuItem5 = new javax.swing.JMenuItem();
 
         jMenu5.setText("File");
         jMenuBar2.add(jMenu5);
@@ -558,6 +559,14 @@ public class MangaDownloadGUI extends javax.swing.JFrame implements IHelpListene
         });
         jMenu2.add(jMenuItem2);
 
+        jMenuItem5.setText("Check for updates");
+        jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem5ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem5);
+
         jMenuBar1.add(jMenu2);
 
         setJMenuBar(jMenuBar1);
@@ -660,6 +669,13 @@ public class MangaDownloadGUI extends javax.swing.JFrame implements IHelpListene
 //            cbxManga.setSelectedItem(selectedItem);
         }
     }//GEN-LAST:event_cbxScannerActionPerformed
+    private UpdateDialog updateDialog;
+    private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
+        if (updateDialog == null) {
+            updateDialog = new UpdateDialog(this, false);
+        }
+        updateDialog.setVisible(true);
+    }//GEN-LAST:event_jMenuItem5ActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCheckSupport;
     private javax.swing.JButton btnScanerFletch;
@@ -681,6 +697,7 @@ public class MangaDownloadGUI extends javax.swing.JFrame implements IHelpListene
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
+    private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSplitPane jSplitPane2;
     private javax.swing.JTabbedPane jTabbedPane1;

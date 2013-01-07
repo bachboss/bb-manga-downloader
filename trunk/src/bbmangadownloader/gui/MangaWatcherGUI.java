@@ -209,6 +209,7 @@ public class MangaWatcherGUI extends javax.swing.JFrame {
         jMenuItem4 = new javax.swing.JMenuItem();
         jMenu6 = new javax.swing.JMenu();
         jMenuItem2 = new javax.swing.JMenuItem();
+        jMenuItem6 = new javax.swing.JMenuItem();
 
         jMenu1.setText("File");
         jMenuBar1.add(jMenu1);
@@ -369,7 +370,7 @@ public class MangaWatcherGUI extends javax.swing.JFrame {
                 .addGroup(pnlLeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addGroup(pnlLeftLayout.createSequentialGroup()
-                        .addComponent(txtWatcherName, javax.swing.GroupLayout.DEFAULT_SIZE, 142, Short.MAX_VALUE)
+                        .addComponent(txtWatcherName, javax.swing.GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnAddWatcher, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
@@ -463,7 +464,7 @@ public class MangaWatcherGUI extends javax.swing.JFrame {
                 .addComponent(pnlFilter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton3)
-                .addContainerGap(51, Short.MAX_VALUE))
+                .addContainerGap())
             .addComponent(jScrollPane4)
         );
         pnlRightTopLayout.setVerticalGroup(
@@ -484,7 +485,7 @@ public class MangaWatcherGUI extends javax.swing.JFrame {
         pnlRightLeft.setLayout(pnlRightLeftLayout);
         pnlRightLeftLayout.setHorizontalGroup(
             pnlRightLeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panelDownload, javax.swing.GroupLayout.DEFAULT_SIZE, 566, Short.MAX_VALUE)
+            .addComponent(panelDownload, javax.swing.GroupLayout.DEFAULT_SIZE, 525, Short.MAX_VALUE)
         );
         pnlRightLeftLayout.setVerticalGroup(
             pnlRightLeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -562,6 +563,14 @@ public class MangaWatcherGUI extends javax.swing.JFrame {
             }
         });
         jMenu6.add(jMenuItem2);
+
+        jMenuItem6.setText("Check for updates");
+        jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem6ActionPerformed(evt);
+            }
+        });
+        jMenu6.add(jMenuItem6);
 
         jMenuBar3.add(jMenu6);
 
@@ -727,6 +736,13 @@ public class MangaWatcherGUI extends javax.swing.JFrame {
         System.gc();
         System.out.println("Free Memory: " + MemoryUtilities.getFreeMemoryString());
     }//GEN-LAST:event_jMenuItem5ActionPerformed
+    private UpdateDialog updateDialog;
+    private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
+        if (updateDialog == null) {
+            updateDialog = new UpdateDialog(this, false);
+        }
+        updateDialog.setVisible(true);
+    }//GEN-LAST:event_jMenuItem6ActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddWatcher;
     private javax.swing.JDialog dlgRenameWatcher;
@@ -748,6 +764,7 @@ public class MangaWatcherGUI extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
+    private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane4;

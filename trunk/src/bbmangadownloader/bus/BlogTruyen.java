@@ -100,7 +100,7 @@ public class BlogTruyen extends ADefaultBus implements IBusOnePage {
         if (m.getUrl().contains("http://blogtruyen.com/Truyen/")) {
             ArrayList<Chapter> returnValue = new ArrayList<Chapter>();
             Document doc = getDocument(m.getUrl());
-            Elements els = doc.getElementById("listChapter").getElementsByClass("row-chapter");
+            Elements els = doc.getElementById("list-chapter").getElementsByClass("row-chapter");
             for (Element divTag : els) {
                 Element aTag = divTag.select("a").first();
                 MangaDateTime time;
