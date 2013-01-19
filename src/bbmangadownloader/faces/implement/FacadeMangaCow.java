@@ -4,7 +4,7 @@
  */
 package bbmangadownloader.faces.implement;
 
-import bbmangadownloader.bus.NoManga;
+import bbmangadownloader.bus.MangaCow;
 import bbmangadownloader.bus.description.IBus;
 import bbmangadownloader.faces.AFacadeDefault;
 import bbmangadownloader.faces.SupportType;
@@ -13,14 +13,14 @@ import bbmangadownloader.faces.SupportType;
  *
  * @author Bach
  */
-public class FacadeNoManga extends AFacadeDefault {
+public class FacadeMangaCow extends AFacadeDefault {
 
-    public FacadeNoManga() {
+    public FacadeMangaCow() {
     }
 
     @Override
     protected IBus getCurrentBUS() {
-        return new NoManga();
+        return new MangaCow();
     }
 
     @Override
@@ -30,6 +30,6 @@ public class FacadeNoManga extends AFacadeDefault {
 
     @Override
     public String getServerName() {
-        return "NoManga";
+        return "MangaCow";
     }
 }
