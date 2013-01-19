@@ -11,6 +11,7 @@ import bbmangadownloader.entity.Chapter;
 import bbmangadownloader.entity.Image;
 import bbmangadownloader.entity.Manga;
 import bbmangadownloader.entity.Server;
+import bbmangadownloader.entity.data.MangaDateTime;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +42,7 @@ public class MangaStream extends ADefaultBus implements IBusOnePage {
                     if (e2.tagName().equals("a")) {
                         // This host does not have upload time
                         Chapter c = new Chapter(-1, e2.text(), BASED_URL + e2.attr("href"), m,
-                                DEFAULT_TRANS, null);
+                                DEFAULT_TRANS, MangaDateTime.NOT_AVAIABLE);
                         m.addChapter(c);
                     }
                     e2 = e2.nextElementSibling();

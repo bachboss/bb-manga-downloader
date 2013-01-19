@@ -25,6 +25,13 @@ public class MangaDateTime {//implements Comparable<MangaDateTime> {
         this.date = date;
     }
 
+    private MangaDateTime(String text, boolean isRelativeTime) {
+        if (!isRelativeTime) {
+            this.isRelative = false;
+            this.relativeTime = text;
+        }
+    }
+
     /**
      *
      * Construct datetime
@@ -57,8 +64,8 @@ public class MangaDateTime {//implements Comparable<MangaDateTime> {
             return null;
         }
     }
-    public static final MangaDateTime NOT_SUPPORT = new MangaDateTime("Not support");
-    public static final MangaDateTime NOT_AVAIABLE = new MangaDateTime("Not avaiable");
+    public static final MangaDateTime NOT_SUPPORT = new MangaDateTime("Not support", false);
+    public static final MangaDateTime NOT_AVAIABLE = new MangaDateTime("Not avaiable", false);
 //    @Override
 //    public int compareTo(MangaDateTime o) {
 ////        a negative integer, zero, or a positive integer as this object is less than, 

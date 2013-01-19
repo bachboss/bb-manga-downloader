@@ -51,7 +51,6 @@ public class Fakku extends ADefaultBus {
         MangaDateTime date;
         try {
             date = new MangaDateTime(DateTimeUtilities.getDate(d, DATE_FORMAT_UPLOAD));
-
         } catch (Exception ex) {
             date = new MangaDateTime(d);
         }

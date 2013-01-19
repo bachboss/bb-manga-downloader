@@ -28,7 +28,7 @@ public class BBMangaDownloader {
     private static final int MODE_WATCHER = 0;
     private static final int MODE_DOWNLOADER = 1;
     //
-    private static final int MODE = MODE_DOWNLOADER;
+    private static final int MODE = MODE_WATCHER;
     public static final String APPLICATION_NAME = APPLICATION_NAMES[MODE];
     public static final boolean TEST = true;
 
@@ -44,23 +44,33 @@ public class BBMangaDownloader {
         try {
             final JFrame startUpPanel = new JFrame("Loading...");
             //<editor-fold defaultstate="collapsed" desc="Startup Pannel">
+            StartUpPannel panel = new StartUpPannel();
             {
                 startUpPanel.setUndecorated(true);
-                StartUpPannel panel = new StartUpPannel();
                 panel.setVersion(getCurrentVersion());
                 startUpPanel.add(panel);
                 {
                     Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
                     double width = dim.getWidth();
                     double height = dim.getHeight();
-                    int pWidth = 400;
-                    int pHeight = 150;
-                    startUpPanel.setBounds(((int) (width - pWidth)) / 2, ((int) (height - pHeight)) / 2, pWidth, pHeight);
+                    Dimension preferDimension = startUpPanel.getPreferredSize();
+                    double pWidth = preferDimension.getWidth();
+                    double pHeight = preferDimension.getHeight();
+                    startUpPanel.setBounds(((int) (width - pWidth)) / 2,
+                            ((int) (height - pHeight)) / 2, (int) pWidth, (int) pHeight);
                 }
             }
             startUpPanel.setVisible(true);
             //</editor-fold>
+            panel.setProgressString("Loading Configuration");
+            panel.setProgressValue(20);
+//            Thread.sleep(1000);
             ConfigManager.loadOnStartUp();
+
+            //
+            panel.setProgressString("Setting Look & Feel");
+            panel.setProgressValue(40);
+//            Thread.sleep(1000);
             //<editor-fold defaultstate="collapsed" desc="Set Look&Feel">
             try {
                 UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -68,17 +78,30 @@ public class BBMangaDownloader {
                 Logger.getLogger(BBMangaDownloader.class.getName()).log(Level.SEVERE, null, ex);
             }
             //</editor-fold>
+
+            panel.setProgressString("Loading Update Service");
+            panel.setProgressValue(60);
+//            Thread.sleep(1000);
             //<editor-fold defaultstate="collapsed" desc="Update Service">
             if (ConfigManager.getCurrentInstance().isCheckUpdateOnStartUp()) {
                 UpdateService.loadOnStartUp();
             }
             //</editor-fold>
+
+            panel.setProgressString("Loading Data");
+            panel.setProgressValue(80);
+//            Thread.sleep(1000);
             ServerManager.loadServer();
             // Load Watcher...
             if (!isModeDownloader()) {
 //                MangaManager.lazyLoadAllMangas();
                 WatcherMangager.loadOnStartup();
             }
+
+            panel.setProgressString("Done");
+            panel.setProgressValue(100);
+//            Thread.sleep(1000);
+
             // Invoke GUI !            
             java.awt.EventQueue.invokeLater(new Runnable() {
                 @Override

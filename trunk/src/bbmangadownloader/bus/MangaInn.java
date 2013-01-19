@@ -63,13 +63,18 @@ public class MangaInn extends ABusPageBasedDefaultChapImage { // Done
             if (aTags.isEmpty()) {
                 return null;
             }
+            String strDate = htmlTag.child(1).text();
+            MangaDateTime date;
+
             try {
-                MangaDateTime date = new MangaDateTime(DateTimeUtilities.getDate(htmlTag.child(1).text(), DATE_FORMAT_UPLOAD));
-                Element aTag = aTags.first();
-                return new Chapter(-1, aTag.text(), aTag.attr("href"), m,
-                        DEFAULT_TRANS, date);
+                date = new MangaDateTime(DateTimeUtilities.getDate(strDate, DATE_FORMAT_UPLOAD));
             } catch (ParseException ex) {
+                date = new MangaDateTime(strDate);
             }
+
+            Element aTag = aTags.first();
+            return new Chapter(-1, aTag.text(), aTag.attr("href"), m,
+                    DEFAULT_TRANS, date);
         }
         return null;
     }
