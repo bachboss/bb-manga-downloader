@@ -44,7 +44,7 @@ public class FacadeManager {
         MAP_HOST.put("blogtruyen", new FacadeBlogTruyen());
         MAP_HOST.put("tenmanga", new FacadeTenManga());
         MAP_HOST.put("dragonfly", new FacadeDragonFly());
-        MAP_HOST.put("nomanga", new FacadeNoManga());
+        MAP_HOST.put("mangacow", new FacadeMangaCow());
 //        MAP_HOST.put("cxcscans", new FacadeCxcScans());
 
         if (ConfigManager.getCurrentInstance().isAdult()) {

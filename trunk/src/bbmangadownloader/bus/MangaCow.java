@@ -29,7 +29,7 @@ import org.jsoup.select.Elements;
  *
  * @author Bach
  */
-public class NoManga extends ABusPageBasedDefaultChapImage {
+public class MangaCow extends ABusPageBasedDefaultChapImage {
 
     private static final DateFormat DATE_FORMAT_UPLOAD = new SimpleDateFormat("MMM dd, yyyy");
     private static final String DEFAULT_TRANS = "NoManga";
