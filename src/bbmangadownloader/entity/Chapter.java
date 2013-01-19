@@ -52,7 +52,6 @@ public class Chapter extends HtmlDocument implements Comparable<Chapter>, Serial
         if (chapterNumber < 0) {
             this.chapterNumber = Heuristic.tryGetChapterNumber(this);
         }
-        this.setImage = new HashSet<Image>();
     }
 
     public String getTranslator() {
@@ -110,7 +109,12 @@ public class Chapter extends HtmlDocument implements Comparable<Chapter>, Serial
     }
 
     public Set<Image> getSetImage() {
-        return setImage;
+        synchronized (this) {
+            if (setImage == null) {
+                setImage = new HashSet<Image>();
+            }
+            return setImage;
+        }
     }
 
     public void addImage(Image img) {

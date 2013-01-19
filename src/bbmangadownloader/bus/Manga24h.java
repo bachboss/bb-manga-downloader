@@ -34,6 +34,7 @@ public class Manga24h extends ADefaultBus implements IBusOnePage { // Done
     private static final String URL_LIST_MANGA = "http://manga24h.com/manga/list";
     private static final String URL_LIST_MANGA_BASED = "http://manga24h.com/manga/list/page/";
     private static final String DATE_FORMAT_UPLOAD = "yyyy-MM-dd";
+    private static final String DEFAULT_TRANS = "Manga24h";
 
     private void getMangas(Server s, Document doc, List<Manga> listManga) {
         Elements elements = doc.select("div[id=left_content] div[class=post]");
@@ -92,14 +93,16 @@ public class Manga24h extends ADefaultBus implements IBusOnePage { // Done
             Element aTag = children.first().select("a").first();
             Element eDate = children.last();
             Chapter c;
+            String dateString = TextUtilities.trim(HtmlUtilities.unescapeHtml4(eDate.text()));
+            MangaDateTime date;
             try {
-                c = new Chapter(-1, aTag.text(), BASED_URL + aTag.attr("href"), manga, aTag.text(),
-                        new MangaDateTime(DateTimeUtilities.getDate(TextUtilities.trim(HtmlUtilities.unescapeHtml4(eDate.text())),
-                        DATE_FORMAT_UPLOAD)));
-                lstChapter.add(c);
+                date = new MangaDateTime(
+                        DateTimeUtilities.getDate(dateString, DATE_FORMAT_UPLOAD));
             } catch (ParseException ex) {
-                Logger.getLogger(TruyenTranhTuan.class.getName()).log(Level.SEVERE, null, ex);
+                date = new MangaDateTime(dateString);
             }
+            c = new Chapter(-1, aTag.text(), BASED_URL + aTag.attr("href"), manga, DEFAULT_TRANS, date);
+            lstChapter.add(c);
         }
         return lstChapter;
     }

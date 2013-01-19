@@ -61,6 +61,7 @@ public class ConfigManager {
         softwareConfig.store(new FileOutputStream(CONFIG_PATH), null);
     }
 
+    //<editor-fold>
     public String getProperty(String propertyName) throws ConfigNotFoundException {
         String returnValue = softwareConfig.getProperty(propertyName);
         if (returnValue == null) {
@@ -86,6 +87,14 @@ public class ConfigManager {
         return false;
     }
 
+    private static String getYesNoString(boolean value) {
+        if (value) {
+            return "yes";
+        } else {
+            return "no";
+        }
+    }
+
     private void setYesNo(String key, boolean value) {
         if (value) {
             setProperty(key, "yes");
@@ -94,141 +103,177 @@ public class ConfigManager {
         }
     }
 
-    public String getProxyAddress() {
+//    private void setYesNo(String key, String value) {
+//        setYesNo(key, getYesNo(value));
+//    }
+    public String getConfig(Config config) {
         try {
-            return getProperty("proxyAddress");
+            return getProperty(config.getConfigName());
         } catch (ConfigNotFoundException ex) {
-            return "";
+            return config.getDefaultValue();
         }
+    }
+
+    /**
+     *
+     * @param <T>
+     * @param config
+     * @param o
+     * @return null type o is not defined
+     */
+    public <T> T getConfig(Config config, T o) {
+        if (o instanceof String) {
+            return (T) getConfig(config);
+        } else if (o instanceof Integer) {
+            return (T) (Integer.valueOf(getConfig(config)));
+        } else if (o instanceof Boolean) {
+            return (T) (Boolean.valueOf(getYesNo(getConfig(config))));
+        } else {
+            return null;
+        }
+    }
+
+    public void setConfig(Config config, String value) {
+        setProperty(config.getConfigName(), value);
+    }
+
+    public void setConfig(Config config, int value) {
+        setConfig(config, String.valueOf(value));
+    }
+
+    public void setConfig(Config config, boolean value) {
+        setConfig(config, getYesNoString(value));
+    }
+    //</editor-fold>
+
+    public String getProxyAddress() {
+        return getConfig(Config.ProxyAddress);
     }
 
     public void setProxyAddress(String address) {
-        setProperty("proxyAddress", address);
+        setConfig(Config.ProxyAddress, address);
     }
 
     public int getProxyPort() {
-        String port;
-        try {
-            port = getProperty("proxyPort");
-            try {
-                return Integer.parseInt(port);
-            } catch (Exception ex) {
-                return 0;
-            }
-        } catch (ConfigNotFoundException ex) {
-            return 0;
-        }
+        return getConfig(Config.ProxyPort, Integer.MAX_VALUE);
     }
 
     public void setProxyPort(int port) {
-        setProperty("proxyPort", String.valueOf(port));
+        setConfig(Config.Zip, port);
     }
 
     public String getOutputFolder() {
-        try {
-            File f = new File(getProperty("outputFolder"));
-            if (f.isDirectory()) {
-                return f.getAbsolutePath();
-            } else {
-                return OSSupport.getDefaultOutputFolder().getAbsolutePath();
+        File f = new File(getConfig(Config.OutputFolder));
+        if (!f.exists()) {
+            boolean isCreated = f.mkdir();
+            if (!isCreated) {
+                return Config.OutputFolder.getDefaultValue();
             }
-        } catch (ConfigNotFoundException ex) {
-            return OSSupport.getDefaultOutputFolder().getAbsolutePath();
+        } else if (f.isDirectory()) {
+            return f.getAbsolutePath();
         }
+        return Config.OutputFolder.getDefaultValue();
     }
 
     public void setOutputFolder(String outputFolder) {
-        setProperty("outputFolder", outputFolder);
+        setConfig(Config.OutputFolder, outputFolder);
     }
 
     public boolean getIsUsingProxy() {
-        try {
-            return ConfigManager.getYesNo(getProperty("useProxy"));
-        } catch (ConfigNotFoundException ex) {
-            return false;
-        }
+        return ConfigManager.getYesNo(getConfig(Config.UseProxy));
     }
 
     public void setIsUsingProxy(boolean isUseProxy) {
-        setYesNo("useProxy", isUseProxy);
+        setYesNo(Config.UseProxy.getConfigName(), isUseProxy);
     }
 
     public String getWatcherFile() {
-        try {
-            return getProperty("watcherFile");
-        } catch (ConfigNotFoundException ex) {
-            return "watcher.xml";
+        File f = new File(getConfig(Config.WatcherFile));
+        if (!f.exists()) {
+            f.mkdirs();
+            try {
+                f.createNewFile();
+            } catch (IOException ex) {
+                return Config.WatcherFile.getDefaultValue();
+            }
         }
+        return f.getAbsolutePath();
     }
 
     public String getCacheFolder() {
-        try {
-            return getProperty("cacheFolder");
-        } catch (ConfigNotFoundException ex) {
-            return "Cache";
-        }
+        return getConfig(Config.CacheFolder);
     }
 
     public boolean isAdult() {
-        try {
-            return ConfigManager.getYesNo(getProperty("abc"));
-        } catch (ConfigNotFoundException ex) {
-            return false;
-        }
+        return getYesNo(getConfig(Config.Aldult));
     }
 
     public boolean isZip() {
-        try {
-            return getYesNo(getProperty("zip"));
-        } catch (ConfigNotFoundException ex) {
-            return false;
-        }
+        return getYesNo(getConfig(Config.Zip));
     }
 
     public void setZip(boolean isZip) {
-        setYesNo("zip", isZip);
+        setConfig(Config.Zip, isZip);
     }
 
     public boolean isDeleteAfterZip() {
-        try {
-            return getYesNo(getProperty("deleteAfterZip"));
-        } catch (ConfigNotFoundException ex) {
-            return false;
-        }
+        return getConfig(Config.DeleteAfterZip, Boolean.FALSE);
     }
 
     public void setDeleteAfterZip(boolean isDelete) {
-        setYesNo("deleteAfterZip", isDelete);
+        setConfig(Config.DeleteAfterZip, isDelete);
     }
 
     public boolean isGenerateHtml() {
-        try {
-            return getYesNo(getProperty("generateHtml"));
-        } catch (ConfigNotFoundException ex) {
-            return false;
-        }
+        return getConfig(Config.GenerateHtml, Boolean.TRUE);
     }
 
     public void setGenerateHtml(boolean isGenerate) {
-        setYesNo("generateHtml", isGenerate);
+        setConfig(Config.GenerateHtml, isGenerate);
     }
 
     public void setCheckUpdateOnStartUp(boolean value) {
-        setYesNo("updateOnStartup", value);
+        setConfig(Config.UpdateOnStartUp, value);
     }
 
     public boolean isCheckUpdateOnStartUp() {
-        try {
-            return getYesNo(getProperty("updateOnStartup"));
-        } catch (ConfigNotFoundException ex) {
-            return true;
-        }
+        return getConfig(Config.UpdateOnStartUp, Boolean.FALSE);
     }
 
     public static class ConfigNotFoundException extends Exception {
 
         public ConfigNotFoundException(String message) {
             super(message);
+        }
+    }
+
+    public static enum Config {
+
+        ProxyAddress("proxyAddress", ""),
+        ProxyPort("proxyPort", "0"),
+        OutputFolder("outputFolder", OSSupport.getDefaultOutputFolder().getAbsolutePath()),
+        UseProxy("useProxy", "no"),
+        WatcherFile("watcherFile", "watcher.xml"),
+        CacheFolder("cacheFolder", "Cache"),
+        Aldult("abc", "no"),
+        Zip("zip", "no"),
+        DeleteAfterZip("deleteAfterZip", "no"),
+        GenerateHtml("generateHtml", "no"),
+        UpdateOnStartUp("updateOnStartup", "yes");
+
+        private Config(String configName, String defaultValue) {
+            this.configName = configName;
+            this.defaultValue = defaultValue;
+        }
+        private String configName;
+        private String defaultValue;
+
+        public String getConfigName() {
+            return configName;
+        }
+
+        public String getDefaultValue() {
+            return defaultValue;
         }
     }
 }

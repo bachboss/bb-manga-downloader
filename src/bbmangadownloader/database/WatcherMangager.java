@@ -30,7 +30,7 @@ public class WatcherMangager {
 
     private static final List<Watcher> listWatcher = new ArrayList<Watcher>();
     private static final Map<Integer, Watcher> mapWatcher = new HashMap<Integer, Watcher>();
-    private static final File FILE_WATCHER = new File(ConfigManager.getCurrentInstance().getWatcherFile());
+    private static File FILE_WATCHER;
 
     public static List<Watcher> getListWatcher() {
         return listWatcher;
@@ -39,6 +39,9 @@ public class WatcherMangager {
     public static synchronized void loadOnStartup() {
         System.out.println("Loading Watchers...");
         try {
+            FILE_WATCHER = new File(ConfigManager.getCurrentInstance().getWatcherFile());
+            if (!FILE_WATCHER.exists()) {
+            }
             loadWatcherFromFile(FILE_WATCHER, listWatcher);
             for (Watcher w : listWatcher) {
                 mapWatcher.put(w.getId(), w);

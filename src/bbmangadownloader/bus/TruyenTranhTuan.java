@@ -63,14 +63,18 @@ public class TruyenTranhTuan extends ADefaultBus implements IBusOnePage { // Don
             if (children.size() == 3) {
                 Element aTag = children.get(0).select("a").first();
                 Chapter c;
+                String strDate = children.get(2).text();
+                MangaDateTime date;
                 try {
-                    c = new Chapter(-1, aTag.text(), BASED_URL + aTag.attr("href"), manga,
-                            children.get(1).text(),
-                            new MangaDateTime(DateTimeUtilities.getDate(children.get(2).text(), DATE_FORMAT_UPLOAD)));
-                    lstChapter.add(c);
+                    date = new MangaDateTime(DateTimeUtilities.getDate(strDate, DATE_FORMAT_UPLOAD));
                 } catch (ParseException ex) {
-                    Logger.getLogger(TruyenTranhTuan.class.getName()).log(Level.SEVERE, null, ex);
+                    date = MangaDateTime.NOT_AVAIABLE;
                 }
+                c = new Chapter(-1, aTag.text(), BASED_URL + aTag.attr("href"), manga,
+                        children.get(1).text(),
+                        date);
+                lstChapter.add(c);
+
             }
         }
 

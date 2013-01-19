@@ -64,12 +64,14 @@ public class MangaReader extends ABusPageBasedDefaultChapPageImage { // Done
             return null;
         }
         Element aTag = htmlTag.child(0).select("a").first();
+        String strDate = htmlTag.child(1).text();
+        MangaDateTime date;
         try {
-            MangaDateTime date = new MangaDateTime(DateTimeUtilities.getDate(htmlTag.child(1).text(), DATE_FORMAT_UPLOAD));
-            return new Chapter(-1, aTag.text(), BASED_URL + aTag.attr("href"), m, DEFAULT_TRANS, date);
+            date = new MangaDateTime(DateTimeUtilities.getDate(strDate, DATE_FORMAT_UPLOAD));
         } catch (ParseException ex) {
-            return null;
+            date = new MangaDateTime(strDate);
         }
+        return new Chapter(-1, aTag.text(), BASED_URL + aTag.attr("href"), m, DEFAULT_TRANS, date);
     }
 
     @Override

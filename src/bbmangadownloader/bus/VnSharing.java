@@ -132,16 +132,16 @@ public class VnSharing extends KissManga { // Done
                 continue;
             }
             Element aTag = e.child(0).child(0);
+            MangaDateTime date;
             try {
-                MangaDateTime date = new MangaDateTime(DateTimeUtilities.getDate(e.child(1).text(), DATE_FORMAT_UPLOAD));
-                Chapter c = new Chapter(-1, aTag.text(), BASED_URL + aTag.attr("href"), manga,
-                        translator, date);
-                lstChapter.add(c);
+                date = new MangaDateTime(DateTimeUtilities.getDate(e.child(1).text(), DATE_FORMAT_UPLOAD));
             } catch (ParseException ex) {
-                Logger.getLogger(VnSharing.class.getName()).log(Level.SEVERE, null, ex);
-                // Can not error;
-                continue;
+                date = MangaDateTime.NOT_AVAIABLE;
             }
+            Chapter c = new Chapter(-1, aTag.text(), BASED_URL + aTag.attr("href"), manga,
+                    translator, date);
+            lstChapter.add(c);
+
         }
         return lstChapter;
     }

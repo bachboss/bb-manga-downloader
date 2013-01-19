@@ -65,7 +65,6 @@ public class MangaFox extends ABusPageBasedDefaultChapImage { // Done
                 date = new MangaDateTime(DateTimeUtilities.getDate(
                         strDate, DATE_FORMAT_UPLOAD));
             } catch (ParseException ex) {
-                // TODO: Improve: x Hours ago, fuck !;
                 date = new MangaDateTime(strDate);
             }
 

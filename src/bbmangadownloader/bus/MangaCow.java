@@ -32,7 +32,7 @@ import org.jsoup.select.Elements;
 public class MangaCow extends ABusPageBasedDefaultChapImage {
 
     private static final DateFormat DATE_FORMAT_UPLOAD = new SimpleDateFormat("MMM dd, yyyy");
-    private static final String DEFAULT_TRANS = "NoManga";
+    private static final String DEFAULT_TRANS = "MangaCow";
 
     @Override
     public List<Manga> getAllMangas(Server s) throws IOException, HtmlParsingException {
