@@ -11,6 +11,7 @@ import bbmangadownloader.entity.Image;
 import bbmangadownloader.entity.Manga;
 import bbmangadownloader.entity.Server;
 import bbmangadownloader.entity.data.MangaDateTime;
+import bbmangadownloader.manager.HttpDownloadManager;
 import bbmangadownloader.ult.DateTimeUtilities;
 import bbmangadownloader.ult.HtmlUtilities;
 import bbmangadownloader.ult.TextUtilities;
@@ -35,6 +36,13 @@ public class Manga24h extends ADefaultBus implements IBusOnePage { // Done
     private static final String URL_LIST_MANGA_BASED = "http://manga24h.com/manga/list/page/";
     private static final String DATE_FORMAT_UPLOAD = "yyyy-MM-dd";
     private static final String DEFAULT_TRANS = "Manga24h";
+    //
+    private static final String COOKIE_DEFAULT = "location.href;";
+
+    @Override
+    protected Document getDocument(String url) throws IOException {
+        return HttpDownloadManager.createConnection(url).cookie(COOKIE_DEFAULT).getDocument();
+    }
 
     private void getMangas(Server s, Document doc, List<Manga> listManga) {
         Elements elements = doc.select("div[id=left_content] div[class=post]");
