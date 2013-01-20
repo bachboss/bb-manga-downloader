@@ -7,6 +7,7 @@ package bbmangadownloader;
 import bbmangadownloader.entity.Image;
 import bbmangadownloader.manager.HttpDownloadManager;
 import java.io.IOException;
+import java.io.InputStream;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
@@ -37,29 +38,14 @@ public class TestCode {
         return getImageFromChapter(doc, order);
     }
 
-    public static void main(String[] args) throws Exception {        
-//        String BASED_URL = "http://www.fakku.net";
-//
-//        String script = FileUtilities.loadFromFile(new File("D:\\Temp.js"));
-////        System.out.println(script);
-//        String data = null;
-//
-//        data = script.substring(script.indexOf("function imgpath(x)"), script.length());
-//        data = data.substring(data.indexOf("return \'") + 8, data.length());
-//        data = data.substring(0, data.indexOf('\''));
-//
+    public static void main(String[] args) throws Exception {
+        String url = "http://manga24h.com/944/Toriko.html";
+        Document doc = HttpDownloadManager.createConnection(url).
+                cookie("location.href").getDocument();
+        System.out.println("OK !");
+        
 
 
-//        String[] arrUrl = data.split(",");
-//        int numberOfPage = arrUrl.length;
-
-
-
-//
-//        for (String str : arrUrl) {
-//            System.out.println(str);
-//        }
-//
 //        Document doc = getDocument("http://manga.cxcscans.com/reader/read/bamboo_blade/en/14/102/page/4");
 //        Elements elements = doc.select("script[type=text/javascript]");
 ////        for (Element e : elements) {
