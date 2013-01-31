@@ -22,7 +22,7 @@ import javax.swing.UIManager;
  */
 public class BBMangaDownloader {
 
-    private static final String CURR_VERSION = "1.2.5";
+    private static final String CURR_VERSION = "1.2.7";
     //
     private static final String[] APPLICATION_NAMES = new String[]{"BB Manga Watcher", "BB Manga Downloader"};
     private static final int MODE_WATCHER = 0;
