@@ -9,6 +9,8 @@ import bbmangadownloader.faces.ServerManager;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
@@ -53,7 +55,8 @@ public class HelpDialog extends javax.swing.JDialog {
             "http://manga24h.com/944/Toriko.html",
             "http://blogtruyen.com/Truyen/rosariovampire-season-2",
             "http://www.tenmanga.com/book/Naruto.html",
-            "http://mangacow.com/bungaku_shoujo_to_ue_kawaku_yuurei/"
+            "http://mangacow.com/bungaku_shoujo_to_ue_kawaku_yuurei/",
+            "http://99mh.com/comic/168/"
         };
 //</editor-fold>
 
@@ -65,6 +68,20 @@ public class HelpDialog extends javax.swing.JDialog {
             sU.server = ServerManager.getServerByUrl(link);
             lstServerUrl.add(sU);
         }
+        Collections.sort(lstServerUrl, new Comparator<ServerUrl>() {
+            @Override
+            public int compare(ServerUrl o1, ServerUrl o2) {
+                String s1 = o1.server == null ? null : o1.server.getServerName();
+                String s2 = o2.server == null ? null : o2.server.getServerName();
+                if (s1 == null) {
+                    return -1;
+                }
+                if (s2 == null) {
+                    return 1;
+                }
+                return s1.compareTo(s2);
+            }
+        });
 
         modelServer = new DefaultComboBoxModel<ServerUrl>();
         for (ServerUrl s : lstServerUrl) {

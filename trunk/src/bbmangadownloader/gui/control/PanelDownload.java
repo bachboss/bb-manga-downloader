@@ -143,10 +143,10 @@ public class PanelDownload extends javax.swing.JPanel implements TaskDownloader.
         tblDownload = new javax.swing.JTable();
 
         popDownload.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
-            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
-            }
             public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
                 popDownloadPopupMenuWillBecomeVisible(evt);
+            }
+            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
             }
             public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
             }
@@ -194,7 +194,7 @@ public class PanelDownload extends javax.swing.JPanel implements TaskDownloader.
         });
         popDownload.add(mnDownloadViewInBrowser);
 
-        mnDownloadViewFolder.setText("View Directory");
+        mnDownloadViewFolder.setText("Open Folder");
         mnDownloadViewFolder.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 mnDownloadViewFolderActionPerformed(evt);
