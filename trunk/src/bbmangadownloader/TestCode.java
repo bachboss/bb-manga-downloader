@@ -7,7 +7,6 @@ package bbmangadownloader;
 import bbmangadownloader.entity.Image;
 import bbmangadownloader.manager.HttpDownloadManager;
 import java.io.IOException;
-import java.io.InputStream;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 

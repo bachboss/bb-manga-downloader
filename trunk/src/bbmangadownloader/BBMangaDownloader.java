@@ -2,6 +2,7 @@ package bbmangadownloader;
 
 import bbmangadownloader.database.WatcherMangager;
 import bbmangadownloader.faces.ServerManager;
+import bbmangadownloader.gui.IMangaInterface;
 import bbmangadownloader.gui.MangaDownloadGUI;
 import bbmangadownloader.gui.MangaWatcherGUI;
 import bbmangadownloader.gui.StartUpPannel;
@@ -10,17 +11,19 @@ import bbmangadownloader.ult.OSSupport;
 import bbmangadownloader.ult.ReflectionUtilities;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.io.IOException;
 import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
+import nanohttpd.MyHttpdServer;
 
 /**
  *
  * @author Bach
  */
-public class BBMangaDownloader {
+public final class BBMangaDownloader {
 
     private static final String CURR_VERSION = "1.2.7";
     //
@@ -34,6 +37,12 @@ public class BBMangaDownloader {
 
     public static boolean isModeDownloader() {
         return MODE == MODE_DOWNLOADER;
+    }
+    // 
+    private static JFrame mainFrame;
+    private static MyHttpdServer customServer;
+
+    private BBMangaDownloader() {
     }
 
     public static void main(String[] args) {
@@ -64,13 +73,11 @@ public class BBMangaDownloader {
             //</editor-fold>
             panel.setProgressString("Loading Configuration");
             panel.setProgressValue(20);
-//            Thread.sleep(1000);
             ConfigManager.loadOnStartUp();
 
             //
             panel.setProgressString("Setting Look & Feel");
-            panel.setProgressValue(40);
-//            Thread.sleep(1000);
+            panel.setProgressValue(35);
             //<editor-fold defaultstate="collapsed" desc="Set Look&Feel">
             try {
                 UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -80,8 +87,7 @@ public class BBMangaDownloader {
             //</editor-fold>
 
             panel.setProgressString("Loading Update Service");
-            panel.setProgressValue(60);
-//            Thread.sleep(1000);
+            panel.setProgressValue(55);
             //<editor-fold defaultstate="collapsed" desc="Update Service">
             if (ConfigManager.getCurrentInstance().isCheckUpdateOnStartUp()) {
                 UpdateService.loadOnStartUp();
@@ -89,8 +95,7 @@ public class BBMangaDownloader {
             //</editor-fold>
 
             panel.setProgressString("Loading Data");
-            panel.setProgressValue(80);
-//            Thread.sleep(1000);
+            panel.setProgressValue(75);
             ServerManager.loadServer();
             // Load Watcher...
             if (!isModeDownloader()) {
@@ -98,24 +103,41 @@ public class BBMangaDownloader {
                 WatcherMangager.loadOnStartup();
             }
 
-            panel.setProgressString("Done");
+            panel.setProgressValue(85);
+            panel.setProgressString("Create http listenner");
+            //<editor-fold defaultstate="collapsed" desc="Browser's Extension handler">
+
+            try {
+                initHttpServer();
+            } catch (IOException ex) {
+                System.out.println("Can not create http server. Browser's Extension can not work !");
+                // TODO: Handler code here !
+            }
+            //</editor-fold>
+
             panel.setProgressValue(100);
+            panel.setProgressString("Done");
 //            Thread.sleep(1000);
 
-            // Invoke GUI !            
+            // Invoke GUI !  
             java.awt.EventQueue.invokeLater(new Runnable() {
                 @Override
                 public void run() {
+                    // 1. Main GUI !
                     if (isModeDownloader()) {
-                        new MangaDownloadGUI().setVisible(true);
+                        mainFrame = new MangaDownloadGUI();
                     } else {
-                        new MangaWatcherGUI().setVisible(true);
+                        mainFrame = new MangaWatcherGUI();
                     }
+                    mainFrame.setVisible(true);
                     startUpPanel.setVisible(false);
                     startUpPanel.dispose();
+                    // 2. Tray Icon
+                    loadSystemTray();
+                    // 3. 
+                    customServer.setIm((IMangaInterface) mainFrame);
                 }
             });
-
         } catch (Exception ex) {
             Logger.getLogger(BBMangaDownloader.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -152,5 +174,18 @@ public class BBMangaDownloader {
 
     public static String getCurrentVersion() {
         return CURR_VERSION;
+    }
+
+    public static synchronized void setVisibleMainWindows(boolean flag) {
+        mainFrame.setVisible(flag);
+    }
+
+    private static void loadSystemTray() {
+        bbmangadownloader.gui.SystemTray.loadSystemTray();
+    }
+
+    private static void initHttpServer() throws IOException {
+        customServer = new MyHttpdServer();
+        System.out.println("Created server on port 9090.");
     }
 }
