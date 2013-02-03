@@ -1,0 +1,16 @@
+{
+  "manifest_version": 2,
+
+  "name": "BB Manga Downloader",
+  "description": "BB Manga Downloader Extension.",
+  "version": "1.0",
+
+  "browser_action": {
+    "default_icon": "icon.png",
+    "default_popup": "popup.html"
+  },
+  "permissions": [
+	"tabs", 
+	"http://localhost:9090/"
+  ]
+}
