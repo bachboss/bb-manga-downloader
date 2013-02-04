@@ -56,8 +56,8 @@ public class SystemTray {
             trayIcon.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    trayIcon.displayMessage("Action Event",
-                            "An Action Event Has Been Performed!",
+                    trayIcon.displayMessage(BBMangaDownloader.APPLICATION_NAME,
+                            "Application is running in background",
                             TrayIcon.MessageType.INFO);
                 }
             });

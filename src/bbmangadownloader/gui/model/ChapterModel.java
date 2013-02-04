@@ -52,7 +52,7 @@ public class ChapterModel extends AbstractTableModel implements MyTableModelSort
     public Object getDisplayDataAtColumn(int column, Chapter chapter) {
         switch (column) {
             case (0):
-                return GUIUtilities.getStringFromFloat(chapter.getChapterNumber());
+                return GUIUtilities.getChapterNumber(chapter.getChapterNumber());
             case (1):
                 return chapter.getDisplayName();
             case (2):
