@@ -15,9 +15,10 @@ import java.util.Properties;
 public class MyHttpdServer extends NanoHTTPD {
 
     private IMangaInterface im;
+    public static final int HTTP_PORT = 25560;
 
     public MyHttpdServer() throws IOException {
-        super(9090, null);
+        super(HTTP_PORT, null);
     }
 
     public void setIm(IMangaInterface im) {
@@ -27,8 +28,14 @@ public class MyHttpdServer extends NanoHTTPD {
     @Override
     public Response serve(String uri, String method, Properties header, Properties parms, Properties files) {
         String url = parms.getProperty("url");
-        System.out.println("Received Url = " + url);
-        im.addUrl(url);
-        return new NanoHTTPD.Response(HTTP_OK, MIME_HTML, "OK");
+        if (uri.startsWith("/extension/")) {
+            System.out.println("Received Url = " + url);
+            if (im != null) {
+                im.addUrl(url);
+            }
+            return new NanoHTTPD.Response(HTTP_OK, MIME_HTML, "OK");
+        } else {
+            return new NanoHTTPD.Response(HTTP_NOTFOUND, MIME_HTML, "Unknown Request");
+        }
     }
 }

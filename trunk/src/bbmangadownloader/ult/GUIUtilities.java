@@ -28,6 +28,14 @@ public class GUIUtilities {
         return DECIMAL_FORMATER.format(f);
     }
 
+    public static String getChapterNumber(float f) {
+        if (f < 0) {
+            return "Unknown";
+        } else {
+            return DECIMAL_FORMATER.format(f);
+        }
+    }
+
     public static void showDialog(Component parent, String text) {
         JOptionPane.showMessageDialog(parent, text);
     }

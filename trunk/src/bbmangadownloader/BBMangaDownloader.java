@@ -186,6 +186,6 @@ public final class BBMangaDownloader {
 
     private static void initHttpServer() throws IOException {
         customServer = new MyHttpdServer();
-        System.out.println("Created server on port 9090.");
+        System.out.println("Created server on port " + MyHttpdServer.HTTP_PORT + ".");
     }
 }

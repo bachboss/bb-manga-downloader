@@ -42,7 +42,7 @@ public class TestCode {
         Document doc = HttpDownloadManager.createConnection(url).
                 cookie("location.href").getDocument();
         System.out.println("OK !");
-        
+
 
 
 //        Document doc = getDocument("http://manga.cxcscans.com/reader/read/bamboo_blade/en/14/102/page/4");
