@@ -17,6 +17,7 @@ import java.util.Set;
  */
 public class Chapter extends HtmlDocument implements Comparable<Chapter>, Serializable {
 
+    public static final Chapter EMPTY_CHAPTER = new Chapter(-1, "Empty", null, Manga.EMPTY_MANGA);
     private Manga manga;
     private float chapterNumber;
     private String displayName;

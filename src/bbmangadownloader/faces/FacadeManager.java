@@ -4,11 +4,18 @@
  */
 package bbmangadownloader.faces;
 
+import bbmangadownloader.entity.Chapter;
+import bbmangadownloader.entity.Image;
+import bbmangadownloader.entity.Manga;
+import bbmangadownloader.entity.Server;
+import bbmangadownloader.faces.IFacadeMangaServer.UrlType;
 import bbmangadownloader.faces.implement.*;
 import bbmangadownloader.manager.ConfigManager;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -81,4 +88,50 @@ public class FacadeManager {
         }
         return null;
     }
+    public static final IFacadeMangaServer FACADE_EMPTY = new IFacadeMangaServer() {
+        @Override
+        public List<Manga> getAllMangas(Server server) throws Exception {
+            return Collections.emptyList();
+        }
+
+        @Override
+        public List<Chapter> getAllChapters(Manga manga) throws Exception {
+            return Collections.emptyList();
+        }
+
+        @Override
+        public List<Image> getAllImages(Chapter chapter) throws Exception {
+            return Collections.emptyList();
+        }
+
+        @Override
+        public IFacadeMangaServer clone() {
+            return this;
+        }
+
+        @Override
+        public SupportType getSupportType() {
+            return SupportType.Support;
+        }
+
+        @Override
+        public String getServerName() {
+            return "Empty";
+        }
+
+        @Override
+        public Manga getManga(String mangaUrl) {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+        @Override
+        public Chapter getChapter(String chapterUrl, boolean isGetMangaInformation) {
+            return Chapter.EMPTY_CHAPTER;
+        }
+
+        @Override
+        public UrlType getUrlType(String url) {
+            return UrlType.Unknow;
+        }
+    };
 }

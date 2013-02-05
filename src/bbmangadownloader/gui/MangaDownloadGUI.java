@@ -844,8 +844,21 @@ public class MangaDownloadGUI extends javax.swing.JFrame implements IHelpListene
     @Override
     public void addUrl(String url) {
         Server s = ServerManager.getServerByUrl(url);
-        Manga m = new Manga(s, "Quick Download", url);
-        Chapter c = new Chapter(-1, Long.toString(System.currentTimeMillis()), url, m);
-        addDownloadChapter(c);
+        IFacadeMangaServer iMangaServer = s.getMangaServer();
+        switch (iMangaServer.getUrlType(url)) {
+            case Chapter: {
+                Chapter c = iMangaServer.getChapter(url, true);
+                addDownloadChapter(c);
+                break;
+            }
+            case Manga: {
+                System.out.println("Not Supported !");
+                break;
+            }
+            default: {
+                System.out.println("Unknow !");
+                break;
+            }
+        }
     }
 }

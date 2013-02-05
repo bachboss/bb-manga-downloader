@@ -9,6 +9,7 @@ import bbmangadownloader.entity.Chapter;
 import bbmangadownloader.entity.Image;
 import bbmangadownloader.entity.Manga;
 import bbmangadownloader.entity.Server;
+import bbmangadownloader.faces.IFacadeMangaServer;
 import java.io.IOException;
 import java.util.List;
 
@@ -30,4 +31,10 @@ public interface IBus {
     public List<Chapter> getAllChapters(Manga m) throws IOException, HtmlParsingException;
 
     public List<Image> getAllImages(Chapter c) throws IOException, HtmlParsingException;
+
+    public Manga getManga(String mangaUrl);
+
+    public Chapter getChapter(String chapterUrl, boolean isGetMangaInformation);
+
+    public IFacadeMangaServer.UrlType getUrlType(String url);
 }
