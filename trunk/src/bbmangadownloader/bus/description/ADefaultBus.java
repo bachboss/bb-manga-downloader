@@ -8,6 +8,7 @@ import bbmangadownloader.entity.Chapter;
 import bbmangadownloader.entity.Manga;
 import bbmangadownloader.entity.Server;
 import bbmangadownloader.entity.data.MangaDateTime;
+import bbmangadownloader.faces.IFacadeMangaServer.UrlType;
 import bbmangadownloader.faces.ServerManager;
 import bbmangadownloader.manager.HttpDownloadManager;
 import java.io.IOException;
@@ -58,13 +59,22 @@ public abstract class ADefaultBus implements IBus {
 
     protected String getMangaName(Document chapterDocument) {
         throw new UnsupportedOperationException("Not supported yet.");
+    }
 
+    protected String getMangaUrl(Document chapterDocument) {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     private Manga getMangaInformation(Document chapterDocument, String chapterUrl) {
         Server s = ServerManager.getServerByUrl(chapterUrl);
-        Manga m = new Manga(s, getMangaName(chapterDocument), null);
+        Manga m = new Manga(s, getMangaName(chapterDocument), getMangaUrl(chapterDocument));
         return m;
+    }
+
+    @Override
+    public UrlType getUrlType(String url) {
+        // TODO: Later;
+        return UrlType.Chapter;
     }
 
     @Override

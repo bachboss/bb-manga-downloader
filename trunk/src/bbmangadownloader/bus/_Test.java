@@ -10,6 +10,7 @@ import bbmangadownloader.entity.Chapter;
 import bbmangadownloader.entity.Image;
 import bbmangadownloader.entity.Manga;
 import bbmangadownloader.entity.Server;
+import bbmangadownloader.faces.IFacadeMangaServer.UrlType;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,5 +47,20 @@ public class _Test implements IBus {
             }
         }
         return returnValue;
+    }
+
+    @Override
+    public Manga getManga(String mangaUrl) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public Chapter getChapter(String chapterUrl, boolean isGetMangaInformation) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public UrlType getUrlType(String url) {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

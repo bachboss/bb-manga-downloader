@@ -142,8 +142,21 @@ public class Batoto extends ABusPageBasedDefaultChapPageImage { // Done
     }
 
     @Override
+    protected String getMangaUrl(Document chapterDocument) {
+        return chapterDocument.select(
+                "div#ipbwrapper div#content div.moderation_bar ul li:eq(0) a")
+                .first().attr("href");
+    }
+
+    @Override
     public UrlType getUrlType(String url) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        if (url.indexOf("batoto.net/comic/") != -1) {
+            return UrlType.Manga;
+        } else if (url.indexOf("batoto.net/read/") != -1) {
+            return UrlType.Chapter;
+        } else {
+            return UrlType.Unknow;
+        }
     }
 
     private class CallableImpl implements Callable<Boolean> {
