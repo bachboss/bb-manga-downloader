@@ -6,7 +6,7 @@ function doLog(e) {
 			
 function sendServiceRequest(url) {
     var jax = new XMLHttpRequest();
-    jax.open('POST','http://localhost:25560/extension/');
+    jax.open('POST','http://localhost:25560/extension/',true);
     jax.setRequestHeader('Content-type','application/x-www-form-urlencoded');
     jax.send('url='+url);
 }
