@@ -20,6 +20,7 @@ import java.util.logging.Logger;
  */
 public final class Manga extends HtmlDocument implements Serializable {
 
+    public static final Manga EMPTY_MANGA = new Manga(Server.EMPTY_SERVER, "Empty", null);
     private int id = -1;
     private String mangaName;
     private Server server;

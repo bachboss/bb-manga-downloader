@@ -7,6 +7,7 @@ package bbmangadownloader.bus;
 import bbmangadownloader.bus.description.ABusPageBasedDefaultChapPageImage;
 import bbmangadownloader.entity.*;
 import bbmangadownloader.entity.data.MangaDateTime;
+import bbmangadownloader.faces.IFacadeMangaServer.UrlType;
 import bbmangadownloader.ult.DateTimeUtilities;
 import bbmangadownloader.ult.MultitaskJob;
 import bbmangadownloader.ult.NumberUtilities;
@@ -115,6 +116,34 @@ public class Batoto extends ABusPageBasedDefaultChapPageImage { // Done
     @Override
     protected Image getImageFromTag(Element imgNode, Chapter c, Page p) {
         return new Image(p.getPageOrder(), imgNode.attr("src"), c);
+    }
+
+    @Override
+    protected String getChapterDisplayName(Document chapterDocument) {
+        return chapterDocument.select("div#ipbwrapper div#content div.moderation_bar ul li select option[selected]").
+                first().text();
+    }
+
+    @Override
+    protected String getTrans(Document chapterDocument) {
+        // TODO: Later;
+        return "Later !";
+    }
+
+    @Override
+    protected MangaDateTime getUploadDate(Document chapterDocument) {
+        return MangaDateTime.NOT_AVAIABLE;
+    }
+
+    @Override
+    protected String getMangaName(Document chapterDocument) {
+        return chapterDocument.select(
+                "div#ipbwrapper div#content div.moderation_bar ul li:eq(0) a").text();
+    }
+
+    @Override
+    public UrlType getUrlType(String url) {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     private class CallableImpl implements Callable<Boolean> {

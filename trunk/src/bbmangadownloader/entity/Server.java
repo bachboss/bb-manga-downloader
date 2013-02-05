@@ -4,6 +4,7 @@
  */
 package bbmangadownloader.entity;
 
+import bbmangadownloader.faces.FacadeManager;
 import bbmangadownloader.faces.IFacadeMangaServer;
 import java.io.Serializable;
 
@@ -13,6 +14,7 @@ import java.io.Serializable;
  */
 public class Server extends HtmlDocument implements Serializable {
 
+    public static final Server EMPTY_SERVER = new Server(FacadeManager.FACADE_EMPTY);
     private IFacadeMangaServer mangaServer;
     private String serverName;
 
