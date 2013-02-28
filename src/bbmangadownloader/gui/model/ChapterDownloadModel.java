@@ -15,7 +15,8 @@ import javax.swing.table.AbstractTableModel;
  *
  * @author Bach
  */
-public class ChapterDownloadModel extends AbstractTableModel implements MyTableModelSortable<DownloadTask> {
+public class ChapterDownloadModel extends AbstractTableModel
+        implements MyTableModelSortable<DownloadTask> {
 
     private static final String[] COLUMNS = {"Chapter", "Display Name", "Status", "URL"};
     private List<DownloadTask> listDownload;
@@ -112,10 +113,11 @@ public class ChapterDownloadModel extends AbstractTableModel implements MyTableM
         removeTaskAt(index);
     }
 
-    public void removeTaskAt(int index) {
-        this.listDownload.remove(index);
+    public DownloadTask removeTaskAt(int index) {
+        DownloadTask task = this.listDownload.remove(index);
         this.fireTableRowsDeleted(index, index);
 //        this.fireTableDataChanged();
+        return task;
     }
 
     public void clear() {

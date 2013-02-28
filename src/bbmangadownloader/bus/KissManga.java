@@ -106,7 +106,8 @@ public class KissManga extends ADefaultBus implements IBusOnePage {  // Done
             }
             return lstReturn;
         } catch (NumberFormatException ex) {
-            System.out.println("Can not get number page");
+            Logger.getLogger(KissManga.class.getName()).log(Level.SEVERE,
+                    "Can not get number page - can not happend?", ex);
             return null;
         }
     }

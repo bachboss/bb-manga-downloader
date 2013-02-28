@@ -115,7 +115,6 @@ public class Cococomic extends ADefaultBus implements IBusOnePage {  // Done
                 String[] arrImgLink = html.split("\\|");
                 for (int i = 0; i < arrImgLink.length; i++) {
                     lstImage.add(new Image(i, baseImgUrl + arrImgLink[i], chapter, chapter.getUrl()));
-                    System.out.println(baseImgUrl + arrImgLink[i]);
                 }
 
                 break;

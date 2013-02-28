@@ -53,6 +53,7 @@ public class TaskDownloader {
         try {
             switch (task.getStatusEnum()) {
                 case No:
+                case Queue:
                 case Error:
                 case Checking:
                     if (isRunning()) {
@@ -84,6 +85,13 @@ public class TaskDownloader {
         thread = new Thread(new Runnable() {
             @Override
             public void run() {
+                if (bbmangadownloader.BBMangaDownloader.TEST) {
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(TaskDownloader.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
                 doResume();
             }
         });
@@ -179,6 +187,7 @@ public class TaskDownloader {
     private void done() {
         task.setStatus(DownloadTaskStatus.Done);
         listener.updateRecord(task);
+        listener.onTaskDownloadFinish(task);
     }
 
     private void downloadImages(final DownloadTask task, Collection<Image> lstImg, File imageFolder) throws InterruptedException {
@@ -230,5 +239,7 @@ public class TaskDownloader {
     public static interface ITaskDownloaderListener {
 
         public void updateRecord(DownloadTask task);
+
+        public void onTaskDownloadFinish(DownloadTask task);
     }
 }

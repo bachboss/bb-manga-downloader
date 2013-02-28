@@ -49,7 +49,6 @@ public class ComicVN extends ADefaultBus implements IBusOnePage {
             Element e = iChapter.next();
             long date = Long.valueOf(e.select("span[class=up_date chap_moi_time]").attr("rel"));
             date *= 1000;
-            System.out.println(date);
             Element eAtag = e.select("td[class=chap_title] a").first();
             Chapter c = new Chapter(-1, eAtag.text(), BASED_URL + eAtag.attr("href"), manga, DEFAULT_TRANS,
                     new MangaDateTime(new Date(date)));

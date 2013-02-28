@@ -7,6 +7,7 @@ package bbmangadownloader.bus.model.data;
 import bbmangadownloader.entity.Chapter;
 import bbmangadownloader.gui.bus.TaskDownloader;
 import java.io.File;
+import javax.management.Query;
 
 /**
  *
@@ -46,7 +47,8 @@ public class DownloadTask {
     }
 
     public synchronized String getStatus() {
-        if (status == DownloadTaskStatus.No) {
+        if (status == DownloadTaskStatus.No
+                || status == DownloadTaskStatus.Queue) {
             return status.getStatus();
         }
         String s;
@@ -101,7 +103,7 @@ public class DownloadTask {
     public static enum DownloadTaskStatus {
 
         No(0), Checking(1), Parsing(2), Downloading(3), Cleaning(4),
-        Done(5), Error(6), Stopped(7);
+        Done(5), Error(6), Stopped(7), Queue(8);
 
         private DownloadTaskStatus(int id) {
             this.id = id;
@@ -118,7 +120,7 @@ public class DownloadTask {
         }
         private static final String[] STATUS_ALL = new String[]{
             "", "Checking", "Parsing", "Downloading", "Cleaning",
-            "Done", "Error", "Stopped"
+            "Done", "Error", "Stopped", "Queueu"
         };
     }
 }
