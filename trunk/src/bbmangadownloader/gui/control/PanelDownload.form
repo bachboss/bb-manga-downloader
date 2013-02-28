@@ -11,12 +11,20 @@
         <Property name="useNullLayout" type="boolean" value="true"/>
       </Layout>
       <SubComponents>
-        <MenuItem class="javax.swing.JMenuItem" name="mnDownloadStart">
+        <MenuItem class="javax.swing.JMenuItem" name="mnDownloadStartImmediately">
           <Properties>
-            <Property name="label" type="java.lang.String" value="Start"/>
+            <Property name="text" type="java.lang.String" value="Start (Immediately)"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnDownloadStartActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnDownloadStartImmediatelyActionPerformed"/>
+          </Events>
+        </MenuItem>
+        <MenuItem class="javax.swing.JMenuItem" name="mnDownloadStartQueue">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Start (Queue)"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnDownloadStartQueueActionPerformed"/>
           </Events>
         </MenuItem>
         <MenuItem class="javax.swing.JMenuItem" name="mnDownloadResume">

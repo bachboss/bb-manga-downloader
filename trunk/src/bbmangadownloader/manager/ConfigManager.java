@@ -159,7 +159,7 @@ public class ConfigManager {
     }
 
     public void setProxyPort(int port) {
-        setConfig(Config.Zip, port);
+        setConfig(Config.ProxyPort, port);
     }
 
     public String getOutputFolder() {
@@ -240,6 +240,14 @@ public class ConfigManager {
         return getConfig(Config.UpdateOnStartUp, Boolean.FALSE);
     }
 
+    public int getMaxiumDownloadInQueue() {
+        return getConfig(Config.MaxiumDownloadInQueue, Integer.MAX_VALUE);
+    }
+
+    public void setMaxiumDownloadInQueue(int max) {
+        setConfig(Config.MaxiumDownloadInQueue, max);
+    }
+
     public static class ConfigNotFoundException extends Exception {
 
         public ConfigNotFoundException(String message) {
@@ -259,7 +267,8 @@ public class ConfigManager {
         Zip("zip", "no"),
         DeleteAfterZip("deleteAfterZip", "no"),
         GenerateHtml("generateHtml", "no"),
-        UpdateOnStartUp("updateOnStartup", "yes");
+        UpdateOnStartUp("updateOnStartup", "yes"),
+        MaxiumDownloadInQueue("maxiumDownloadInQueue", "5");
 
         private Config(String configName, String defaultValue) {
             this.configName = configName;

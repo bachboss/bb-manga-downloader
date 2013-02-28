@@ -74,7 +74,6 @@ public class BlogTruyen extends ADefaultBus implements IBusOnePage {
                 }
             });
         }
-//        System.out.println("Number Of Page = " + numberOfPage);
         for (int i = 2; i <= numberOfPage; i++) {
             final String u = POST_FORM_STR + i;
             listTask.add(new Callable<Object>() {
@@ -90,7 +89,6 @@ public class BlogTruyen extends ADefaultBus implements IBusOnePage {
                 }
             });
         }
-        System.out.println(listTask.size());
         MultitaskJob.doTask(listTask);
         return returnValue;
     }

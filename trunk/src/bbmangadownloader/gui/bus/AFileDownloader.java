@@ -60,6 +60,12 @@ public abstract class AFileDownloader implements Runnable, Callable<Boolean>, IF
 
     @Override
     public Boolean call() throws Exception {
+        if (bbmangadownloader.BBMangaDownloader.TEST
+                && connection.getUrl().contains("localhost:80")) {
+            Thread.sleep(2000);
+            finishFileDownload();
+            return true;
+        }
         //        System.out.println("\tDownloading: " + url + " -> " + fileOutput.getAbsolutePath());
 //        GUIUtil.showLog("\tDownloading: " + GUIUtil.compressPath(url.toString())
 //                + " -> " + GUIUtil.compressPath(fileOutput.getAbsolutePath()));
@@ -81,7 +87,6 @@ public abstract class AFileDownloader implements Runnable, Callable<Boolean>, IF
         int caughtFileNotFoundExTime = 0;
 
         int counterToPreventDeadLock = 0;
-
         if (fileOutput.canWrite()) {
             try {
                 boolean isTryAgain;

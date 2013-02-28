@@ -25,9 +25,10 @@ import nanohttpd.MyHttpdServer;
  */
 public final class BBMangaDownloader {
 
-    private static final String CURR_VERSION = "1.2.7";
+    private static final String CURR_VERSION = "1.2.8";
     //
-    private static final String[] APPLICATION_NAMES = new String[]{"BB Manga Watcher", "BB Manga Downloader"};
+    private static final String[] APPLICATION_NAMES =
+            new String[]{"BB Manga Watcher", "BB Manga Downloader"};
     private static final int MODE_WATCHER = 0;
     private static final int MODE_DOWNLOADER = 1;
     //
@@ -46,6 +47,12 @@ public final class BBMangaDownloader {
     }
 
     public static void main(String[] args) {
+//        Logger.getLogger("").addHandler(new LogHanddler());
+        if (TEST) {
+            Logger.getLogger(BBMangaDownloader.class.getName()).
+                    log(Level.WARNING,
+                    "DEVELOPING MODE - TURN OFF BEFORE RELEASING !", (Object) null);
+        }
         if (OSSupport.getOS() == OSSupport.OS.MAC_OS) {
             configForMacOS();
         }
@@ -106,13 +113,15 @@ public final class BBMangaDownloader {
             panel.setProgressValue(85);
             panel.setProgressString("Create http listenner");
             //<editor-fold defaultstate="collapsed" desc="Browser's Extension handler">
+//              Un-comment line ~147
+//            try {
+//                initHttpServer();
 
-            try {
-                initHttpServer();
-            } catch (IOException ex) {
-                System.out.println("Can not create http server. Browser's Extension can not work !");
-                // TODO: Handler code here !
-            }
+//            } catch (IOException ex) {
+//                Logger.getLogger(BBMangaDownloader.class.getName()).log(Level.SEVERE,
+//                        "Can not create http server. Browser's Extension can not work !",
+//                        ex);
+//            }
             //</editor-fold>
 
             panel.setProgressValue(100);
@@ -133,9 +142,9 @@ public final class BBMangaDownloader {
                     startUpPanel.setVisible(false);
                     startUpPanel.dispose();
                     // 2. Tray Icon
-                    loadSystemTray();
+//                    loadSystemTray();
                     // 3. 
-                    customServer.setIm((IMangaInterface) mainFrame);
+//                    customServer.setIm((IMangaInterface) mainFrame);
                 }
             });
         } catch (Exception ex) {
@@ -166,9 +175,11 @@ public final class BBMangaDownloader {
                     ReflectionUtilities.getMethod(
                     classApplication, "setDockIconImage", java.awt.Image.class),
                     image);
-            System.out.println("Done !");
+            Logger.getLogger(BBMangaDownloader.class.getName()).log(Level.CONFIG,
+                    "Config for Mac OS Done", (Object) null);
         } catch (Exception ex) {
             Logger.getLogger(BBMangaDownloader.class.getName()).log(Level.SEVERE, null, ex);
+
         }
     }
 
@@ -186,6 +197,8 @@ public final class BBMangaDownloader {
 
     private static void initHttpServer() throws IOException {
         customServer = new MyHttpdServer();
-        System.out.println("Created server on port " + MyHttpdServer.HTTP_PORT + ".");
+        Logger.getLogger(BBMangaDownloader.class.getName()).
+                log(Level.FINE,
+                "Created server on port " + MyHttpdServer.HTTP_PORT, (Object) null);
     }
 }
