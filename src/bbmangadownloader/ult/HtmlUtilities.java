@@ -16,7 +16,6 @@ import org.apache.commons.codec.net.URLCodec;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.nodes.Node;
 
 /**
  *
