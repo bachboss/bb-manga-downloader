@@ -50,7 +50,7 @@ public abstract class AFileDownloader implements Runnable, Callable<Boolean>, IF
 
     private void saveFile(MyConnection connection, File fileOutput, int connectTimeOut, int readTimeOut) throws IOException {
         //  Option 1: Use Stream                
-        FileUtilities.saveStreamToFile(connection.getInputStream(), fileOutput);
+        FileUtilities.saveStreamToFile(connection.getInputStreamOpen(), fileOutput);
         // Option 2: Use NIO            
 //        ReadableByteChannel rbc = Channels.newChannel(fileUrl.openConnection().getInputStream());
 //        MyUtilities.saveChannelToFile(rbc, fileOutput);

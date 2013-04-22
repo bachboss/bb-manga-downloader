@@ -69,7 +69,7 @@ public class Batoto extends ABusPageBasedDefaultChapPageImage { // Done
 
     @Override
     protected Elements getChapterQuery(Element htmlTag) {
-        return htmlTag.select("table[class=ipb_table chapters_list] tr[class*=row]");
+        return htmlTag.select("html body table.chapters_list tr.row");
     }
 
     @Override
@@ -94,7 +94,6 @@ public class Batoto extends ABusPageBasedDefaultChapPageImage { // Done
             } catch (ParseException ex) {
                 uploadDate = new MangaDateTime(dateText);
             }
-
             return new Chapter(
                     -1F,
                     aTag.text(),

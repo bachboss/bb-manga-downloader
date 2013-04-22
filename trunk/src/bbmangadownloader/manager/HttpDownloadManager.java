@@ -6,6 +6,7 @@ package bbmangadownloader.manager;
 
 import bbmangadownloader.ult.ExceptionUtilities;
 import bbmangadownloader.ult.HtmlUtilities;
+import bbmangadownloader.ult.HttpUtilities;
 import java.io.DataOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -13,10 +14,9 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.*;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.zip.GZIPInputStream;
 import org.apache.commons.codec.EncoderException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -95,38 +95,6 @@ public class HttpDownloadManager {
     }
 //</editor-fold>
 
-    public static String getStringFromPostForms(Map<String, String> postForm) throws UnsupportedEncodingException {
-        if (postForm != null && !postForm.isEmpty()) {
-            Set<Entry<String, String>> data = postForm.entrySet();
-            StringBuilder content = new StringBuilder();
-            boolean isFirst = true;
-            for (Entry<String, String> entry : data) {
-                if (isFirst) {
-                    isFirst = false;
-                } else {
-                    content.append('&');
-                }
-                content.append(entry.getKey()).append('=').
-                        append(URLEncoder.encode(entry.getValue(), "UTF-8"));
-            }
-            return content.toString();
-        } else {
-            return "";
-        }
-    }
-
-    public static String getStringFromCookies(Map<String, String> cookies) {
-        if (cookies != null && !cookies.isEmpty()) {
-            StringBuilder sb = new StringBuilder();
-            for (Map.Entry<String, String> item : cookies.entrySet()) {
-                sb.append(item.getKey()).append("=").append(item.getValue()).append(";");
-            }
-            return sb.toString();
-        } else {
-            return "";
-        }
-    }
-
     /**
      * Lowest level of HTTP Connection Others are wrapper
      */
@@ -179,15 +147,14 @@ public class HttpDownloadManager {
 
         uc.setReadTimeout(readTimeOut);
         uc.setConnectTimeout(connectTimeOut);
-
         return uc;
     }
 
     private static Document getDocumentFromUrl(MyConnection connection, int connectTimeOut, int readTimeOut)
             throws IOException {
-//        System.out.println("Is Use Proxy (?): " + isUseProxy);                
         HttpURLConnection uc = getHttpURLConnection(connection, connectTimeOut, readTimeOut);
-        Document doc = Jsoup.parse(uc.getInputStream(),
+        connection.setHttpAttribute(uc);
+        Document doc = Jsoup.parse(connection.getInputStream(),
                 connection.getCharSet(),
                 connection.getURL().toExternalForm());
         return doc;
@@ -202,13 +169,10 @@ public class HttpDownloadManager {
             readTimeOut = c.getReadTimeOut();
         }
         HttpURLConnection uc = getHttpURLConnection(connection, connectTimeOut, readTimeOut);
-        return uc.getInputStream();
+        connection.setHttpAttribute(uc);
+        return connection.getInputStream();
     }
 
-    @Deprecated
-    /**
-     * Use HttpDownloadManager.getInputStreamFromUrl instead
-     */
     public static InputStream getInputStreamFromUrl(String url) throws IOException {
         MyConnection c = new MyConnection(url);
         return getInputStreamFromUrl(c);
@@ -236,6 +200,7 @@ public class HttpDownloadManager {
             do {
                 try {
                     System.out.println("\tDownloading HTML from: " + fileUrl);
+                    connection.URL = fileUrl;
                     // Download Here !
                     Document doc = getDocumentFromUrl(connection, connectTimeOut, readTimeOut);
                     return doc;
@@ -307,6 +272,7 @@ public class HttpDownloadManager {
         private String userAgent;
         private String referer;
         private URL URL;
+        private boolean gzip = false;
 
         private MyConnection(String url) throws MalformedURLException {
             url(url);
@@ -352,7 +318,7 @@ public class HttpDownloadManager {
         }
 
         public MyConnection cookie(Map<String, String> cookie) {
-            String s = getStringFromCookies(cookie);
+            String s = HttpUtilities.getStringFromCookies(cookie);
             if (s == null || s.isEmpty()) {
                 this.cookie = null;
             } else {
@@ -371,7 +337,7 @@ public class HttpDownloadManager {
         }
 
         public MyConnection post(Map<String, String> post) throws UnsupportedEncodingException {
-            String s = getStringFromPostForms(post);
+            String s = HttpUtilities.getStringFromPostForms(post);
             if (s == null || s.isEmpty()) {
                 this.post = null;
             } else {
@@ -397,12 +363,40 @@ public class HttpDownloadManager {
             return this;
         }
 
+        public boolean isGzip() {
+            return gzip;
+        }
+
         public Document getDocument() throws IOException {
             return getDocumentFromConnection(this);
         }
 
-        public InputStream getInputStream() throws IOException {
+        public InputStream getInputStreamOpen() throws IOException {
             return getInputStreamFromUrl(this);
+        }
+
+        private InputStream getInputStream() throws IOException {
+            if (connection == null) {
+                return null;
+            }
+            if (gzip) {
+                return new GZIPInputStream(connection.getInputStream());
+            } else {
+                return connection.getInputStream();
+            }
+        }
+        private HttpURLConnection connection;
+
+        private void setHttpAttribute(HttpURLConnection connection) {
+            this.connection = connection;
+            // G-zip
+            if (connection.getHeaderField("Content-Encoding") != null
+                    && connection.getHeaderField("Content-Encoding").equals("gzip")) {
+                this.gzip = true;
+            } else {
+                gzip = false;
+            }
+            //
         }
     }
 }
