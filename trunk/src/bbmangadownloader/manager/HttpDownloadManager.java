@@ -15,7 +15,6 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.zip.GZIPInputStream;
-import org.apache.commons.codec.EncoderException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
@@ -154,8 +153,9 @@ public class HttpDownloadManager {
             if (tryTime > DownloadConfig.DEFAULT_ATTEMP) {
                 break;
             }
-
-            System.out.println("Download from: " + downloadURL + "\tAttemp = " + tryTime);
+            if (bbmangadownloader.BBMangaDownloader.TEST) {
+                System.out.println("Download from: " + downloadURL + "\tAttemp = " + tryTime);
+            }
             try {
                 HttpURLConnection urlConnection = getHttpURLConnection(downloadURL, connection, connectTimeOut, readTimeOut);
                 urlConnection.connect();
