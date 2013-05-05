@@ -26,11 +26,6 @@ public abstract class AFileDownloader implements Runnable, Callable<Boolean>, IF
     /**
      * This class is abstract class, used to download 1 file at a time
      */
-    private static int DEFAULT_STEP = 10000;
-    private static int DEFAULT_CONNECT_TIMEOUT = 10000;
-    private static int DEFAULT_READ_TIMEOUT = 10000;
-    private static int DEFAULT_ATTEMP = 3;
-    private static int DEFAULT_DEADLOCK = 10;
     //
     private MyConnection connection;
     private File fileOutput;
@@ -48,7 +43,7 @@ public abstract class AFileDownloader implements Runnable, Callable<Boolean>, IF
         this.fileOutput = fileOutput;
     }
 
-    private void saveFile(MyConnection connection, File fileOutput, int connectTimeOut, int readTimeOut) throws IOException {
+    private void saveFile(MyConnection connection, File fileOutput) throws Exception {
         //  Option 1: Use Stream                
         FileUtilities.saveStreamToFile(connection.getInputStreamOpen(), fileOutput);
         // Option 2: Use NIO            
@@ -73,82 +68,22 @@ public abstract class AFileDownloader implements Runnable, Callable<Boolean>, IF
         Exception lastEx = null;
         if (!fileOutput.exists()) {
             try {
-                System.out.println("\t\t\tCreating New File: " + fileOutput);
                 fileOutput.createNewFile();
             } catch (IOException ex) {
                 Logger.getLogger(AFileDownloader.class.getName()).log(Level.SEVERE, null, ex);
+                System.out.println("Can not create file: " + fileOutput.getAbsolutePath());
             }
         }
         // If only can write to file += file existed!
-        int connectTimeOut = DEFAULT_CONNECT_TIMEOUT;
-        int readTimeOut = DEFAULT_READ_TIMEOUT;
-        int timOutTryTime = 0;
-        boolean useEncodeString = true;
-        int caughtFileNotFoundExTime = 0;
 
-        int counterToPreventDeadLock = 0;
         if (fileOutput.canWrite()) {
             try {
-                boolean isTryAgain;
-                do {
-                    try {
-                        System.out.println("\tDownloading from " + connection.getUrl());
-                        saveFile(connection, fileOutput, connectTimeOut, readTimeOut);
-                        isTryAgain = false;
-                        System.out.println("\t\tDownloaded from " + connection.getUrl());
-                        finishFileDownload();
-                        return Boolean.TRUE;
-                    } catch (SocketTimeoutException ex) {
-                        //<editor-fold>
-                        lastEx = ex;
-                        timOutTryTime++;
-                        connectTimeOut += DEFAULT_STEP;
-                        readTimeOut += DEFAULT_STEP;
-                        isTryAgain = true;
-                        System.out.println("\tSocketTimeOutExcption, re-try (" + timOutTryTime + ") with timeout = " + connectTimeOut);
-                        //</editor-fold>
-                    } catch (FileNotFoundException ex) {
-                        lastEx = ex;
-                        if (caughtFileNotFoundExTime < 2) {
-                            caughtFileNotFoundExTime++;
-                            isTryAgain = true;
-                            connection.URL(HtmlUtilities.encodeUrl(connection.getURL(), useEncodeString));
-                            useEncodeString = !useEncodeString;
-                            System.out.println("\tFileNotFoundException: " + ex.getMessage());
-                        } else {
-                            break;
-                        }
-                    } catch (IOException ex) {
-                        lastEx = ex;
-                        isTryAgain = true;
-                        System.out.println("\tIOException: " + ex.getMessage());
-                        int httpError = ExceptionUtilities.getHttpErrorCode(ex);
-                        if (httpError != -1) {
-                            System.out.println("\t\tHTTP Error: " + httpError);
-                            if (httpError == 400) {
-                                if (caughtFileNotFoundExTime < 2) {
-                                    caughtFileNotFoundExTime++;
-                                    isTryAgain = true;
-                                    connection.URL(HtmlUtilities.encodeUrl(connection.getURL(), useEncodeString));
-                                    useEncodeString = !useEncodeString;
-                                    System.out.println("\tHTTP Error = 404: " + ex.getMessage());
-                                } else {
-                                    break;
-                                }
-                            } else if (httpError == 403) {
-                                isTryAgain = false;
-                                System.out.println("\t\t\tStop this, due to HTTP Error = 403");
-//                            Logger.getLogger(AFileDownloader.class.getName()).log(Level.SEVERE, null, ex);
-                            }
-                        } else {
-                            // is not HTTP Error (Code >= 400, != 410,400)
-                            Logger.getLogger(AFileDownloader.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    }
-                } while (isTryAgain && timOutTryTime < DEFAULT_ATTEMP && (++counterToPreventDeadLock) < DEFAULT_DEADLOCK);
+                saveFile(connection, fileOutput);
+                System.out.println("\t\tDownloaded from " + connection.getUrl());
+                finishFileDownload();
+                return Boolean.TRUE;
             } catch (Exception ex) {
-                System.out.println("\tCan Process this type of error !");
-                Logger.getLogger(AFileDownloader.class.getName()).log(Level.SEVERE, null, ex);
+                lastEx = ex;
             }
         }
 

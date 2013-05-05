@@ -30,6 +30,6 @@ public class FacadeMangaCow extends AFacadeDefault {
 
     @Override
     public String getServerName() {
-        return "MangaCow";
+        return "Mngcow";
     }
 }

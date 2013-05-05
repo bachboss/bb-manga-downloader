@@ -10,6 +10,7 @@ import bbmangadownloader.entity.Chapter;
 import bbmangadownloader.entity.Image;
 import bbmangadownloader.entity.Manga;
 import bbmangadownloader.entity.Server;
+import bbmangadownloader.entity.data.MangaDateTime;
 import com.google.code.regexp.NamedMatcher;
 import com.google.code.regexp.NamedPattern;
 import java.io.IOException;
@@ -26,8 +27,10 @@ import org.jsoup.select.Elements;
  */
 public class VietBoom extends ADefaultBus implements IBusOnePage {
 
-    public static final String BASED_URL = "http://truyen.vietboom.com";
-    public static final String BASED_IMG_URL = "http://truyen.vietboom.com/Resources/Images/Pages/";
+    private static final String BASED_URL = "http://truyen.vietboom.com";
+    private static final String BASED_IMG_URL = "http://truyen.vietboom.com/Resources/Images/Pages/";
+    //
+    private static final String DEFAULT_TRANS = "VietBoom";
 
     @Override
     public List<Manga> getAllMangas(Server s) throws IOException {
@@ -56,7 +59,8 @@ public class VietBoom extends ADefaultBus implements IBusOnePage {
             } else {
                 for (Iterator<Element> it = xmlNode.iterator(); it.hasNext();) {
                     Element e = it.next();
-                    Chapter c = new Chapter(-1, e.text(), BASED_URL + e.attr("href"), manga);
+                    Chapter c = new Chapter(-1, e.text(), BASED_URL + e.attr("href"), manga,
+                            DEFAULT_TRANS, MangaDateTime.NOT_SUPPORT);
                     lstChapter.add(c);
 
                 }

@@ -78,10 +78,8 @@ public class Cococomic extends ADefaultBus implements IBusOnePage {  // Done
 
     protected Chapter getChapterFromTag(Element htmlTag, Manga m) {
         String url = htmlTag.attr("href");
-        MangaDateTime date;
-        date = MangaDateTime.NOT_SUPPORT;
         return new Chapter(-1, htmlTag.text(), getBaseUrl() + url, m,
-                getDefaultTranslator(), date);
+                getDefaultTranslator(), MangaDateTime.NOT_SUPPORT);
     }
 
     @Override

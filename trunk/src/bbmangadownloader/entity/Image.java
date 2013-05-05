@@ -6,6 +6,7 @@ package bbmangadownloader.entity;
 
 import bbmangadownloader.manager.HttpDownloadManager;
 import bbmangadownloader.manager.HttpDownloadManager.MyConnection;
+import java.io.IOException;
 import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.util.logging.Level;
@@ -37,7 +38,7 @@ public class Image extends HtmlDocument implements Serializable {
         try {
             connection = HttpDownloadManager.createConnection(url).referer(referer);
             connection.referer(referer);
-        } catch (MalformedURLException ex) {
+        } catch (IOException ex) {
             Logger.getLogger(Image.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -58,7 +59,7 @@ public class Image extends HtmlDocument implements Serializable {
         this.imgOrder = imgOrder;
     }
 
-    public MyConnection getConnection() throws MalformedURLException {
+    public MyConnection getConnection() throws IOException {
         if (connection == null) {
             connection = HttpDownloadManager.createConnection(url);
         }

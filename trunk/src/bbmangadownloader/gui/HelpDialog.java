@@ -55,8 +55,8 @@ public class HelpDialog extends javax.swing.JDialog {
             "http://manga24h.com/944/Toriko.html",
             "http://blogtruyen.com/Truyen/rosariovampire-season-2",
             "http://www.tenmanga.com/book/Naruto.html",
-            "http://mangacow.com/bungaku_shoujo_to_ue_kawaku_yuurei/",
-            "http://99mh.com/comic/168/"
+            "http://mngcow.net/Crepuscule/"
+//            "http://99mh.com/comic/7350/"
         };
 //</editor-fold>
 

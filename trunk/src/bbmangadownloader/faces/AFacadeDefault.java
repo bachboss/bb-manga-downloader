@@ -9,7 +9,6 @@ import bbmangadownloader.entity.Image;
 import bbmangadownloader.entity.Manga;
 import bbmangadownloader.entity.Server;
 import java.util.List;
-import org.jsoup.nodes.Document;
 
 /**
  *
