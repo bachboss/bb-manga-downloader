@@ -7,6 +7,7 @@ package bbmangadownloader.manager;
 import bbmangadownloader.entity.Chapter;
 import bbmangadownloader.entity.Image;
 import bbmangadownloader.ult.FileUtilities;
+import com.google.code.regexp.NamedPattern;
 import java.io.File;
 import java.net.MalformedURLException;
 
@@ -18,10 +19,22 @@ public class FileManager {
 
     private static File downloadToFolder;
     private static File logFile;
-    //
-    private static final String[] FIX_CHARACTERS = new String[]{
-        "\\\\", "/", "\\:", "\\*", "\\?", "\"", "<", ">", "\\|", "\\.\\."
-    };
+    //    
+    private static final NamedPattern PATTERN;
+    private static final String PATTERN_STR;
+
+    static {
+        String[] FIX_CHARACTERS = new String[]{
+            "\\\\", "/", "\\:", "\\*", "\\?", "\"", "<", ">", "\\|", "\\.\\."
+        };
+        StringBuilder sb = new StringBuilder("[");
+        for (String s : FIX_CHARACTERS) {
+            sb.append(s);
+        }
+        sb.append(']');
+        PATTERN_STR = sb.toString();
+        PATTERN = NamedPattern.compile(PATTERN_STR);
+    }
 
     public static void setDownloadFolder(File f) {
         System.out.println("Saved Download folder to " + f.getAbsolutePath());
@@ -40,18 +53,9 @@ public class FileManager {
         return logFile;
     }
 
-    private static String normalizeFileName(String fileName) {
-        String s = fileName;
-        for (String str : FIX_CHARACTERS) {
-            s = s.replaceAll(str, "_");
-        }
-        return s;
-    }
-
-    private static String getWithNumber(String text, int number) {
-        return new StringBuilder(text).insert(text.indexOf("."), "-" + number).toString();
-    }
-
+//    private static String getWithNumber(String text, int number) {
+//        return new StringBuilder(text).insert(text.indexOf("."), "-" + number).toString();
+//    }
     public static File getFolderForChapter(Chapter c) {
         String folderName = normalizeFileName(c.getDisplayName());
         if (folderName.isEmpty()) {
@@ -84,7 +88,16 @@ public class FileManager {
         return fileImage;
     }
 
+    private static String normalizeFileName(String fileName) {
+        return PATTERN.matcher(fileName).replaceAll("_");
+    }
+
     public static File getFileInFolder(File folder, String fileName) {
         return new File(folder, normalizeFileName(fileName));
     }
+
+//    public static void main(String[] args) {
+//        String s = "Ch.202: King's Crest for Dummies";
+//        System.out.println(normalizeFileName(s));
+//    }
 }

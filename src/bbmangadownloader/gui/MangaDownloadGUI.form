@@ -116,6 +116,7 @@
   <SyntheticProperties>
     <SyntheticProperty name="menuBar" type="java.lang.String" value="jMenuBar1"/>
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
+    <SyntheticProperty name="generateCenter" type="boolean" value="false"/>
   </SyntheticProperties>
   <AuxValues>
     <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
@@ -227,7 +228,7 @@
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Component id="txtMangaName" max="32767" attributes="0"/>
-                                  <Component id="txtMangaUrl" pref="386" max="32767" attributes="0"/>
+                                  <Component id="txtMangaUrl" pref="424" max="32767" attributes="0"/>
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" max="-2" attributes="0">
@@ -365,7 +366,7 @@
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="cbxManga" pref="508" max="32767" attributes="0"/>
+                                  <Component id="cbxManga" pref="510" max="32767" attributes="0"/>
                                   <Component id="cbxScanner" max="32767" attributes="0"/>
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
@@ -522,7 +523,7 @@
                 </DimensionLayout>
                 <DimensionLayout dim="1">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="sclChapter" alignment="1" pref="126" max="32767" attributes="0"/>
+                      <Component id="sclChapter" alignment="1" pref="127" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
               </Layout>
@@ -580,14 +581,14 @@
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="1" attributes="0">
-                          <Component id="pnlTaskDownload" pref="707" max="32767" attributes="0"/>
+                          <Component id="pnlTaskDownload" pref="703" max="32767" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
                 <DimensionLayout dim="1">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="pnlTaskDownload" alignment="0" pref="149" max="32767" attributes="0"/>
+                      <Component id="pnlTaskDownload" alignment="0" pref="154" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
               </Layout>

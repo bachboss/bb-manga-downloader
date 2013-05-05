@@ -199,7 +199,7 @@ public class TaskDownloader {
                     try {
                         File fileImage = FileManager.getFileForImage(imageFolder, img);
                         listImageTask.add(new DefaultFileDownloader(task, img, fileImage));
-                    } catch (MalformedURLException ex) {
+                    } catch (IOException ex) {
                         Logger.getLogger(TaskDownloader.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
@@ -212,7 +212,7 @@ public class TaskDownloader {
 
         private Image image;
 
-        private DefaultFileDownloader(DownloadTask task, Image image, File fileOutput) throws MalformedURLException {
+        private DefaultFileDownloader(DownloadTask task, Image image, File fileOutput) throws IOException {
             super(image.getConnection(), fileOutput);
             this.task = task;
             this.image = image;

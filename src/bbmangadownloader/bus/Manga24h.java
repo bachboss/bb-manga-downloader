@@ -19,8 +19,6 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -93,7 +91,6 @@ public class Manga24h extends ADefaultBus implements IBusOnePage { // Done
     @Override
     public List<Chapter> getAllChapters(Manga manga) throws IOException {
         ArrayList<Chapter> lstChapter = new ArrayList<Chapter>();
-
         Document doc = getDocument(manga.getUrl());
         Elements xmlNodes = doc.select("div[class=post] table[class=mytable] tr:gt(0)");
         for (Element e : xmlNodes) {

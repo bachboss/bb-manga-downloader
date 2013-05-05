@@ -4,11 +4,9 @@
  */
 package bbmangadownloader.manager;
 
-import bbmangadownloader.ult.ExceptionUtilities;
 import bbmangadownloader.ult.HtmlUtilities;
 import bbmangadownloader.ult.HttpUtilities;
 import java.io.DataOutputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -27,92 +25,82 @@ import org.jsoup.nodes.Document;
  */
 public class HttpDownloadManager {
 
-    private static int DEFAULT_READ_TIME_OUT = 60000;
-    private static int DEFAULT_CONNECT_TIME_OUT = 60000;
-//    private static int DEFAULT_STEP = 10000;
-    private static int DEFAULT_ATTEMP = 3;
-    private static String DEFAULT_USER_AGENT = "Mozilla/5.0 (Windows NT 6.2; WOW64; rv:12.0) Gecko/20100101 Firefox/12.0";
+    public static final DownloadConfig config = new DownloadConfig();
     //
-    private static HttpDownloadManager cI;
-    //
-    private boolean isUsingProxy;
-    private Proxy currentProxy;
-    private String userAgent;
-    private int connectTimeOut = 0;
-    private int readTimeOut = 0;
 
-    private HttpDownloadManager() {
-    }
 //<editor-fold>
+    public static class DownloadConfig {
 
-    public static HttpDownloadManager getCurrentInstance() {
-        if (cI == null) {
-            synchronized (HttpDownloadManager.class) {
-                if (cI == null) {
-                    cI = new HttpDownloadManager();
-                }
+        private static int DEFAULT_READ_TIME_OUT = 10000;
+        private static int DEFAULT_CONNECT_TIME_OUT = 10000;
+        private static int DEFAULT_ATTEMP = 5;
+        private static String DEFAULT_USER_AGENT =
+                "Mozilla/5.0 (Windows NT 6.2; WOW64; rv:12.0) Gecko/20100101 Firefox/12.0";
+        private boolean isUsingProxy;
+        private Proxy currentProxy;
+        private String userAgent;
+        private int connectTimeOut = 0;
+        private int readTimeOut = 0;
+
+        public void setProxy(String address, int port) {
+            currentProxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(address, port));
+        }
+
+        private Proxy getProxy() {
+            return currentProxy;
+        }
+
+        public boolean isIsUsingProxy() {
+            return isUsingProxy;
+        }
+
+        public void setIsUsingProxy(boolean isUsingProxy) {
+            this.isUsingProxy = isUsingProxy;
+        }
+
+        private int getConnectTimeOut() {
+            return connectTimeOut == 0 ? DEFAULT_CONNECT_TIME_OUT : connectTimeOut;
+        }
+
+        private int getReadTimeOut() {
+            return readTimeOut == 0 ? DEFAULT_READ_TIME_OUT : readTimeOut;
+        }
+
+        private String getUserAgent() {
+            if (userAgent == null) {
+                return DEFAULT_USER_AGENT;
             }
+            if (userAgent.isEmpty()) {
+                return DEFAULT_USER_AGENT;
+            }
+            return userAgent;
         }
-        return cI;
     }
 
-    public static void init() {
-        cI = new HttpDownloadManager();
-    }
-
-    public void setProxy(String address, int port) {
-        currentProxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(address, port));
-    }
-
-    private Proxy getProxy() {
-        return currentProxy;
-    }
-
-    public boolean isIsUsingProxy() {
-        return isUsingProxy;
-    }
-
-    public void setIsUsingProxy(boolean isUsingProxy) {
-        this.isUsingProxy = isUsingProxy;
-    }
-
-    private int getConnectTimeOut() {
-        return connectTimeOut == 0 ? DEFAULT_CONNECT_TIME_OUT : connectTimeOut;
-    }
-
-    private int getReadTimeOut() {
-        return readTimeOut == 0 ? DEFAULT_READ_TIME_OUT : readTimeOut;
-    }
-
-    private String getUserAgent() {
-        if (userAgent == null) {
-            return DEFAULT_USER_AGENT;
-        }
-        if (userAgent.isEmpty()) {
-            return DEFAULT_USER_AGENT;
-        }
-        return userAgent;
-    }
 //</editor-fold>
-
     /**
-     * Lowest level of HTTP Connection Others are wrapper
+     * Setting timeout, post, cookies, and others of connection
+     *
      */
-    private static HttpURLConnection getHttpURLConnection(MyConnection connection, int connectTimeOut, int readTimeOut) throws IOException {
+    private static HttpURLConnection getHttpURLConnection(URL url, MyConnection connection, int connectTimeOut, int readTimeOut)
+            throws IOException {
 //        System.out.println("Is Use Proxy (?): " + isUseProxy);
-        String userAgent = connection.getUserAgent() == null ? DEFAULT_USER_AGENT : connection.getUserAgent();
-        URL url = new URL(connection.getUrl());
-
-        HttpDownloadManager dlmng = getCurrentInstance();
+        DownloadConfig cConfig = HttpDownloadManager.config;
+        // Proxy
         HttpURLConnection uc;
-        if (dlmng.isIsUsingProxy()) {
-            uc = (HttpURLConnection) url.openConnection(dlmng.getProxy());
+        if (cConfig.isIsUsingProxy()) {
+            uc = (HttpURLConnection) url.openConnection(cConfig.getProxy());
         } else {
             uc = (HttpURLConnection) url.openConnection();
         }
+        // User Agent
+        {
+            String userAgent = connection.getUserAgent() == null
+                    ? cConfig.getUserAgent() : connection.getUserAgent();
 
-        uc.setRequestProperty("User-Agent", userAgent);
-
+            uc.setRequestProperty("User-Agent", userAgent);
+        }
+        // Cookies
         {
             String cookies = connection.getCookie();
             if (cookies != null && !cookies.isEmpty()) {
@@ -120,7 +108,7 @@ public class HttpDownloadManager {
                 uc.setRequestProperty("set-cookie", cookies);
             }
         }
-
+        // Post 
         {
             String postForm = connection.getPost();
             if (postForm != null && !postForm.isEmpty()) {
@@ -129,15 +117,11 @@ public class HttpDownloadManager {
                 uc.setDoOutput(true);
                 uc.setRequestProperty("Content-Length", String.valueOf(postForm.length()));
                 DataOutputStream wr = new DataOutputStream(uc.getOutputStream());
-                try {
-                    wr.writeBytes(postForm);
-                    wr.flush();
-                } catch (Exception ex) {
-                    Logger.getLogger(HttpDownloadManager.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                wr.writeBytes(postForm);
+                wr.flush();
             }
         }
-
+        // Referer
         {
             String referer = connection.getReferer();
             if (referer != null) {
@@ -150,116 +134,81 @@ public class HttpDownloadManager {
         return uc;
     }
 
-    private static Document getDocumentFromUrl(MyConnection connection, int connectTimeOut, int readTimeOut)
+    /**
+     * Try to fix with timeout, url is error
+     *
+     */
+    private static void getConnectionFromConnectionWithFix(MyConnection connection) throws IOException {
+        IOException lastEx = null;
+        int connectTimeOut = config.getConnectTimeOut();
+        int readTimeOut = config.getReadTimeOut();
+
+        int tryTime = 0;
+        boolean useEncodeString = false;
+        URL url = new URL(connection.getUrl());
+        URL downloadURL = url;
+
+
+        boolean isDownloaded = false;
+        while (!isDownloaded) {
+            if (tryTime > DownloadConfig.DEFAULT_ATTEMP) {
+                break;
+            }
+
+            System.out.println("Download from: " + downloadURL + "\tAttemp = " + tryTime);
+            try {
+                HttpURLConnection urlConnection = getHttpURLConnection(downloadURL, connection, connectTimeOut, readTimeOut);
+                urlConnection.connect();
+                int responseCode = urlConnection.getResponseCode();
+                if (responseCode >= 200 && responseCode < 300) {
+                    // Success                    
+                    connection.setHttpAttribute(urlConnection);
+                    return;
+                } else {
+                    try {
+                        downloadURL = HtmlUtilities.encodeUrl(url, useEncodeString);
+                        if (!useEncodeString) {
+                            useEncodeString = !useEncodeString;
+                        }
+                    } catch (IOException ex) {
+                        lastEx = ex;
+                    } catch (URISyntaxException ex) {
+                        Logger.getLogger(HttpDownloadManager.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            } catch (SocketTimeoutException ex) {
+                lastEx = ex;
+                readTimeOut *= 2;
+                connectTimeOut *= 2;
+            } catch (IOException ex) {
+                lastEx = ex;
+            }
+            tryTime++;
+        }
+        if (lastEx != null) {
+            throw lastEx;
+        }
+    }
+
+    private static Document getDocumentFromConnection(MyConnection connection)
             throws IOException {
-        HttpURLConnection uc = getHttpURLConnection(connection, connectTimeOut, readTimeOut);
-        connection.setHttpAttribute(uc);
+        getConnectionFromConnectionWithFix(connection);
         Document doc = Jsoup.parse(connection.getInputStream(),
                 connection.getCharSet(),
                 connection.getURL().toExternalForm());
         return doc;
     }
 
-    private static InputStream getInputStreamFromUrl(MyConnection connection) throws IOException {
-        int connectTimeOut;
-        int readTimeOut;
-        {
-            HttpDownloadManager c = getCurrentInstance();
-            connectTimeOut = c.getConnectTimeOut();
-            readTimeOut = c.getReadTimeOut();
-        }
-        HttpURLConnection uc = getHttpURLConnection(connection, connectTimeOut, readTimeOut);
-        connection.setHttpAttribute(uc);
+    private static InputStream getInputStreamFromConnection(MyConnection connection) throws IOException {
+        getConnectionFromConnectionWithFix(connection);
         return connection.getInputStream();
     }
 
     public static InputStream getInputStreamFromUrl(String url) throws IOException {
-        MyConnection c = new MyConnection(url);
-        return getInputStreamFromUrl(c);
+        return getInputStreamFromConnection(new MyConnection(url));
     }
 
-    private static Document getDocumentFromConnection(MyConnection connection) throws IOException {
-        IOException lastEx = null;
-        int connectTimeOut;
-        int readTimeOut;
-        {
-            HttpDownloadManager c = getCurrentInstance();
-            connectTimeOut = c.getConnectTimeOut();
-            readTimeOut = c.getReadTimeOut();
-        }
-        int tryTime = 0;
-        boolean useEncodeString = true;
-        boolean caughtFileNotFoundEx = false;
-        URL fileUrl;
-        URL url = new URL(connection.getUrl());
-
-        boolean isDownloaded = false;
-        try {
-            fileUrl = HtmlUtilities.encodeUrl(url, useEncodeString);
-            boolean isTryAgain = false;
-            do {
-                try {
-                    System.out.println("\tDownloading HTML from: " + fileUrl);
-                    connection.URL = fileUrl;
-                    // Download Here !
-                    Document doc = getDocumentFromUrl(connection, connectTimeOut, readTimeOut);
-                    return doc;
-                } catch (FileNotFoundException ex) {
-                    lastEx = ex;
-                    if (!caughtFileNotFoundEx) {
-                        caughtFileNotFoundEx = true;
-                        isTryAgain = true;
-                        useEncodeString = !useEncodeString;
-                        fileUrl = HtmlUtilities.encodeUrl(url, useEncodeString);
-                        System.out.println("\t\tFileNotFoundException: " + ex.getMessage());
-                    } else {
-                        break;
-                    }
-                } catch (SocketTimeoutException ex) {
-                    lastEx = ex;
-                    tryTime++;
-                    isTryAgain = true;
-                    System.out.println("\t\tSocketTimeOutExcption, re-try (" + tryTime + ") with timeout = " + connectTimeOut);
-//                            Logger.getLogger(HttpDownloadManager.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (IOException ex) {
-                    lastEx = ex;
-                    System.out.println("\t\tIOException: " + ex.getMessage());
-                    int httpError = ExceptionUtilities.getHttpErrorCode(ex);
-                    if (httpError != -1) {
-                        System.out.println("\t\t\tHTTP Error: " + httpError);
-                        if (httpError == 400) {
-                            useEncodeString = !useEncodeString;
-                            fileUrl = HtmlUtilities.encodeUrl(url, useEncodeString);
-                        } else {
-                            isTryAgain = true;
-                            tryTime++;
-                            Logger.getLogger(HttpDownloadManager.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    } else {
-                        // is not HTTP Error (Code >= 400, != 410,400)
-                        isTryAgain = true;
-                        tryTime++;
-                        Logger.getLogger(HttpDownloadManager.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-            } while (isTryAgain && tryTime < DEFAULT_ATTEMP);
-            if (!isDownloaded) {
-                throw lastEx;
-            } else {
-                return null;
-            }
-        } catch (URISyntaxException ex) {
-            System.out.println("\t\tCan Process this type of error !");
-            Logger.getLogger(HttpDownloadManager.class.getName()).log(Level.SEVERE, null, ex);
-            return null;
-        } catch (EncoderException ex) {
-            System.out.println("\t\tCan Process this type of error !");
-            Logger.getLogger(HttpDownloadManager.class.getName()).log(Level.SEVERE, null, ex);
-            return null;
-        }
-    }
-
-    public static MyConnection createConnection(String url) throws MalformedURLException {
+    public static MyConnection createConnection(String url) throws IOException {
         return new MyConnection(url);
     }
 
@@ -273,6 +222,7 @@ public class HttpDownloadManager {
         private String referer;
         private URL URL;
         private boolean gzip = false;
+        private HttpURLConnection httpUrlConnection;
 
         private MyConnection(String url) throws MalformedURLException {
             url(url);
@@ -368,27 +318,32 @@ public class HttpDownloadManager {
         }
 
         public Document getDocument() throws IOException {
+            if (httpUrlConnection == null) {
+                getDocumentFromConnection(this);
+            }
             return getDocumentFromConnection(this);
         }
 
         public InputStream getInputStreamOpen() throws IOException {
-            return getInputStreamFromUrl(this);
+            if (httpUrlConnection == null) {
+                getInputStreamFromConnection(this);
+            }
+            return getInputStream();
         }
 
         private InputStream getInputStream() throws IOException {
-            if (connection == null) {
+            if (httpUrlConnection == null) {
                 return null;
             }
             if (gzip) {
-                return new GZIPInputStream(connection.getInputStream());
+                return new GZIPInputStream(httpUrlConnection.getInputStream());
             } else {
-                return connection.getInputStream();
+                return httpUrlConnection.getInputStream();
             }
         }
-        private HttpURLConnection connection;
 
         private void setHttpAttribute(HttpURLConnection connection) {
-            this.connection = connection;
+            this.httpUrlConnection = connection;
             // G-zip
             if (connection.getHeaderField("Content-Encoding") != null
                     && connection.getHeaderField("Content-Encoding").equals("gzip")) {
@@ -396,7 +351,6 @@ public class HttpDownloadManager {
             } else {
                 gzip = false;
             }
-            //
         }
     }
 }

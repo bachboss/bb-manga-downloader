@@ -262,14 +262,14 @@ public class ConfigurationDialog extends javax.swing.JDialog {
             config.setMaxiumDownloadInQueue((Integer) spnQueueMaxium.getValue());
 
             // Proxy
-            HttpDownloadManager downloadManager = HttpDownloadManager.getCurrentInstance();
-            synchronized (downloadManager) {
+            HttpDownloadManager.DownloadConfig dConfig = HttpDownloadManager.config;
+            synchronized (dConfig) {
                 boolean isUseProxy = cbxProxy.isSelected();
-                downloadManager.setIsUsingProxy(isUseProxy);
+                dConfig.setIsUsingProxy(isUseProxy);
                 if (isUseProxy) {
                     String address = txtProxyAddress.getText();
                     int port = (Integer) spnProxyPort.getValue();
-                    downloadManager.setProxy(address, port);
+                    dConfig.setProxy(address, port);
                     config.setProxyAddress(address);
                     config.setProxyPort(port);
                 }

@@ -51,9 +51,9 @@ public class FacadeManager {
         MAP_HOST.put("blogtruyen", new FacadeBlogTruyen());
         MAP_HOST.put("tenmanga", new FacadeTenManga());
         MAP_HOST.put("dragonfly", new FacadeDragonFly());
-        MAP_HOST.put("mangacow", new FacadeMangaCow());
+        MAP_HOST.put("mngcow", new FacadeMangaCow());
 //        MAP_HOST.put("cxcscans", new FacadeCxcScans());
-        MAP_HOST.put("99mh", new Facade99mh());
+//        MAP_HOST.put("99mh", new Facade99mh());
 
         if (ConfigManager.getCurrentInstance().isAdult()) {
             MAP_HOST.put("hentai2read", new FacadeHentai2Read());

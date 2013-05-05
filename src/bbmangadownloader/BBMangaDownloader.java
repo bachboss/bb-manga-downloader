@@ -2,7 +2,6 @@ package bbmangadownloader;
 
 import bbmangadownloader.database.WatcherMangager;
 import bbmangadownloader.faces.ServerManager;
-import bbmangadownloader.gui.IMangaInterface;
 import bbmangadownloader.gui.MangaDownloadGUI;
 import bbmangadownloader.gui.MangaWatcherGUI;
 import bbmangadownloader.gui.StartUpPannel;
@@ -11,13 +10,11 @@ import bbmangadownloader.ult.OSSupport;
 import bbmangadownloader.ult.ReflectionUtilities;
 import java.awt.Dimension;
 import java.awt.Toolkit;
-import java.io.IOException;
 import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
-import nanohttpd.MyHttpdServer;
 
 /**
  *
@@ -25,7 +22,7 @@ import nanohttpd.MyHttpdServer;
  */
 public final class BBMangaDownloader {
 
-    private static final String CURR_VERSION = "1.2.9";
+    private static final String CURR_VERSION = "1.3.1";
     //
     private static final String[] APPLICATION_NAMES =
             new String[]{"BB Manga Watcher", "BB Manga Downloader"};
@@ -34,17 +31,14 @@ public final class BBMangaDownloader {
     //
     private static final int MODE = MODE_DOWNLOADER;
     public static final String APPLICATION_NAME = APPLICATION_NAMES[MODE];
-    public static final boolean TEST = true;
+    public static final boolean TEST = false;
 
     public static boolean isModeDownloader() {
         return MODE == MODE_DOWNLOADER;
     }
     // 
     private static JFrame mainFrame;
-    private static MyHttpdServer customServer;
-
-    private BBMangaDownloader() {
-    }
+//    private static MyHttpdServer customServer;
 
     public static void main(String[] args) {
 //        Logger.getLogger("").addHandler(new LogHanddler());
@@ -61,21 +55,17 @@ public final class BBMangaDownloader {
             final JFrame startUpPanel = new JFrame("Loading...");
             //<editor-fold defaultstate="collapsed" desc="Startup Pannel">
             StartUpPannel panel = new StartUpPannel();
-            {
-                startUpPanel.setUndecorated(true);
-                panel.setVersion(getCurrentVersion());
-                startUpPanel.add(panel);
-                {
-                    Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-                    double width = dim.getWidth();
-                    double height = dim.getHeight();
-                    Dimension preferDimension = startUpPanel.getPreferredSize();
-                    double pWidth = preferDimension.getWidth();
-                    double pHeight = preferDimension.getHeight();
-                    startUpPanel.setBounds(((int) (width - pWidth)) / 2,
-                            ((int) (height - pHeight)) / 2, (int) pWidth, (int) pHeight);
-                }
-            }
+            startUpPanel.setUndecorated(true);
+            panel.setVersion(getCurrentVersion());
+            startUpPanel.add(panel);
+            Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+            double width = dim.getWidth();
+            double height = dim.getHeight();
+            Dimension preferDimension = startUpPanel.getPreferredSize();
+            double pWidth = preferDimension.getWidth();
+            double pHeight = preferDimension.getHeight();
+            startUpPanel.setBounds(((int) (width - pWidth)) / 2,
+                    ((int) (height - pHeight)) / 2, (int) pWidth, (int) pHeight);
             startUpPanel.setVisible(true);
             //</editor-fold>
             panel.setProgressString("Loading Configuration");
@@ -132,7 +122,6 @@ public final class BBMangaDownloader {
             java.awt.EventQueue.invokeLater(new Runnable() {
                 @Override
                 public void run() {
-                    // 1. Main GUI !
                     if (isModeDownloader()) {
                         mainFrame = new MangaDownloadGUI();
                     } else {
@@ -194,11 +183,11 @@ public final class BBMangaDownloader {
     private static void loadSystemTray() {
         bbmangadownloader.gui.SystemTray.loadSystemTray();
     }
-
-    private static void initHttpServer() throws IOException {
-        customServer = new MyHttpdServer();
-        Logger.getLogger(BBMangaDownloader.class.getName()).
-                log(Level.FINE,
-                "Created server on port " + MyHttpdServer.HTTP_PORT, (Object) null);
-    }
+//
+//    private static void initHttpServer() throws IOException {
+//        customServer = new MyHttpdServer();
+//        Logger.getLogger(BBMangaDownloader.class.getName()).
+//                log(Level.FINE,
+//                "Created server on port " + MyHttpdServer.HTTP_PORT, (Object) null);
+//    }
 }

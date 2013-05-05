@@ -16,7 +16,7 @@ import java.util.logging.Logger;
  */
 public class ConfigManager {
 
-    private static ConfigManager cI;
+    private static final ConfigManager cI = new ConfigManager();
     private Properties softwareConfig;
     private static final String CONFIG_PATH = "config.properties";
 
@@ -29,8 +29,6 @@ public class ConfigManager {
     }
 
     public static void loadOnStartUp() {
-        cI = new ConfigManager();
-
         Properties p = cI.softwareConfig;
         try {
             File configFile = new File(CONFIG_PATH);
@@ -45,7 +43,7 @@ public class ConfigManager {
         synchronized (cI) {
             // Load Proxy
             if (cI.getIsUsingProxy()) {
-                HttpDownloadManager.getCurrentInstance().setProxy(cI.getProxyAddress(), cI.getProxyPort());
+                HttpDownloadManager.config.setProxy(cI.getProxyAddress(), cI.getProxyPort());
             }
             // Load Save Path
             {

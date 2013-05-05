@@ -12,7 +12,6 @@ import bbmangadownloader.faces.IFacadeMangaServer;
 import bbmangadownloader.faces.ServerManager;
 import bbmangadownloader.gui.HelpDialog.IHelpListener;
 import bbmangadownloader.gui.model.*;
-import bbmangadownloader.manager.HttpDownloadManager;
 import bbmangadownloader.ult.GUIUtilities;
 import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
@@ -137,8 +136,6 @@ public class MangaDownloadGUI extends javax.swing.JFrame implements IHelpListene
     }
 
     private void init() {
-        HttpDownloadManager.init();
-
         this.modelChapter = new ChapterModel();
         tblChapters.setModel(modelChapter);
 
@@ -750,17 +747,16 @@ public class MangaDownloadGUI extends javax.swing.JFrame implements IHelpListene
 
                     lstChapter = mangaServer.getAllChapters(manga);
 
-                    modelChapter.addChapters(lstChapter);
-                    modelChapter.fireTableDataChanged();
-
-                    System.out.println("Loaded: " + lstChapter.size());
-                    if (lstChapter == null || lstChapter.isEmpty()) {
-                        GUIUtilities.showLog("Loaded: 0 record(s) !");
+                    if (lstChapter != null && !lstChapter.isEmpty()) {
+                        System.out.println("Loaded: " + lstChapter.size());
+                        tblChapters.setEnabled(true);
+                        modelChapter.addChapters(lstChapter);
+                        modelChapter.fireTableDataChanged();
+//                    tblDownload.setEnabled(true);
+                    } else {
                         GUIUtilities.showDialog(null, "No record found !");
                     }
 
-                    tblChapters.setEnabled(true);
-//                    tblDownload.setEnabled(true);
                 } catch (Throwable ex) {
                     Logger.getLogger(MangaDownloadGUI.class.getName()).log(Level.SEVERE, null, ex);
                     GUIUtilities.showException(null, ex);
