@@ -31,7 +31,7 @@ public class FacadeManager {
     public static void loadData() {
         System.out.println("Loading Facade...");
         // Add Data
-        MAP_HOST.put("vechai.info", new FacadeVeChai());
+//        MAP_HOST.put("vechai.info", new FacadeVeChai());
         MAP_HOST.put("eatmanga", new FacadeEatManga());
         MAP_HOST.put("truyentranhtuan", new FacadeTruyenTranhTuan());
         MAP_HOST.put("mangafox", new FacadeMangafox());

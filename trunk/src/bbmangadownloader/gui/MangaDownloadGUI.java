@@ -224,6 +224,8 @@ public class MangaDownloadGUI extends javax.swing.JFrame implements IHelpListene
         });
         popChapters.add(mnChapterViewInBroser);
 
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
         pnlTop.setMinimumSize(new java.awt.Dimension(0, 0));
 
         pnlServer.setPreferredSize(new java.awt.Dimension(32307, 98));
@@ -283,7 +285,7 @@ public class MangaDownloadGUI extends javax.swing.JFrame implements IHelpListene
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlServerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txtMangaName)
-                    .addComponent(txtMangaUrl, javax.swing.GroupLayout.DEFAULT_SIZE, 386, Short.MAX_VALUE))
+                    .addComponent(txtMangaUrl, javax.swing.GroupLayout.DEFAULT_SIZE, 424, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlServerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(btnCheckSupport, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -368,7 +370,7 @@ public class MangaDownloadGUI extends javax.swing.JFrame implements IHelpListene
                     .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlScanerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(cbxManga, 0, 508, Short.MAX_VALUE)
+                    .addComponent(cbxManga, 0, 510, Short.MAX_VALUE)
                     .addComponent(cbxScanner, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlScanerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -408,7 +410,7 @@ public class MangaDownloadGUI extends javax.swing.JFrame implements IHelpListene
             pnlDownloadInformationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlDownloadInformationLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 102, Short.MAX_VALUE))
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 102, Short.MAX_VALUE))
         );
 
         jTabbedPane1.getAccessibleContext().setAccessibleName("Scanner");
@@ -451,7 +453,7 @@ public class MangaDownloadGUI extends javax.swing.JFrame implements IHelpListene
         );
         pnlChaptersLayout.setVerticalGroup(
             pnlChaptersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(sclChapter, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 126, Short.MAX_VALUE)
+            .addComponent(sclChapter, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 127, Short.MAX_VALUE)
         );
 
         jSplitPane2.setTopComponent(pnlChapters);
@@ -465,12 +467,12 @@ public class MangaDownloadGUI extends javax.swing.JFrame implements IHelpListene
         pnlDownloadLayout.setHorizontalGroup(
             pnlDownloadLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlDownloadLayout.createSequentialGroup()
-                .addComponent(pnlTaskDownload, javax.swing.GroupLayout.DEFAULT_SIZE, 707, Short.MAX_VALUE)
+                .addComponent(pnlTaskDownload, javax.swing.GroupLayout.DEFAULT_SIZE, 703, Short.MAX_VALUE)
                 .addContainerGap())
         );
         pnlDownloadLayout.setVerticalGroup(
             pnlDownloadLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlTaskDownload, javax.swing.GroupLayout.DEFAULT_SIZE, 149, Short.MAX_VALUE)
+            .addComponent(pnlTaskDownload, javax.swing.GroupLayout.DEFAULT_SIZE, 154, Short.MAX_VALUE)
         );
 
         jSplitPane2.setRightComponent(pnlDownload);
