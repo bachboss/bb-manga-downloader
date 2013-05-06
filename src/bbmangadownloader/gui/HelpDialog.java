@@ -42,7 +42,7 @@ public class HelpDialog extends javax.swing.JDialog {
             "http://mangafox.me/manga/fairy_tail/",
             "http://www.mangareader.net/120/the-world-god-only-knows.html",
             "http://truyentranhtuan.com/cage-of-eden/",
-            "http://vechai.info/Naruto/",
+//            "http://vechai.info/Naruto/",
             "http://www.batoto.net/comic/_/comics/beelzebub-r4",
             "http://truyen.vietboom.com/truyen/Death-Note",
             "http://truyen.comicvn.net/2011/03/bloody-monday-ngay-thu-hai-dam-mau.html",

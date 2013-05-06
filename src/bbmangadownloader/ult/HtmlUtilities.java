@@ -97,7 +97,6 @@ public class HtmlUtilities {
 //    private static URLCodec URL_CODEC;
 
     public static void doGenerate(String title, File folderImages) throws IOException {
-
         if (folderImages.isDirectory()) {
             File[] lstFile = folderImages.listFiles(FileUtilities.ImageFileNameFilter.getInstance());
             Arrays.sort(lstFile);
@@ -114,7 +113,7 @@ public class HtmlUtilities {
 //                eImage.attr("src", f.getName());
             }
 
-            FileUtilities.writeStringToFile(doc.toString(), new File(folderImages, "Comic.html"));
+            FileUtilities.writeStringToFile(doc.toString(), new File(folderImages, "index.html"));
         }
     }
 }
