@@ -4,6 +4,7 @@
  */
 package bbmangadownloader.ult;
 
+import bbmangadownloader.manager.ConfigManager;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -13,6 +14,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.Arrays;
+import javax.security.auth.login.Configuration;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -97,23 +99,41 @@ public class HtmlUtilities {
 //    private static URLCodec URL_CODEC;
 
     public static void doGenerate(String title, File folderImages) throws IOException {
+        boolean isGenerateManifest = ConfigManager.getCurrentInstance().isGenerateHtmlManifest();
+        doGenerate(title, folderImages, isGenerateManifest);
+    }
+
+    public static void doGenerate(String title, File folderImages, boolean isGenerateManifest)
+            throws IOException {
         if (folderImages.isDirectory()) {
             File[] lstFile = folderImages.listFiles(FileUtilities.ImageFileNameFilter.getInstance());
             Arrays.sort(lstFile);
             Document doc = new Document("");
             Element eHtml = doc.appendElement("html");
+            StringBuilder manifestString = new StringBuilder("CACHE MANIFEST\n");
+            if (isGenerateManifest) {
+                eHtml.attr("manifest", "cache.manifest");
+            }
             Element eHead = eHtml.appendElement("head");
+            {
+                Element eMeta = eHead.appendElement("meta");
+                eMeta.attr("content", "text/html").attr("charset", "utf-8").attr("http-equiv", "Content-Type");
+            }
             Element eTitle = eHead.appendElement("title");
             eTitle.html(title);
             Element eBody = eHtml.appendElement("body");
             eBody.attr("style", "text-align:center;background-color:black;");
             for (File f : lstFile) {
                 eBody.append("<image src=\"" + f.getName() + "\"/>");
-//                Element eImage = eBody.appendElement("image");
-//                eImage.attr("src", f.getName());
+                if (isGenerateManifest) {
+                    manifestString.append(f.getName()).append('\n');
+                }
             }
-
             FileUtilities.writeStringToFile(doc.toString(), new File(folderImages, "index.html"));
+            if (isGenerateManifest) {
+                FileUtilities.writeStringToFile(manifestString.toString(),
+                        new File(folderImages, "cache.manifest"));
+            }
         }
     }
 }

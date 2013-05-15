@@ -99,6 +99,13 @@ public class HttpDownloadManager {
 
             uc.setRequestProperty("User-Agent", userAgent);
         }
+        // Referer
+        {
+            String referer = connection.getReferer();
+            if (referer != null) {
+                uc.setRequestProperty("Referer", referer);
+            }
+        }
         // Cookies
         {
             String cookies = connection.getCookie();
@@ -120,13 +127,7 @@ public class HttpDownloadManager {
                 wr.flush();
             }
         }
-        // Referer
-        {
-            String referer = connection.getReferer();
-            if (referer != null) {
-                uc.setRequestProperty("Referer", referer);
-            }
-        }
+
 
         uc.setReadTimeout(readTimeOut);
         uc.setConnectTimeout(connectTimeOut);
@@ -154,7 +155,7 @@ public class HttpDownloadManager {
                 break;
             }
             if (bbmangadownloader.BBMangaDownloader.TEST) {
-                System.out.println("Download from: " + downloadURL + "\tAttemp = " + tryTime);
+                System.out.println("Http download: " + downloadURL + "\t\tAttemp = " + tryTime);
             }
             try {
                 HttpURLConnection urlConnection = getHttpURLConnection(downloadURL, connection, connectTimeOut, readTimeOut);
@@ -318,17 +319,18 @@ public class HttpDownloadManager {
         }
 
         public Document getDocument() throws IOException {
-            if (httpUrlConnection == null) {
-                getDocumentFromConnection(this);
-            }
+//            if (httpUrlConnection == null) {
+//                getDocumentFromConnection(this);
+//            }
             return getDocumentFromConnection(this);
         }
 
         public InputStream getInputStreamOpen() throws IOException {
-            if (httpUrlConnection == null) {
-                getInputStreamFromConnection(this);
-            }
-            return getInputStream();
+//            if (httpUrlConnection == null) {
+//                getInputStreamFromConnection(this);
+//            }
+//            return getInputStream();
+            return getInputStreamFromConnection(this);
         }
 
         private InputStream getInputStream() throws IOException {

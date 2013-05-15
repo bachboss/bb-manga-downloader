@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package bbmangadownloader;
+
 
 import bbmangadownloader.entity.Image;
 import bbmangadownloader.manager.HttpDownloadManager;
@@ -14,7 +14,7 @@ import org.jsoup.nodes.Element;
  *
  * @author Bach
  */
-public class TestCode {
+public class TestCode2 {
 
     private static String DEFAULT_USER_AGENT = "Mozilla/5.0 (Windows NT 6.2; WOW64; rv:12.0) Gecko/20100101 Firefox/12.0";
 

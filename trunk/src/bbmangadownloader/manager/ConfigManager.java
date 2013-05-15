@@ -230,6 +230,30 @@ public class ConfigManager {
         setConfig(Config.GenerateHtml, isGenerate);
     }
 
+    public boolean isGenerateHtmlManifest() {
+        return getConfig(Config.GenerateHtmlManifest, Boolean.TRUE);
+    }
+
+    public void setGenerateHtmlManifest(boolean isGenerate) {
+        setConfig(Config.GenerateHtmlManifest, isGenerate);
+    }
+
+    public boolean isHttpdServer() {
+        return getConfig(Config.HttpdServer, Boolean.TRUE);
+    }
+
+    public void setHttpdServer(boolean isTurnOn) {
+        setConfig(Config.HttpdServer, isTurnOn);
+    }
+
+    public int getHttpdServerPort() {
+        return getConfig(Config.HttpdServerPort, Integer.MAX_VALUE);
+    }
+
+    public void setHttpdServerPort(int port) {
+        setConfig(Config.HttpdServerPort, port);
+    }
+
     public void setCheckUpdateOnStartUp(boolean value) {
         setConfig(Config.UpdateOnStartUp, value);
     }
@@ -265,6 +289,9 @@ public class ConfigManager {
         Zip("zip", "no"),
         DeleteAfterZip("deleteAfterZip", "no"),
         GenerateHtml("generateHtml", "no"),
+        GenerateHtmlManifest("generateHtmlManifest", "no"),
+        HttpdServer("httpdServer", "no"),
+        HttpdServerPort("httpdServerPort", "7070"),
         UpdateOnStartUp("updateOnStartup", "yes"),
         MaxiumDownloadInQueue("maxiumDownloadInQueue", "5");
 

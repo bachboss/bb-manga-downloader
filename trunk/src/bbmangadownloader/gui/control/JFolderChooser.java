@@ -66,9 +66,9 @@ public class JFolderChooser extends javax.swing.JPanel {
     private void btnBrowseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBrowseActionPerformed
         getFileChooser().show();
         File f = fchBrowse.getSelectedFile();
-        if (selectedFile != null) {
+        if (f != null) {
             selectedFile = f;
-            txtFilePath.setText(selectedFile.getAbsolutePath());
+            txtFilePath.setText(f.getAbsolutePath());
         }
     }//GEN-LAST:event_btnBrowseActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables

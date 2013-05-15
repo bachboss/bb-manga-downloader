@@ -36,6 +36,10 @@ public class ConfigurationDialog extends javax.swing.JDialog {
                 spnQueueMaxium.setValue(config.getMaxiumDownloadInQueue());
             }
 
+            cbxIsHttpd.setSelected(config.isHttpdServer());
+            spnHttpdPort.setValue(config.getHttpdServerPort());
+            spnHttpdPort.setEnabled(config.isHttpdServer());
+
             // Proxy
             boolean isUseProxy = config.getIsUsingProxy();
             cbxProxy.setSelected(isUseProxy);
@@ -51,6 +55,8 @@ public class ConfigurationDialog extends javax.swing.JDialog {
             {
                 txtSaveTo.setSelectedFile(new File(config.getOutputFolder()));
                 chbHtml.setSelected(config.isGenerateHtml());
+                chbHtmlManifest.setEnabled(config.isGenerateHtml());
+                chbHtmlManifest.setSelected(config.isGenerateHtmlManifest());
                 chbZip.setSelected(config.isZip());
                 if (chbZip.isSelected()) {
                     chbDeleteZip.setEnabled(true);
@@ -75,12 +81,17 @@ public class ConfigurationDialog extends javax.swing.JDialog {
         jPanel4 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         spnQueueMaxium = new javax.swing.JSpinner();
+        jLabel7 = new javax.swing.JLabel();
+        spnHttpdPort = new javax.swing.JSpinner();
+        cbxIsHttpd = new javax.swing.JCheckBox();
+        jLabel8 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         txtSaveTo = new bbmangadownloader.gui.control.JFolderChooser();
         chbZip = new javax.swing.JCheckBox();
         chbDeleteZip = new javax.swing.JCheckBox();
         chbHtml = new javax.swing.JCheckBox();
+        chbHtmlManifest = new javax.swing.JCheckBox();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         cbxProxy = new javax.swing.JCheckBox();
@@ -103,25 +114,56 @@ public class ConfigurationDialog extends javax.swing.JDialog {
 
         spnQueueMaxium.setModel(new javax.swing.SpinnerNumberModel(1, 1, 100, 1));
 
+        jLabel7.setText("Port (*)");
+
+        spnHttpdPort.setModel(new javax.swing.SpinnerNumberModel(1, 1, 100, 1));
+        spnHttpdPort.setEnabled(false);
+
+        cbxIsHttpd.setText("File browser server (*)");
+        cbxIsHttpd.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+        cbxIsHttpd.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cbxIsHttpdItemStateChanged(evt);
+            }
+        });
+
+        jLabel8.setText("(*): Restart application to apply");
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                .addGap(4, 4, 4)
-                .addComponent(jLabel6)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(spnQueueMaxium, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(360, 360, 360))
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addComponent(jLabel6)
+                        .addGap(18, 18, 18)
+                        .addComponent(spnQueueMaxium, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addComponent(cbxIsHttpd)
+                        .addGap(62, 62, 62)
+                        .addComponent(jLabel7)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(spnHttpdPort, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel8))
+                .addContainerGap(174, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6)
                     .addComponent(spnQueueMaxium, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(81, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel7)
+                    .addComponent(spnHttpdPort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cbxIsHttpd))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 51, Short.MAX_VALUE)
+                .addComponent(jLabel8)
+                .addContainerGap())
         );
 
         jTabbedPane1.addTab("General", jPanel4);
@@ -142,6 +184,15 @@ public class ConfigurationDialog extends javax.swing.JDialog {
 
         chbHtml.setText("Generate Html (Read in Browser)");
         chbHtml.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        chbHtml.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                chbHtmlItemStateChanged(evt);
+            }
+        });
+
+        chbHtmlManifest.setText("Generate Offline Cache (Browser Cache)");
+        chbHtmlManifest.setEnabled(false);
+        chbHtmlManifest.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -150,14 +201,17 @@ public class ConfigurationDialog extends javax.swing.JDialog {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addGap(4, 4, 4)
                 .addComponent(jLabel5)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtSaveTo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(chbHtml)
+                        .addGap(18, 18, 18)
+                        .addComponent(chbHtmlManifest))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(chbZip, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(52, 52, 52)
-                        .addComponent(chbDeleteZip))
-                    .addComponent(txtSaveTo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(chbHtml))
+                        .addComponent(chbDeleteZip)))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -168,12 +222,14 @@ public class ConfigurationDialog extends javax.swing.JDialog {
                     .addComponent(txtSaveTo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(chbHtml)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(chbZip)
                     .addComponent(chbDeleteZip))
-                .addContainerGap(23, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(chbHtml)
+                    .addComponent(chbHtmlManifest))
+                .addContainerGap(53, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Output", jPanel3);
@@ -204,7 +260,7 @@ public class ConfigurationDialog extends javax.swing.JDialog {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(cbxProxy)
-                        .addGap(0, 252, Short.MAX_VALUE))
+                        .addGap(0, 273, Short.MAX_VALUE))
                     .addComponent(txtProxyAddress, javax.swing.GroupLayout.DEFAULT_SIZE, 320, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel4)
@@ -225,7 +281,7 @@ public class ConfigurationDialog extends javax.swing.JDialog {
                     .addComponent(txtProxyAddress, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4)
                     .addComponent(spnProxyPort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(54, Short.MAX_VALUE))
+                .addContainerGap(83, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Connection", jPanel2);
@@ -260,6 +316,9 @@ public class ConfigurationDialog extends javax.swing.JDialog {
         synchronized (config) {
             // Maxium
             config.setMaxiumDownloadInQueue((Integer) spnQueueMaxium.getValue());
+            // Httpd port
+            config.setHttpdServer(cbxIsHttpd.isSelected());
+            config.setHttpdServerPort(((Number) spnHttpdPort.getValue()).intValue());
 
             // Proxy
             HttpDownloadManager.DownloadConfig dConfig = HttpDownloadManager.config;
@@ -291,10 +350,8 @@ public class ConfigurationDialog extends javax.swing.JDialog {
             config.setZip(chbZip.isSelected());
             config.setDeleteAfterZip(chbDeleteZip.isSelected());
             config.setGenerateHtml(chbHtml.isSelected());
+            config.setGenerateHtmlManifest(chbHtmlManifest.isSelected());
 //            System.out.println("Save To: " + downloadFolder);
-
-
-
             try {
                 // Save Config
                 config.save();
@@ -310,10 +367,20 @@ public class ConfigurationDialog extends javax.swing.JDialog {
     private void chbZipActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chbZipActionPerformed
         chbDeleteZip.setEnabled(chbZip.isSelected());
     }//GEN-LAST:event_chbZipActionPerformed
+
+    private void chbHtmlItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_chbHtmlItemStateChanged
+        chbHtmlManifest.setEnabled(chbHtml.isSelected());
+    }//GEN-LAST:event_chbHtmlItemStateChanged
+
+    private void cbxIsHttpdItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbxIsHttpdItemStateChanged
+        spnHttpdPort.setEnabled(cbxIsHttpd.isSelected());
+    }//GEN-LAST:event_cbxIsHttpdItemStateChanged
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JCheckBox cbxIsHttpd;
     private javax.swing.JCheckBox cbxProxy;
     private javax.swing.JCheckBox chbDeleteZip;
     private javax.swing.JCheckBox chbHtml;
+    private javax.swing.JCheckBox chbHtmlManifest;
     private javax.swing.JCheckBox chbZip;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
@@ -321,11 +388,14 @@ public class ConfigurationDialog extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JSpinner spnHttpdPort;
     private javax.swing.JSpinner spnProxyPort;
     private javax.swing.JSpinner spnQueueMaxium;
     private javax.swing.JTextField txtProxyAddress;
