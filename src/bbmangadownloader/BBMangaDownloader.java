@@ -10,11 +10,14 @@ import bbmangadownloader.ult.OSSupport;
 import bbmangadownloader.ult.ReflectionUtilities;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
+import nanohttpd.FileBrowserHttpdServer;
 
 /**
  *
@@ -22,7 +25,7 @@ import javax.swing.UIManager;
  */
 public final class BBMangaDownloader {
 
-    private static final String CURR_VERSION = "1.3.1";
+    private static final String CURR_VERSION = "1.3.3";
     //
     private static final String[] APPLICATION_NAMES =
             new String[]{"BB Manga Watcher", "BB Manga Downloader"};
@@ -32,6 +35,7 @@ public final class BBMangaDownloader {
     private static final int MODE = MODE_DOWNLOADER;
     public static final String APPLICATION_NAME = APPLICATION_NAMES[MODE];
     public static final boolean TEST = false;
+    public static FileBrowserHttpdServer BROWSER_SERVER;
 
     public static boolean isModeDownloader() {
         return MODE == MODE_DOWNLOADER;
@@ -134,6 +138,18 @@ public final class BBMangaDownloader {
 //                    loadSystemTray();
                     // 3. 
 //                    customServer.setIm((IMangaInterface) mainFrame);
+
+                    // 4. HTTPD File Browser
+                    ConfigManager config = ConfigManager.getCurrentInstance();
+                    if (config.isHttpdServer()) {
+                        try {
+                            int port = config.getHttpdServerPort();
+                            File directory = new File(config.getOutputFolder());
+                            BROWSER_SERVER = new FileBrowserHttpdServer(port, directory);
+                        } catch (IOException ex) {
+                            Logger.getLogger(BBMangaDownloader.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
                 }
             });
         } catch (Exception ex) {
@@ -179,10 +195,9 @@ public final class BBMangaDownloader {
     public static synchronized void setVisibleMainWindows(boolean flag) {
         mainFrame.setVisible(flag);
     }
-
-    private static void loadSystemTray() {
-        bbmangadownloader.gui.SystemTray.loadSystemTray();
-    }
+//    private static void loadSystemTray() {
+//        bbmangadownloader.gui.SystemTray.loadSystemTray();
+//    }
 //
 //    private static void initHttpServer() throws IOException {
 //        customServer = new MyHttpdServer();

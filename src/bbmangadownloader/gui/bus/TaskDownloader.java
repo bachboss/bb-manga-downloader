@@ -18,7 +18,6 @@ import bbmangadownloader.ult.HtmlUtilities;
 import bbmangadownloader.ult.MultitaskJob;
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -173,7 +172,7 @@ public class TaskDownloader {
         System.out.println("Cleaning: " + imageFolder.getCanonicalPath());
         ConfigManager config = (ConfigManager.getCurrentInstance());
         if (config.isGenerateHtml()) {
-            HtmlUtilities.doGenerate(c.getDisplayName(), imageFolder);
+            HtmlUtilities.doGenerate(c.getDisplayName(), imageFolder, config.isGenerateHtmlManifest());
         }
         if (config.isZip()) {
             FileUtilities.zipDirectory(imageFolder);
