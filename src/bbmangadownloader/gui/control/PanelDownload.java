@@ -152,8 +152,8 @@ public class PanelDownload extends javax.swing.JPanel implements
         jSeparator2 = new javax.swing.JPopupMenu.Separator();
         mnDownloadViewInBrowser = new javax.swing.JMenuItem();
         mnDownloadViewFolder = new javax.swing.JMenuItem();
-        sclDownload = new javax.swing.JScrollPane();
-        tblDownload = new javax.swing.JTable();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblDownload = new org.jdesktop.swingx.JXTable();
 
         popDownload.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
             public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
@@ -225,31 +225,25 @@ public class PanelDownload extends javax.swing.JPanel implements
 
         tblDownload.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Title 1"
             }
         ));
-        tblDownload.setMinimumSize(new java.awt.Dimension(0, 0));
-        sclDownload.setViewportView(tblDownload);
+        jScrollPane1.setViewportView(tblDownload);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 725, Short.MAX_VALUE)
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(sclDownload, javax.swing.GroupLayout.DEFAULT_SIZE, 725, Short.MAX_VALUE))
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 394, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 374, Short.MAX_VALUE)
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(sclDownload, javax.swing.GroupLayout.DEFAULT_SIZE, 374, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, 0)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 93, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -285,6 +279,7 @@ public class PanelDownload extends javax.swing.JPanel implements
         doStartQueue();
     }//GEN-LAST:event_mnDownloadStartQueueActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JMenuItem mnDownloadRemove;
@@ -295,8 +290,7 @@ public class PanelDownload extends javax.swing.JPanel implements
     private javax.swing.JMenuItem mnDownloadViewFolder;
     private javax.swing.JMenuItem mnDownloadViewInBrowser;
     private javax.swing.JPopupMenu popDownload;
-    private javax.swing.JScrollPane sclDownload;
-    private javax.swing.JTable tblDownload;
+    private org.jdesktop.swingx.JXTable tblDownload;
     // End of variables declaration//GEN-END:variables
 
     private void doDownloadRemoveFromDownload() {

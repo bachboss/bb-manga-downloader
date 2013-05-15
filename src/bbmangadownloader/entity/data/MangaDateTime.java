@@ -14,7 +14,7 @@ import java.util.Date;
  *
  * @author Bach
  */
-public class MangaDateTime {//implements Comparable<MangaDateTime> {
+public class MangaDateTime implements Comparable<MangaDateTime> {
 
     private static final DateFormat DEFAULT_DATETIME_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
     private Date date;
@@ -72,4 +72,13 @@ public class MangaDateTime {//implements Comparable<MangaDateTime> {
 ////        equal to, or greater than the specified object.
 //        
 //    }
+
+    @Override
+    public int compareTo(MangaDateTime o) {
+        if (this.date != null && o.date != null) {
+            return this.date.compareTo(o.date);
+        } else {
+            return this.toString().compareTo(o.toString());
+        }
+    }
 }

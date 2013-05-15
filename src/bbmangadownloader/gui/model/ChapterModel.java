@@ -5,7 +5,7 @@
 package bbmangadownloader.gui.model;
 
 import bbmangadownloader.entity.Chapter;
-import bbmangadownloader.ult.GUIUtilities;
+import bbmangadownloader.entity.data.MangaDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
@@ -14,15 +14,20 @@ import javax.swing.table.AbstractTableModel;
  *
  * @author Bach
  */
-public class ChapterModel extends AbstractTableModel implements MyTableModelSortable<Chapter> {
+public class ChapterModel extends AbstractTableModel {
 
     // remove the creat-code later
     private List<Chapter> listChapter;
     private static String[] COLUMNS = {"Chapter", "Display Name", "Upload Date", "Uploader", "URL"};
-    private boolean isAsc = true;
+    private static Class[] CLASSES = {Float.class, String.class, MangaDateTime.class, String.class, String.class};
 
     public ChapterModel() {
         this.listChapter = new ArrayList<Chapter>();
+    }
+
+    @Override
+    public Class<?> getColumnClass(int columnIndex) {
+        return CLASSES[columnIndex];
     }
 
     public List<Chapter> getListChapter() {
@@ -49,25 +54,11 @@ public class ChapterModel extends AbstractTableModel implements MyTableModelSort
     }
 
     @Override
-    public Object getDisplayDataAtColumn(int column, Chapter chapter) {
-        switch (column) {
-            case (0):
-                return GUIUtilities.getChapterNumber(chapter.getChapterNumber());
-            case (1):
-                return chapter.getDisplayName();
-            case (2):
-                return chapter.getUploadDate();
-            case (3):
-                return chapter.getTranslator();
-            case (4):
-                return chapter.getUrl();
-        }
-        return null;
-    }
-
-    @Override
-    public Object getRealDataAtColumn(int column, Chapter chapter) {
-        switch (column) {
+    public Object getValueAt(int rowIndex, int columnIndex) {
+        Chapter chapter = getChapterAt(rowIndex);
+        switch (columnIndex) {
+            case -1:
+                return chapter;
             case (0):
                 return chapter.getChapterNumber();
             case (1):
@@ -80,13 +71,6 @@ public class ChapterModel extends AbstractTableModel implements MyTableModelSort
                 return chapter.getUrl();
         }
         return null;
-    }
-
-    @Override
-    public Object getValueAt(int rowIndex, int columnIndex) {
-        Chapter chapter = getChapterAt(rowIndex);
-        return getDisplayDataAtColumn(columnIndex, chapter);
-
     }
 
     public void addChapter(Chapter c) {
@@ -106,26 +90,5 @@ public class ChapterModel extends AbstractTableModel implements MyTableModelSort
     public void clear() {
         this.listChapter.clear();
         this.fireTableDataChanged();
-    }
-
-    @Override
-    public List getData() {
-        return listChapter;
-    }
-
-    @Override
-    public boolean isSortable(int column) {
-        return true;
-    }
-
-    @Override
-    public boolean getIsAsc() {
-        return isAsc;
-    }
-
-    @Override
-    public boolean swithSortOrder() {
-        isAsc = !isAsc;
-        return isAsc;
     }
 }
