@@ -30,7 +30,7 @@ public class GUIUtilities {
 
     public static String getChapterNumber(float f) {
         if (f < 0) {
-            return "Unknown";
+            return "?";
         } else {
             return DECIMAL_FORMATER.format(f);
         }

@@ -170,7 +170,7 @@
               <Group type="102" attributes="0">
                   <Component id="pnlDownloadInformation" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="jSplitPane2" pref="332" max="32767" attributes="0"/>
+                  <Component id="jSplitPane2" pref="356" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -181,24 +181,17 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jTabbedPane1" pref="0" max="32767" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                  </Group>
+                  <Component id="tpnlController" pref="0" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jTabbedPane1" pref="102" max="32767" attributes="0"/>
-                  </Group>
+                  <Component id="tpnlController" pref="94" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
           </Layout>
           <SubComponents>
-            <Container class="javax.swing.JTabbedPane" name="jTabbedPane1">
+            <Container class="javax.swing.JTabbedPane" name="tpnlController">
               <AccessibilityProperties>
                 <Property name="AccessibleContext.accessibleName" type="java.lang.String" value="Scanner"/>
               </AccessibilityProperties>
@@ -208,8 +201,9 @@
                 <Container class="javax.swing.JPanel" name="pnlServer">
                   <Properties>
                     <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[32307, 98]"/>
+                      <Dimension value="[32307, 100]"/>
                     </Property>
+                    <Property name="requestFocusEnabled" type="boolean" value="false"/>
                   </Properties>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
@@ -228,10 +222,10 @@
                                   <Component id="jLabel7" alignment="0" min="-2" max="-2" attributes="0"/>
                                   <Component id="jLabel5" alignment="0" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="txtMangaUrl" pref="430" max="32767" attributes="0"/>
                                   <Component id="txtMangaName" max="32767" attributes="0"/>
-                                  <Component id="txtMangaUrl" pref="424" max="32767" attributes="0"/>
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" max="-2" attributes="0">
@@ -266,7 +260,7 @@
                                   <Component id="jLabel5" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="lblLoading" alignment="3" min="-2" pref="26" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -350,6 +344,12 @@
                   </SubComponents>
                 </Container>
                 <Container class="javax.swing.JPanel" name="pnlScaner">
+                  <Properties>
+                    <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                      <Dimension value="[32307, 100]"/>
+                    </Property>
+                    <Property name="requestFocusEnabled" type="boolean" value="false"/>
+                  </Properties>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
                       <JTabbedPaneConstraints tabName="Others">
@@ -369,7 +369,7 @@
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="cbxManga" pref="510" max="32767" attributes="0"/>
+                                  <Component id="cbxManga" pref="530" max="32767" attributes="0"/>
                                   <Component id="cbxScanner" max="32767" attributes="0"/>
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
@@ -521,24 +521,24 @@
               <Layout>
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="sclChapter" alignment="0" pref="713" max="32767" attributes="0"/>
+                      <Component id="jScrollPane1" alignment="0" pref="713" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
                 <DimensionLayout dim="1">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="sclChapter" alignment="1" pref="127" max="32767" attributes="0"/>
+                      <Component id="jScrollPane1" alignment="0" pref="127" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
               </Layout>
               <SubComponents>
-                <Container class="javax.swing.JScrollPane" name="sclChapter">
+                <Container class="javax.swing.JScrollPane" name="jScrollPane1">
                   <AuxValues>
                     <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
                   </AuxValues>
 
                   <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
                   <SubComponents>
-                    <Component class="javax.swing.JTable" name="tblChapters">
+                    <Component class="org.jdesktop.swingx.JXTable" name="tblChapters">
                       <Properties>
                         <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
                           <Table columnCount="4" rowCount="4">
@@ -548,13 +548,7 @@
                             <Column editable="true" title="Title 4" type="java.lang.Object"/>
                           </Table>
                         </Property>
-                        <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[0, 0]"/>
-                        </Property>
                       </Properties>
-                      <Events>
-                        <EventHandler event="mouseReleased" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tblChaptersMouseReleased"/>
-                      </Events>
                     </Component>
                   </SubComponents>
                 </Container>
@@ -583,15 +577,12 @@
               <Layout>
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" alignment="1" attributes="0">
-                          <Component id="pnlTaskDownload" pref="703" max="32767" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                      </Group>
+                      <Component id="pnlTaskDownload" alignment="0" pref="713" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
                 <DimensionLayout dim="1">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="pnlTaskDownload" alignment="0" pref="154" max="32767" attributes="0"/>
+                      <Component id="pnlTaskDownload" alignment="0" pref="178" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
               </Layout>

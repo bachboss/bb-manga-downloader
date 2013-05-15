@@ -783,7 +783,7 @@ public class NanoHTTPD {
      * URL-encodes everything between "/"-characters. Encodes spaces as '%20'
      * instead of '+'.
      */
-    private String encodeUri(String uri) {
+    protected String encodeUri(String uri) {
         String newUri = "";
         StringTokenizer st = new StringTokenizer(uri, "/ ", true);
         while (st.hasMoreTokens()) {
@@ -1005,7 +1005,7 @@ public class NanoHTTPD {
     /**
      * Hashtable mapping (String)FILENAME_EXTENSION -> (String)MIME_TYPE
      */
-    private static Hashtable theMimeTypes = new Hashtable();
+    protected static Hashtable theMimeTypes = new Hashtable();
 
     static {
         StringTokenizer st = new StringTokenizer(

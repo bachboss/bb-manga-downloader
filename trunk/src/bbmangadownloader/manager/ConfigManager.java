@@ -270,6 +270,22 @@ public class ConfigManager {
         setConfig(Config.MaxiumDownloadInQueue, max);
     }
 
+    public String getLastDownloadMangaName() {
+        return getConfig(Config.LastDownloadMangaName);
+    }
+
+    public void setLastDownloadMangaName(String name) {
+        setConfig(Config.LastDownloadMangaName, name);
+    }
+
+    public String getLastDownloadMangaUrl() {
+        return getConfig(Config.LastDownloadMangaUrl);
+    }
+
+    public void setLastDownloadMangaUrl(String url) {
+        setConfig(Config.LastDownloadMangaUrl, url);
+    }
+
     public static class ConfigNotFoundException extends Exception {
 
         public ConfigNotFoundException(String message) {
@@ -293,7 +309,9 @@ public class ConfigManager {
         HttpdServer("httpdServer", "no"),
         HttpdServerPort("httpdServerPort", "7070"),
         UpdateOnStartUp("updateOnStartup", "yes"),
-        MaxiumDownloadInQueue("maxiumDownloadInQueue", "5");
+        MaxiumDownloadInQueue("maxiumDownloadInQueue", "5"),
+        LastDownloadMangaUrl("lastDownloadMangaUrl", "http://kissmanga.com/Manga/Hentai-Ouji-to-Warawanai-Neko"),
+        LastDownloadMangaName("lastDownloadMangaName", "Hentai Ouji to Warawanai Neko");
 
         private Config(String configName, String defaultValue) {
             this.configName = configName;

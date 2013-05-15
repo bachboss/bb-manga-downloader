@@ -45,7 +45,6 @@ public final class BBMangaDownloader {
 //    private static MyHttpdServer customServer;
 
     public static void main(String[] args) {
-//        Logger.getLogger("").addHandler(new LogHanddler());
         if (TEST) {
             Logger.getLogger(BBMangaDownloader.class.getName()).
                     log(Level.WARNING,
