@@ -9,23 +9,13 @@ import bbmangadownloader.bus.model.data.DownloadTask.DownloadTaskStatus;
 import bbmangadownloader.entity.Chapter;
 import bbmangadownloader.gui.bus.TaskDownloader;
 import bbmangadownloader.gui.model.ChapterDownloadModel;
-import bbmangadownloader.gui.model.MyColumnSorter;
-import bbmangadownloader.gui.model.MyTableModelSortable;
 import bbmangadownloader.manager.ConfigManager;
 import bbmangadownloader.ult.GUIUtilities;
-import java.awt.Rectangle;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.util.ArrayList;
+import bbmangadownloader.ult.MySwingUtilities;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import javax.swing.JTable;
-import javax.swing.table.AbstractTableModel;
-import javax.swing.table.JTableHeader;
-import javax.swing.table.TableColumnModel;
 
 /**
  *
@@ -76,63 +66,10 @@ public class PanelDownload extends javax.swing.JPanel implements
         tblDownload.getColumnModel().getColumn(2).setPreferredWidth(100);
         tblDownload.getColumnModel().getColumn(2).setMaxWidth(100);
         tblDownload.getColumnModel().getColumn(3).setPreferredWidth(150);
-        tblDownload.setAutoCreateColumnsFromModel(false);
-
-        addHeaderListener(tblDownload);
+//        tblDownload.setAutoCreateColumnsFromModel(false);
         //</editor-fold>        
     }
 
-    //<editor-fold>
-    private void addHeaderListener(JTable table) {
-        table.getTableHeader().addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent evt) {
-                JTable table = ((JTableHeader) evt.getSource()).getTable();
-                TableColumnModel colModel = table.getColumnModel();
-
-                // The index of the column whose header was clicked
-                int vColIndex = colModel.getColumnIndexAtX(evt.getX());
-                int mColIndex = table.convertColumnIndexToModel(vColIndex);
-
-                // Return if not clicked on any column header
-                if (vColIndex == -1) {
-                    return;
-                }
-
-                // Determine if mouse was clicked between column heads
-                Rectangle headerRect = table.getTableHeader().getHeaderRect(vColIndex);
-                if (vColIndex == 0) {
-                    headerRect.width -= 3;    // Hard-coded constant
-                } else {
-                    headerRect.grow(-3, 0);   // Hard-coded constant
-                }
-                if (!headerRect.contains(evt.getX(), evt.getY())) {
-                    // Mouse was clicked between column heads
-                    // vColIndex is the column head closest to the click
-
-                    // vLeftColIndex is the column head to the left of the click
-                    int vLeftColIndex = vColIndex;
-                    if (evt.getX() < headerRect.x) {
-                        vLeftColIndex--;
-                    }
-                    //System.out.println("Click on the middle");
-                } else {
-                    sortAllRowsBy((MyTableModelSortable) table.getModel(), mColIndex);
-                }
-            }
-        });
-    }
-
-    private void sortAllRowsBy(MyTableModelSortable model, int colIndex) {
-        if (model.isSortable(colIndex)) {
-            List data = model.getData();
-            model.swithSortOrder();
-            Collections.sort(data, new MyColumnSorter(colIndex, model));
-            ((AbstractTableModel) model).fireTableDataChanged();
-        }
-    }
-
-    //</editor-fold>
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -295,9 +232,13 @@ public class PanelDownload extends javax.swing.JPanel implements
 
     private void doDownloadRemoveFromDownload() {
         int[] selectedRows = tblDownload.getSelectedRows();
+        DownloadTask[] deletingTasks = new DownloadTask[selectedRows.length];
         Arrays.sort(selectedRows);
         for (int i = selectedRows.length - 1; i >= 0; i--) {
-            DownloadTask task = modelDownload.removeTaskAt(selectedRows[i]);
+            deletingTasks[i] = (DownloadTask) tblDownload.getValueAt(selectedRows[i], -1);
+        }
+
+        for (DownloadTask task : deletingTasks) {
             if (task.getStatusEnum() == DownloadTaskStatus.Queue) {
                 queue.remove(task);
             }
@@ -312,29 +253,15 @@ public class PanelDownload extends javax.swing.JPanel implements
         }
     }
 
-    private DownloadTask getSelectedTask() {
-        int row = tblDownload.getSelectedRow();
-        return modelDownload.getTaskAt(row);
-    }
-
-    private List<DownloadTask> getSelectedTasks() {
-        int[] rows = tblDownload.getSelectedRows();
-        List<DownloadTask> returnValue = new ArrayList<DownloadTask>();
-        for (int row : rows) {
-            returnValue.add(modelDownload.getTaskAt(row));
-        }
-        return returnValue;
-    }
-
     private void doDownloadViewInBrowser() {
-        Chapter c = getSelectedTask().getChapter();
-        if (c != null) {
-            GUIUtilities.openLink(c.getUrl());
+        DownloadTask task = MySwingUtilities.<DownloadTask>getSelectedObject(tblDownload);
+        if (task != null && task.getChapter() != null) {
+            GUIUtilities.openLink(task.getChapter().getUrl());
         }
     }
 
     private void doDownloadStop() {
-        List<DownloadTask> lstTask = getSelectedTasks();
+        List<DownloadTask> lstTask = MySwingUtilities.<DownloadTask>getSelectedObjects(tblDownload);
         for (DownloadTask task : lstTask) {
             task.getDownloader().stop();
             numberOfDownloading--;
@@ -345,7 +272,7 @@ public class PanelDownload extends javax.swing.JPanel implements
     }
 
     private void doDownloadResume() {
-        List<DownloadTask> lstTask = getSelectedTasks();
+        List<DownloadTask> lstTask = MySwingUtilities.<DownloadTask>getSelectedObjects(tblDownload);
         for (DownloadTask task : lstTask) {
             task.getDownloader().resume();
             numberOfDownloading++;
@@ -356,7 +283,7 @@ public class PanelDownload extends javax.swing.JPanel implements
     }
 
     private void doDownloadStartDownload() {
-        List<DownloadTask> lstTask = getSelectedTasks();
+        List<DownloadTask> lstTask = MySwingUtilities.<DownloadTask>getSelectedObjects(tblDownload);
         for (DownloadTask task : lstTask) {
             task.getDownloader().start();
             numberOfDownloading++;
@@ -386,7 +313,7 @@ public class PanelDownload extends javax.swing.JPanel implements
     }
 
     private void doEnableMenuItem() {
-        List<DownloadTask> lstSelectedTask = getSelectedTasks();
+        List<DownloadTask> lstSelectedTask = MySwingUtilities.<DownloadTask>getSelectedObjects(tblDownload);
         boolean isEnableStartNow = false, isEnableStop = false, isEnableResume = false,
                 isEnableStatQueue = false;
         for (Iterator<DownloadTask> it = lstSelectedTask.iterator(); it.hasNext();) {
@@ -418,7 +345,7 @@ public class PanelDownload extends javax.swing.JPanel implements
 
     private void doStartQueue() {
         boolean isAdded = false;
-        List<DownloadTask> listTask = getSelectedTasks();
+        List<DownloadTask> listTask = MySwingUtilities.<DownloadTask>getSelectedObjects(tblDownload);
         for (DownloadTask task : listTask) {
             DownloadTaskStatus status = task.getStatusEnum();
             if (status == DownloadTaskStatus.No

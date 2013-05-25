@@ -223,7 +223,7 @@ public class AddMangaDialog extends javax.swing.JDialog {
 
     private void mnWatcherViewInBroserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnWatcherViewInBroserActionPerformed
         int row = tblChapters.getSelectedRow();
-        Chapter c = modelChapter.getChapterAt(row);
+        Chapter c = (Chapter) tblChapters.getValueAt(row, -1);
         if (c != null) {
             GUIUtilities.openLink(c.getUrl());
         }

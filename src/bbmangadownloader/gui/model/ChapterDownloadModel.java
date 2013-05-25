@@ -15,12 +15,11 @@ import javax.swing.table.AbstractTableModel;
  *
  * @author Bach
  */
-public class ChapterDownloadModel extends AbstractTableModel
-        implements MyTableModelSortable<DownloadTask> {
+public class ChapterDownloadModel extends AbstractTableModel {
 
     private static final String[] COLUMNS = {"Chapter", "Display Name", "Status", "URL"};
+    private static Class[] CLASSES = {Float.class, String.class, String.class, String.class};
     private List<DownloadTask> listDownload;
-    private boolean isAsc = true;
 
     public ChapterDownloadModel() {
         // remove the creat-code later
@@ -51,23 +50,11 @@ public class ChapterDownloadModel extends AbstractTableModel
     }
 
     @Override
-    public Object getDisplayDataAtColumn(int column, DownloadTask task) {
-        switch (column) {
-            case (0):
-                return GUIUtilities.getStringFromFloat(task.getChapter().getChapterNumber());
-            case (1):
-                return task.getChapter().getDisplayName();
-            case (2):
-                return task.getStatus();
-            case (3):
-                return task.getChapter().getUrl();
-        }
-        return null;
-    }
-
-    @Override
-    public Object getRealDataAtColumn(int column, DownloadTask task) {
-        switch (column) {
+    public Object getValueAt(int rowIndex, int columnIndex) {
+        DownloadTask task = getTaskAt(rowIndex);
+        switch (columnIndex) {
+            case -1:
+                return task;
             case (0):
                 return task.getChapter().getChapterNumber();
             case (1):
@@ -78,17 +65,6 @@ public class ChapterDownloadModel extends AbstractTableModel
                 return task.getChapter().getUrl();
         }
         return null;
-    }
-
-    @Override
-    public Object getValueAt(int rowIndex, int columnIndex) {
-        DownloadTask task = getTaskAt(rowIndex);
-        return this.getDisplayDataAtColumn(columnIndex, task);
-    }
-
-    @Override
-    public boolean isSortable(int column) {
-        return true;
     }
 
     public DownloadTask addChapter(Chapter c) {
@@ -104,8 +80,7 @@ public class ChapterDownloadModel extends AbstractTableModel
 
     public void addTask(DownloadTask t) {
         this.listDownload.add(t);
-        this.fireTableRowsInserted(listDownload.size(), listDownload.size());
-//        this.fireTableDataChanged();
+        this.fireTableDataChanged();
     }
 
     public void removeTask(DownloadTask t) {
@@ -113,7 +88,7 @@ public class ChapterDownloadModel extends AbstractTableModel
         removeTaskAt(index);
     }
 
-    public DownloadTask removeTaskAt(int index) {
+    private DownloadTask removeTaskAt(int index) {
         DownloadTask task = this.listDownload.remove(index);
         this.fireTableRowsDeleted(index, index);
 //        this.fireTableDataChanged();
@@ -130,18 +105,12 @@ public class ChapterDownloadModel extends AbstractTableModel
     }
 
     @Override
-    public boolean getIsAsc() {
-        return isAsc;
+    public Class<?> getColumnClass(int columnIndex) {
+        return CLASSES[columnIndex];
     }
 
     @Override
-    public boolean swithSortOrder() {
-        isAsc = !isAsc;
-        return isAsc;
-    }
-
-    @Override
-    public List getData() {
-        return listDownload;
+    public boolean isCellEditable(int rowIndex, int columnIndex) {
+        return false;
     }
 }

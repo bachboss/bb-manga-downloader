@@ -34,7 +34,7 @@ public class ChapterModel extends AbstractTableModel {
         return listChapter;
     }
 
-    public Chapter getChapterAt(int row) {
+    private Chapter getChapterAt(int row) {
         return listChapter.get(row);
     }
 
