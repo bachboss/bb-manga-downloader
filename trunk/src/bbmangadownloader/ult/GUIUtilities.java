@@ -12,6 +12,7 @@ import java.net.URI;
 import java.text.DecimalFormat;
 import java.util.logging.Level;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 import org.jdesktop.swingx.JXErrorPane;
 import org.jdesktop.swingx.error.ErrorInfo;
