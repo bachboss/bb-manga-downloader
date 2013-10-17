@@ -25,7 +25,7 @@ import nanohttpd.FileBrowserHttpdServer;
  */
 public final class BBMangaDownloader {
 
-    private static final String CURR_VERSION = "1.3.3";
+    private static final String CURR_VERSION = "1.3.4";
     //
     private static final String[] APPLICATION_NAMES =
             new String[]{"BB Manga Watcher", "BB Manga Downloader"};
