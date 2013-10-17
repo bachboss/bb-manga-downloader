@@ -28,20 +28,20 @@ public class CacheBuilder {
         ServerManager.loadServer();
 
         ServerTempData[] servers = new ServerTempData[]{
-            new ServerTempData(false, "http://www.batoto.net"),
-            new ServerTempData(false, "http://eatmanga.com"),
-            new ServerTempData(false, "http://kissmanga.com"),
-            new ServerTempData(false, "http://mangafox.me"),
-            new ServerTempData(false, "http://mangainn.com"),
-            new ServerTempData(false, "http://www.mangareader.net"),
-            new ServerTempData(false, "http://truyentranhtuan.com"),
-            new ServerTempData(false, "http://truyen.vnsharing.net"),
-            new ServerTempData(false, "http://mangastream.com/"),
-            new ServerTempData(false, "http://mangahere.com/"),
-            new ServerTempData(false, "http://cococomic.com/"),
-            new ServerTempData(false, "http://99770.cc/"),
-            new ServerTempData(false, "http://manga24h.com/"),
-            new ServerTempData(true, "http://blogtruyen.com/")
+            //            new ServerTempData(false, "http://www.batoto.net"),
+            //            new ServerTempData(false, "http://eatmanga.com"),
+            //            new ServerTempData(false, "http://kissmanga.com"),
+            //            new ServerTempData(false, "http://mangafox.me"),
+            //            new ServerTempData(false, "http://mangainn.com"),
+            new ServerTempData(true, "http://www.mangareader.net")
+//            new ServerTempData(false, "http://truyentranhtuan.com"),
+//            new ServerTempData(false, "http://truyen.vnsharing.net"),
+//            new ServerTempData(false, "http://mangastream.com/"),
+//            new ServerTempData(false, "http://mangahere.com/"),
+//            new ServerTempData(false, "http://cococomic.com/"),
+//            new ServerTempData(false, "http://99770.cc/"),
+//            new ServerTempData(false, "http://manga24h.com/"),
+//            new ServerTempData(true, "http://blogtruyen.com/")
         };
 
         for (ServerTempData sEE : servers) {
@@ -52,12 +52,12 @@ public class CacheBuilder {
                     System.out.println("--------------------------------------------------------------------------------");
                     System.out.println("Loading Server : " + server.getServerName());
 
-                    File folderCache = new File("H:\\Manga\\Cache\\", server.getServerName());
+                    File folderCache = new File("F:\\Manga\\Cache\\", server.getServerName());
                     folderCache.mkdirs();
 //                    File fileOutput = new File(folderCache, "file.data");
 
                     List<Manga> lstManga = facade.getAllMangas(server);
-                    System.out.println("Parsing Done!");
+                    System.out.println("Parsing Done: " + lstManga.size());
                     Map<Integer, Manga> mapManga = new HashMap<Integer, Manga>();
                     FileWriter fw = null;
                     try {
