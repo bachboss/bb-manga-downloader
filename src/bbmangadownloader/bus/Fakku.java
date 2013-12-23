@@ -12,16 +12,16 @@ import bbmangadownloader.entity.Manga;
 import bbmangadownloader.entity.Server;
 import bbmangadownloader.entity.data.MangaDateTime;
 import bbmangadownloader.ult.DateTimeUtilities;
-import com.google.code.regexp.NamedMatcher;
-import com.google.code.regexp.NamedPattern;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 /**
  *
@@ -30,7 +30,7 @@ import org.jsoup.nodes.Element;
 public class Fakku extends ADefaultBus {
 
     private static final String BASED_URL = "http://www.fakku.net";
-    private static final NamedPattern PATTERN_PAGE = NamedPattern.compile("var data = \\{.*\\};");
+//    private static final NamedPattern PATTERN_PAGE = NamedPattern.compile("var window.params.thumbs");
     private static final DateFormat DATE_FORMAT_UPLOAD = new SimpleDateFormat("MMM dd, yyyy", Locale.US);
 
     @Override
@@ -42,12 +42,12 @@ public class Fakku extends ADefaultBus {
     public List<Chapter> getAllChapters(Manga m) throws IOException, HtmlParsingException {
         Document doc = getDocument(m.getUrl(), m.getUrl());
         String displayName = doc.select("div[id=content] div[id=right] div[class=wrap] div[class=content-name]").first().text();
-        String chapterUrl = doc.select("div[id=left] div[class=wrap] ul[id=content-navigation] li[id=last] a").first()
+        String chapterUrl = doc.select("div[id=left] div[class=wrap] ul[class=content-navigation] li a").first()
                 .attr("href");
         Element eUpload = doc.select("div#right div.wrap div.row.small div.right").first();
         String uploader = eUpload.select("a").text();
-        String d =
-                eUpload.select("b").text();
+        String d
+                = eUpload.select("b").text();
         MangaDateTime date;
         try {
             date = new MangaDateTime(DateTimeUtilities.getDate(d, DATE_FORMAT_UPLOAD));
@@ -70,36 +70,76 @@ public class Fakku extends ADefaultBus {
         int numberOfPage = 0;
         String basedImg = null;
         {
-            Document doc = getDocument(c.getUrl(), c.getUrl());
-            Element eScript = doc.select("script:not([src])").first();
-            String script = eScript.html();
+            Document doc = getDocument(c.getUrl() + "/read#page=0", c.getUrl());
+            Elements eScripts = doc.select("script:not([src])");
+            for (Element eScript : eScripts) {
+                String script = eScript.html();
 
-            String data = null;
-            NamedMatcher m = PATTERN_PAGE.matcher(script);
-            if (m.find()) {
-                data = m.group();
-                data = data.substring(data.indexOf(':') + 2, data.indexOf("};") - 1);
-            }
-            String[] arrUrl = data.split(",");
-            numberOfPage = arrUrl.length;
+                String data = null;
+                if (script.contains("window.params.thumbs")) {
+                    data = script;
+                    int i1 = data.indexOf("window.params.thumbs");
+                    data = data.substring(i1, data.indexOf("];", i1) - 1);
+                    String[] arrUrl = data.split(",");
+                    numberOfPage = arrUrl.length;
 
-            basedImg = script.substring(script.indexOf("function imgpath(x)"), script.length());
-            basedImg = basedImg.substring(basedImg.indexOf("return \'") + 8, basedImg.length());
-            basedImg = basedImg.substring(0, basedImg.indexOf('\''));
-        }
-        {
-            for (int i = 0; i < numberOfPage; i++) {
-                Image image = new Image(i, imgPath(String.valueOf(i), basedImg), c, c.getUrl());
-                returnValue.add(image);
+                    basedImg = script.substring(script.indexOf("function imgpath(x)"), script.length());
+                    i1 = basedImg.indexOf("return \'");
+                    basedImg = basedImg.substring(i1 + 8, basedImg.indexOf('}'));
+                    basedImg = basedImg.substring(0, basedImg.indexOf('\''));
+                    //                    return'http://t.fakku.net/images/manga/y/[Hanamaki_Kaeru]_Original_Work_-_Yousei-san_ni_Onegai!/images/'+x+'.jpg';}
+
+                    for (int i = 1; i <= numberOfPage; i++) {
+                        Image image = new Image(i, imgPath(i, basedImg), c, c.getUrl());
+                        returnValue.add(image);
+
+                    }
+                    return returnValue;
+
+                }
             }
         }
-        return returnValue;
+        return Collections.EMPTY_LIST;
     }
 
-    private static String imgPath(String x, String basedImgUrl) {
-        while (x.length() < 3) {
-            x = '0' + x;
+    private static String imgPath(int x, String basedImgUrl) {
+        String s;
+        if (x < 10) {
+            s = "00" + x;
+        } else if (x < 100) {
+            s = "0" + x;
+        } else {
+            s = Integer.toString(x);
         }
-        return basedImgUrl + x + ".jpg";
+        return basedImgUrl + s + ".jpg";
     }
+//    @Override
+//    protected Elements getPageQuery(Element htmlTag) throws HtmlParsingException {
+//        return htmlTag.select("html body div#wrap div#content div.chapter div.right div.page select.drop").first().children();
+//    }
+//
+//    @Override
+//    protected Page getPageFromTag(Element htmlTag, Chapter c) throws HtmlParsingException {
+//        return new Page(c.getUrl() + "/read#page=1", c);
+//    }
+//
+//    @Override
+//    protected Element getImageQuery(Element imgNode) throws HtmlParsingException {
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//    }
+//
+//    @Override
+//    protected Image getImageFromTag(Element imgNode, Chapter c, Page p) throws HtmlParsingException {
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//    }
+//
+//    @Override
+//    protected Elements getChapterQuery(Element htmlTag) throws HtmlParsingException {
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//    }
+//
+//    @Override
+//    protected Chapter getChapterFromTag(Element htmlTag, Manga m) throws HtmlParsingException {
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//    }
 }
