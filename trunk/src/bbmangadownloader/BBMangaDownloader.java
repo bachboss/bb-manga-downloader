@@ -9,6 +9,7 @@ import bbmangadownloader.manager.ConfigManager;
 import bbmangadownloader.ult.OSSupport;
 import bbmangadownloader.ult.ReflectionUtilities;
 import java.awt.Dimension;
+import java.awt.HeadlessException;
 import java.awt.Toolkit;
 import java.io.File;
 import java.io.IOException;
@@ -151,7 +152,7 @@ public final class BBMangaDownloader {
                     }
                 }
             });
-        } catch (Exception ex) {
+        } catch (HeadlessException ex) {
             Logger.getLogger(BBMangaDownloader.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

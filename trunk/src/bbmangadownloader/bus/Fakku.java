@@ -84,15 +84,14 @@ public class Fakku extends ADefaultBus {
                     numberOfPage = arrUrl.length;
 
                     basedImg = script.substring(script.indexOf("function imgpath(x)"), script.length());
-                    i1 = basedImg.indexOf("return \'");
-                    basedImg = basedImg.substring(i1 + 8, basedImg.indexOf('}'));
+                    i1 = basedImg.indexOf("return");
+                    basedImg = basedImg.substring(basedImg.indexOf("'", i1) + 1, basedImg.indexOf('}'));
                     basedImg = basedImg.substring(0, basedImg.indexOf('\''));
                     //                    return'http://t.fakku.net/images/manga/y/[Hanamaki_Kaeru]_Original_Work_-_Yousei-san_ni_Onegai!/images/'+x+'.jpg';}
-
+                    basedImg = basedImg.trim();
                     for (int i = 1; i <= numberOfPage; i++) {
                         Image image = new Image(i, imgPath(i, basedImg), c, c.getUrl());
                         returnValue.add(image);
-
                     }
                     return returnValue;
 
