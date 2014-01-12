@@ -32,7 +32,8 @@ import javax.swing.JOptionPane;
  */
 public class TaskDownloader {
 
-    private static final int DEFAULT_IMAGE_QUEUE_SIZE = 3;
+    private static final int DEFAULT_IMAGE_QUEUE_SIZE = ConfigManager.
+            getCurrentInstance().getMaxiumDownloadImage();
     //
     private ITaskDownloaderListener listener;
     private final DownloadTask task;

@@ -316,8 +316,7 @@ public class PanelDownload extends javax.swing.JPanel implements
         List<DownloadTask> lstSelectedTask = MySwingUtilities.<DownloadTask>getSelectedObjects(tblDownload);
         boolean isEnableStartNow = false, isEnableStop = false, isEnableResume = false,
                 isEnableStatQueue = false;
-        for (Iterator<DownloadTask> it = lstSelectedTask.iterator(); it.hasNext();) {
-            DownloadTask task = it.next();
+        for (DownloadTask task : lstSelectedTask) {
             DownloadTaskStatus status = task.getStatusEnum();
             switch (status) {
                 case No:
