@@ -9,6 +9,7 @@ import bbmangadownloader.entity.Manga;
 import bbmangadownloader.ult.GUIUtilities;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.SwingUtilities;
 import org.jdesktop.swingx.JXTreeTable;
 import org.jdesktop.swingx.treetable.AbstractTreeTableModel;
 import org.jdesktop.swingx.treetable.TreeTableModel;
@@ -115,7 +116,7 @@ public class WatcherMangaTreeTableModel extends AbstractTreeTableModel {
                 return mW.getChapterCount();
             } else {
                 // lazy load here !
-                new Thread(new Runnable() {
+                SwingUtilities.invokeLater(new Runnable() {
 
                     @Override
                     public void run() {
@@ -125,7 +126,7 @@ public class WatcherMangaTreeTableModel extends AbstractTreeTableModel {
                         TreeTableModel t = WatcherMangaTreeTableModel.this;
                         treeTable.setTreeTableModel(t);
                     }
-                }).start();
+                });
                 return 1;
             }
         } else {

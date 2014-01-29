@@ -5,17 +5,14 @@
 package bbmangadownloader.gui.bus;
 
 import bbmangadownloader.manager.HttpDownloadManager.MyConnection;
-import bbmangadownloader.ult.ExceptionUtilities;
 import bbmangadownloader.ult.FileUtilities;
 import bbmangadownloader.ult.GUIUtilities;
-import bbmangadownloader.ult.HtmlUtilities;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.SocketTimeoutException;
 import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.SwingUtilities;
 
 /**
  *
@@ -27,7 +24,7 @@ public abstract class AFileDownloader implements Runnable, Callable<Boolean>, IF
      * This class is abstract class, used to download 1 file at a time
      */
     //
-    private MyConnection connection;
+    private final MyConnection connection;
     private File fileOutput;
 
     public AFileDownloader(MyConnection connection, File fileOutput) {
@@ -100,13 +97,13 @@ public abstract class AFileDownloader implements Runnable, Callable<Boolean>, IF
         try {
             call();
         } catch (final Exception ex) {
-            new Thread(new Runnable() {
+            SwingUtilities.invokeLater(new Runnable() {
                 @Override
                 public void run() {
                     GUIUtilities.showException(null, ex);
                     Logger.getLogger(AFileDownloader.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            }).start();
+            });
         }
     }
 }

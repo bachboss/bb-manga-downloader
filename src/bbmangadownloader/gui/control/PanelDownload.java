@@ -12,8 +12,8 @@ import bbmangadownloader.gui.model.ChapterDownloadModel;
 import bbmangadownloader.manager.ConfigManager;
 import bbmangadownloader.ult.GUIUtilities;
 import bbmangadownloader.ult.MySwingUtilities;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -24,10 +24,8 @@ import java.util.List;
 public class PanelDownload extends javax.swing.JPanel implements
         TaskDownloader.ITaskDownloaderListener {
 
-    // fixed;
-//    private IPanelDownloadListener listener;
     private ChapterDownloadModel modelDownload;
-    private final LinkedList<DownloadTask> queue;
+    private final ArrayList<DownloadTask> queue = new ArrayList<DownloadTask>();
     private int numberOfDownloading = 0;
 
     private static int getMaxiumNumberDownload() {
@@ -46,8 +44,6 @@ public class PanelDownload extends javax.swing.JPanel implements
 //        tblDownload.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         initData();
         initHeader();
-        queue = new LinkedList<DownloadTask>();
-
     }
 
     private void initData() {
@@ -303,7 +299,7 @@ public class PanelDownload extends javax.swing.JPanel implements
     public void listAll() {
         for (DownloadTask t : modelDownload.getListDownload()) {
             System.out.println(t.getChapter().getDisplayName() + "\t"
-                    + t.getStatus() + "\t" + t.getStatusEnum());
+                    + t.getDisplayStatus() + "\t" + t.getStatusEnum());
         }
     }
 
@@ -317,23 +313,18 @@ public class PanelDownload extends javax.swing.JPanel implements
         boolean isEnableStartNow = false, isEnableStop = false, isEnableResume = false,
                 isEnableStatQueue = false;
         for (DownloadTask task : lstSelectedTask) {
-            DownloadTaskStatus status = task.getStatusEnum();
-            switch (status) {
-                case No:
-                case Error:
-                    isEnableStartNow = true;
-                    isEnableStatQueue = true;
-                    break;
-                case Checking:
-                case Parsing:
-                case Downloading:
-                    isEnableStop = true;
-                    break;
-//                case Cleaning:                    
-//                case Done:
+            TaskDownloader downloader = task.getDownloader();
+            if (downloader.isQueue()) {
+                isEnableStatQueue = true;
             }
-            if (!task.isIsRunning()) {
+            if (downloader.isResume()) {
                 isEnableResume = true;
+            }
+            if (downloader.isStart()) {
+                isEnableStartNow = true;
+            }
+            if (downloader.isStop()) {
+                isEnableStop = true;
             }
         }
         mnDownloadStartImmediately.setEnabled(isEnableStartNow);
@@ -351,7 +342,7 @@ public class PanelDownload extends javax.swing.JPanel implements
                     || status == DownloadTaskStatus.Error) {
                 task.setStatus(DownloadTaskStatus.Queue);
                 modelDownload.fireDownloadTaskStatusUpdated(task);
-                queue.addLast(task);
+                queue.add(task);
                 isAdded = true;
             }
         }
@@ -361,15 +352,13 @@ public class PanelDownload extends javax.swing.JPanel implements
     }
 
     private void invokeQueue() {
-        if (!queue.isEmpty() && numberOfDownloading < getMaxiumNumberDownload()) {
-            synchronized (queue) {
-                while (numberOfDownloading < getMaxiumNumberDownload()
-                        && !queue.isEmpty()) {
-                    DownloadTask task = queue.removeFirst();
-                    if (task.getStatusEnum() == DownloadTaskStatus.Queue) {
-                        numberOfDownloading++;
-                        task.getDownloader().start();
-                    }
+        synchronized (queue) {
+            while (numberOfDownloading < getMaxiumNumberDownload()
+                    && !queue.isEmpty()) {
+                DownloadTask task = queue.remove(0);
+                if (task.getStatusEnum() == DownloadTaskStatus.Queue) {
+//                    numberOfDownloading++;
+                    task.getDownloader().start();
                 }
             }
         }
@@ -379,8 +368,5 @@ public class PanelDownload extends javax.swing.JPanel implements
     public void onTaskDownloadFinish(DownloadTask task) {
         numberOfDownloading--;
         invokeQueue();
-    }
-
-    public static interface IPanelDownloadListener {
     }
 }
