@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 import javax.swing.JTable;
+import javax.swing.SwingUtilities;
 import javax.swing.table.TableColumnModel;
 import org.jdesktop.swingx.treetable.DefaultTreeTableModel;
 
@@ -847,21 +848,21 @@ public class MangaWatcherGUI extends javax.swing.JFrame {
     }
 
     private void loadAllChapterInWatcher(final Watcher w) {
-        new Thread(new Runnable() {
+        SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
                 w.loadChapers();
             }
-        }).start();
+        });
     }
 
     private void forceLoadAllChapterInWatcher(final Watcher w) {
-        new Thread(new Runnable() {
+        SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
                 w.forceLoadChapters();
             }
-        }).start();
+        });
     }
 
     private void forceLoadAllChapterInWatcher(final Watcher[] arrWatchers) {

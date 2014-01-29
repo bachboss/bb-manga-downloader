@@ -24,6 +24,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
+import javax.swing.SwingUtilities;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.jdesktop.swingx.autocomplete.ObjectToStringConverter;
 import org.jdesktop.swingx.combobox.ListComboBoxModel;
@@ -691,10 +692,10 @@ public class MangaDownloadGUI extends javax.swing.JFrame implements IHelpListene
     }
 
     private void doFletch() {
+        lblLoading.setVisible(true);
         new Thread(new Runnable() {
             @Override
             public void run() {
-                lblLoading.setVisible(true);
                 modelChapter.clear();
                 try {
 
@@ -714,7 +715,7 @@ public class MangaDownloadGUI extends javax.swing.JFrame implements IHelpListene
                         GUIUtilities.showDialog(null, "No record found !");
                     }
 
-                } catch (Throwable ex) {
+                } catch (Exception ex) {
                     Logger.getLogger(MangaDownloadGUI.class.getName()).log(Level.SEVERE, null, ex);
                     GUIUtilities.showException(null, ex);
                 }

@@ -11,6 +11,7 @@ import java.net.MalformedURLException;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.SwingUtilities;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
@@ -58,7 +59,7 @@ public class UpdateService implements Runnable {
     }
 
     static void loadOnStartUp() {
-        new Thread(new UpdateService()).start();
+        SwingUtilities.invokeLater(new UpdateService());
     }
 
     @Override

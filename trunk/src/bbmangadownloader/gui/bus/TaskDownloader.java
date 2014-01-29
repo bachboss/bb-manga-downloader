@@ -35,7 +35,7 @@ public class TaskDownloader {
     private static final int DEFAULT_IMAGE_QUEUE_SIZE = ConfigManager.
             getCurrentInstance().getMaxiumDownloadImage();
     //
-    private ITaskDownloaderListener listener;
+    private final ITaskDownloaderListener listener;
     private final DownloadTask task;
     private Thread thread;
 
@@ -44,75 +44,125 @@ public class TaskDownloader {
         this.task = task;
     }
 
-    private boolean isRunning() {
-        return task.isIsRunning();
+    public void start() {
+        check();
     }
 
+    public void check() {
+        if (isStart()) {
+            task.setStatus(DownloadTaskStatus.Checking);
+            thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    if (bbmangadownloader.BBMangaDownloader.TEST) {
+                        try {
+                            Thread.sleep(2000);
+                        } catch (InterruptedException ex) {
+                            Logger.getLogger(TaskDownloader.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                    doCheck();
+                }
+            });
+            thread.start();
+        }
+    }
+
+    boolean isTryStop = false;
+
+    public void tryStop() {
+        isTryStop = true;
+    }
+
+    public boolean isStart() {
+        DownloadTaskStatus status = task.getStatusEnum();
+        return (status == DownloadTaskStatus.No || status == DownloadTaskStatus.Queue);
+    }
+
+    public boolean isStop() {
+        DownloadTaskStatus status = task.getStatusEnum();
+        return (status == DownloadTaskStatus.Checking
+                || status == DownloadTaskStatus.Parsing
+                || status == DownloadTaskStatus.Downloading);
+    }
+
+    private void stop() {
+        if (isStop()) {
+            doStop();
+        }
+    }
+
+    public boolean isResume() {
+        return (task.getStatusEnum() == DownloadTaskStatus.Stopped
+                || task.getStatusEnum() == DownloadTaskStatus.Error);
+
+    }
+
+    public void resume() {
+        if (isResume()) {
+            doResume();
+        }
+    }
+
+    public boolean isQueue() {
+        return task.getStatusEnum() == DownloadTaskStatus.No;
+    }
+
+    private void clean() throws IOException {
+        if (task.getStatusEnum() == DownloadTaskStatus.Downloading) {
+            doClean();
+        }
+    }
+
+    public void queue() {
+        DownloadTaskStatus status = task.getStatusEnum();
+        if (status == DownloadTaskStatus.No) {
+            doQueue();
+        }
+    }
+
+    public void waitForResume() {
+        if (isTryStop) {
+            isTryStop = false;
+            while (task.getStatusEnum() == DownloadTaskStatus.Stopped) {
+                Thread.yield();
+            }
+        }
+    }
+
+    // Private State Machine
     private void doResume() {
-        task.setIsRunning(true);
+        isTryStop = false;
         try {
-            switch (task.getStatusEnum()) {
-                case No:
-                case Queue:
-                case Error:
-                case Checking:
-                    if (isRunning()) {
-                        check();
-                    }
-                case Parsing:
-                    if (isRunning()) {
-                        parse();
-                    }
-                case Downloading:
-                    if (isRunning()) {
-                        download();
-                    }
-                case Cleaning:
-                    if (isRunning()) {
-                        cleaning();
-                    }
-//                case Done:
-//                    return;
+            switch (task.getLastStatusEnum()) {
+                case Checking: {
+                    doCheck();
+                    break;
+                }
+                case Parsing: {
+                    doParse();
+                    break;
+                }
+                case Downloading: {
+                    doDownload();
+                    break;
+                }
+                case Error: {
+                    start();
+                    break;
+                }
             }
         } catch (Exception ex) {
-            Logger.getLogger(MangaDownloadGUI.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MangaDownloadGUI.class
+                    .getName()).log(Level.SEVERE, null, ex);
             task.setStatus(DownloadTask.DownloadTaskStatus.Error);
             GUIUtilities.showException(null, ex);
         }
     }
 
-    public void start() {
-        thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                if (bbmangadownloader.BBMangaDownloader.TEST) {
-                    try {
-                        Thread.sleep(2000);
-                    } catch (InterruptedException ex) {
-                        Logger.getLogger(TaskDownloader.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-                doResume();
-            }
-        });
-        thread.start();
-    }
-
-    public void stop() {
-        if (isRunning() && task.getStatusEnum() != DownloadTaskStatus.Done) {
-            task.setIsRunning(false);
-        }
-    }
-
-    public void resume() {
-        if (!isRunning() && task.getStatusEnum() != DownloadTaskStatus.Done) {
-            task.setIsRunning(true);
-            start();
-        }
-    }
-
-    private void check() {
+    private void doCheck() {
         task.setStatus(DownloadTaskStatus.Checking);
+        //<editor-fold defaultstate="collapsed" desc="Do business Logic">
         Chapter c = task.getChapter();
         System.out.println("Checking Chapter: " + c + "\t" + c.getUrl());
         File imageFolder = FileManager.getFolderForChapter(c);
@@ -124,7 +174,7 @@ public class TaskDownloader {
                         "Chapter \"" + c.getDisplayName() + "\" could already been downloaded. "
                         + "Delete it and start new download?",
                         "Directory not empty", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
-                // Cancel
+                // Cancel   
                 if (value == JOptionPane.CANCEL_OPTION) {
                     task.setStatus(DownloadTask.DownloadTaskStatus.Stopped);
                     return;
@@ -134,38 +184,61 @@ public class TaskDownloader {
         }
         imageFolder.mkdirs();
         task.setDownloadTo(imageFolder);
+        //</editor-fold>
+        doParse();
     }
 
-    private void parse() throws Exception {
-        Chapter c = task.getChapter();
-        if (c.getImagesCount() == -1) {
-            System.out.println("Parsing chapter: " + c);
+    private void doQueue() {
+        task.setStatus(DownloadTaskStatus.Queue);
+    }
+
+    private void doParse() {
+        try {
             task.setStatus(DownloadTask.DownloadTaskStatus.Parsing);
-            listener.updateRecord(task);
+            Chapter c = task.getChapter();
+            if (c.getImagesCount() == -1) {
+                System.out.println("Parsing chapter: " + c);
+                listener.updateRecord(task);
 
-            IFacadeMangaServer usingServer = c.getManga().getServer().getMangaServer();
-            List<Image> lstImg = usingServer.getAllImages(c);
+                IFacadeMangaServer usingServer = c.getManga().getServer().getMangaServer();
+                List<Image> lstImg = usingServer.getAllImages(c);
 
-            c.addImages(lstImg);
-            System.out.println("\tGot " + lstImg.size() + " image(s)");
+                c.addImages(lstImg);
+                System.out.println("\tGot " + lstImg.size() + " image(s)");
+            }
+            doDownload();
+        } catch (Exception ex) {
+            doError();
+            Logger.getLogger(TaskDownloader.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    private void download() throws InterruptedException {
-        task.setStatus(DownloadTask.DownloadTaskStatus.Downloading);
-        listener.updateRecord(task);
-
-        Chapter c = task.getChapter();
-        File imageFolder = task.getDownloadTo();
-        Collection<Image> lstImg = c.getSetImage();
-        System.out.println("\tSave to: " + imageFolder.getAbsolutePath());
-        downloadImages(task, lstImg, imageFolder);
-        // Turn-off the logger
-        //MyLogger.log(lstImg, imageFolder.getParentFile(), c);
+    private void doDownload() {
+        try {
+            task.setStatus(DownloadTask.DownloadTaskStatus.Downloading);
+            listener.updateRecord(task);
+            Chapter c = task.getChapter();
+            File imageFolder = task.getDownloadTo();
+            Collection<Image> lstImg = c.getSetImage();
+            System.out.println("\tSave to: " + imageFolder.getAbsolutePath());
+            downloadImages(task, lstImg, imageFolder);
+            // Turn-off the logger
+            //MyLogger.log(lstImg, imageFolder.getParentFile(), c);
+        } catch (InterruptedException ex) {
+            doError();
+            Logger
+                    .getLogger(TaskDownloader.class
+                            .getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
-    private void cleaning() throws IOException {
-        task.setStatus(DownloadTask.DownloadTaskStatus.Cleaning);
+    private void doError() {
+        task.setStatus(DownloadTaskStatus.Error);
+        isDownloadImages = false;
+    }
+
+    private void doClean() throws IOException {
+        task.setStatus(DownloadTaskStatus.Cleaning);
         listener.updateRecord(task);
 
         Chapter c = task.getChapter();
@@ -181,50 +254,65 @@ public class TaskDownloader {
                 FileUtilities.deleteDirector(imageFolder);
             }
         }
-        done();
+        doDone();
     }
 
-    private void done() {
+    private void doDone() {
         task.setStatus(DownloadTaskStatus.Done);
         listener.updateRecord(task);
         listener.onTaskDownloadFinish(task);
     }
 
+    private boolean isDownloadImages = false;
+
     private void downloadImages(final DownloadTask task, Collection<Image> lstImg, File imageFolder) throws InterruptedException {
-        ArrayList<Callable<Boolean>> listImageTask = new ArrayList<Callable<Boolean>>();
-        synchronized (task) {
+        if (isDownloadImages) {
+        } else {
+            isDownloadImages = true;
+            ArrayList<Callable<Boolean>> listImageTask = new ArrayList<Callable<Boolean>>();
+            synchronized (task) {
 //            task.clearCurrentImage();
-            for (Image img : lstImg) {
-                if (!img.isIsDownloaded()) {
-                    try {
-                        File fileImage = FileManager.getFileForImage(imageFolder, img);
-                        listImageTask.add(new DefaultFileDownloader(task, img, fileImage));
-                    } catch (IOException ex) {
-                        Logger.getLogger(TaskDownloader.class.getName()).log(Level.SEVERE, null, ex);
+                for (Image img : lstImg) {
+                    if (!img.isIsDownloaded()) {
+                        try {
+                            File fileImage = FileManager.getFileForImage(imageFolder, img);
+                            listImageTask.add(new DefaultFileDownloader(task, img, fileImage));
+
+                        } catch (IOException ex) {
+                            Logger.getLogger(TaskDownloader.class
+                                    .getName()).log(Level.SEVERE, null, ex);
+                        }
                     }
                 }
             }
+            MultitaskJob.doTask(DEFAULT_IMAGE_QUEUE_SIZE, listImageTask);
         }
-        MultitaskJob.doTask(DEFAULT_IMAGE_QUEUE_SIZE, listImageTask);
+    }
+
+    private void doStop() {
+        task.setStatus(DownloadTaskStatus.Stopped);
+
     }
 
     private class DefaultFileDownloader extends AFileDownloader {
 
-        private Image image;
+        private final Image image;
 
         private DefaultFileDownloader(DownloadTask task, Image image, File fileOutput) throws IOException {
             super(image.getConnection(), fileOutput);
             this.task = task;
             this.image = image;
         }
-        private DownloadTask task;
+        private final DownloadTask task;
 
         @Override
         public Boolean call() throws Exception {
-            if (isRunning()) {
-                return super.call();
-            } else {
-                return false;
+            while (true) {
+                if (task.getStatusEnum() == DownloadTaskStatus.Downloading) {
+                    return super.call();
+                } else {
+                    Thread.yield();
+                }
             }
         }
 
@@ -233,6 +321,14 @@ public class TaskDownloader {
             image.setIsDownloaded(true);
             task.increaseCurrentImage();
             listener.updateRecord(task);
+            if (task.isFinish()) {
+                try {
+                    doClean();
+                } catch (IOException ex) {
+                    doError();
+                    Logger.getLogger(TaskDownloader.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
         }
     }
 

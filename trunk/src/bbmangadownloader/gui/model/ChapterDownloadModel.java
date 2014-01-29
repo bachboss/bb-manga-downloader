@@ -6,7 +6,6 @@ package bbmangadownloader.gui.model;
 
 import bbmangadownloader.bus.model.data.DownloadTask;
 import bbmangadownloader.entity.Chapter;
-import bbmangadownloader.ult.GUIUtilities;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
@@ -18,8 +17,8 @@ import javax.swing.table.AbstractTableModel;
 public class ChapterDownloadModel extends AbstractTableModel {
 
     private static final String[] COLUMNS = {"Chapter", "Display Name", "Status", "URL"};
-    private static Class[] CLASSES = {Float.class, String.class, String.class, String.class};
-    private List<DownloadTask> listDownload;
+    private static final Class[] CLASSES = {Float.class, String.class, String.class, String.class};
+    private final List<DownloadTask> listDownload;
 
     public ChapterDownloadModel() {
         // remove the creat-code later
@@ -60,7 +59,7 @@ public class ChapterDownloadModel extends AbstractTableModel {
             case (1):
                 return task.getChapter().getDisplayName();
             case (2):
-                return task.getStatus();
+                return task.getDisplayStatus();
             case (3):
                 return task.getChapter().getUrl();
         }

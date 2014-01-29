@@ -13,6 +13,7 @@ import bbmangadownloader.manager.ConfigManager;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
 /**
@@ -30,14 +31,21 @@ public class MangaDownloaderGUITest extends javax.swing.JFrame {
     }
 
     private void initSampleData() {
-        Server s = ServerManager.getServerByName("test");
-        Manga m = new Manga(s, "Test Mana", "http://google.com.vn");
-        Random r = new Random();
-        for (int i = 0; i < 20; i++) {
-            pnlTaskDownload.addChapter(
-                    new Chapter(i, "Chapter " + r.nextInt(1000), "http://google.com.vn",
-                    m));
-        }
+        SwingUtilities.invokeLater(new Runnable() {
+
+            @Override
+            public void run() {
+                Server s = ServerManager.getServerByName("test");
+                Manga m = new Manga(s, "Test Mana", "http://google.com.vn");
+                Random r = new Random();
+                for (int i = 0; i < 20; i++) {
+                    pnlTaskDownload.addChapter(
+                            new Chapter(i, "Chapter " + r.nextInt(1000), "http://google.com.vn",
+                                    m));
+                }
+            }
+        });
+
     }
 
     /**

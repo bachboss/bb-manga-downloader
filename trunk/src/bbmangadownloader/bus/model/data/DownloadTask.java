@@ -7,7 +7,6 @@ package bbmangadownloader.bus.model.data;
 import bbmangadownloader.entity.Chapter;
 import bbmangadownloader.gui.bus.TaskDownloader;
 import java.io.File;
-import javax.management.Query;
 
 /**
  *
@@ -15,12 +14,12 @@ import javax.management.Query;
  */
 public class DownloadTask {
 
-    private Chapter c;
+    private final Chapter c;
     private int currentImage;
     private DownloadTaskStatus status = DownloadTaskStatus.No;
+    private DownloadTaskStatus lastStatus = DownloadTaskStatus.No;
     private File downloadTo;
     private TaskDownloader downloader;
-    private boolean isRunning = false;
 
     public DownloadTask(Chapter c) {
         this.c = c;
@@ -38,42 +37,9 @@ public class DownloadTask {
         return downloadTo;
     }
 
-    public void setDownloadTo(File downloadTo) {
-        this.downloadTo = downloadTo;
-    }
-
     public void setStatus(DownloadTaskStatus status) {
+        this.lastStatus = this.status;
         this.status = status;
-    }
-
-    public synchronized String getStatus() {
-        if (status == DownloadTaskStatus.No
-                || status == DownloadTaskStatus.Queue) {
-            return status.getStatus();
-        }
-        String s;
-        if (status == DownloadTaskStatus.Downloading) {
-            int numberOfImage = c.getImagesCount();
-            if (currentImage == 0) {
-                s = ("▼ (0%)");
-            } else if (currentImage == c.getImagesCount()) {
-                s = ("▼ (100%)");
-            } else {
-                s = String.format("▼ (%.2f", (((float) currentImage) / numberOfImage * 100)) + "%)";
-            }
-        } else {
-            s = status.getStatus();
-        }
-
-        if (isRunning) {
-            return s;
-        } else {
-            return ("Pause: " + s);
-        }
-    }
-
-    public DownloadTaskStatus getStatusEnum() {
-        return status;
     }
 
     public void clearCurrentImage() {
@@ -92,12 +58,51 @@ public class DownloadTask {
         this.downloader = downloader;
     }
 
-    public boolean isIsRunning() {
-        return isRunning;
+    public void setDownloadTo(File downloadTo) {
+        this.downloadTo = downloadTo;
     }
 
-    public void setIsRunning(boolean isRunning) {
-        this.isRunning = isRunning;
+    public boolean isFinish() {
+        return currentImage == c.getImagesCount();
+    }
+
+    // State Chart Diagram
+    public boolean isRunning() {
+        switch (status) {
+            case Checking:
+            case Downloading:
+            case Parsing:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    public synchronized String getDisplayStatus() {
+        if (status == DownloadTaskStatus.Downloading) {
+            String s;
+            int numberOfImage = c.getImagesCount();
+            if (currentImage == 0) {
+                s = ("▼ (0%)");
+            } else if (currentImage == c.getImagesCount()) {
+                s = ("▼ (100%)");
+            } else {
+                s = String.format("▼ (%.2f", (((float) currentImage) / numberOfImage * 100)) + "%)";
+            }
+            return s;
+        } else if (status == DownloadTaskStatus.Stopped) {
+            return "Stop: " + getLastStatusEnum().toString();
+        } else {
+            return getStatusEnum().toString();
+        }
+    }
+
+    public DownloadTaskStatus getStatusEnum() {
+        return status;
+    }
+
+    public DownloadTaskStatus getLastStatusEnum() {
+        return lastStatus;
     }
 
     public static enum DownloadTaskStatus {
@@ -108,7 +113,7 @@ public class DownloadTask {
         private DownloadTaskStatus(int id) {
             this.id = id;
         }
-        private int id;
+        private final int id;
 
         private String getStatus() {
             return STATUS_ALL[id];

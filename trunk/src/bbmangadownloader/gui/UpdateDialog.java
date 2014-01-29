@@ -12,6 +12,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.SwingUtilities;
 
 /**
  *
@@ -24,6 +25,9 @@ public class UpdateDialog extends javax.swing.JDialog {
 
     /**
      * Creates new form UpdateDialog
+     *
+     * @param parent
+     * @param modal
      */
     public UpdateDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -38,7 +42,7 @@ public class UpdateDialog extends javax.swing.JDialog {
     }
 
     private void doUpdate() {
-        new Thread(new Runnable() {
+        SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
                 btnCheck.setEnabled(false);
@@ -61,7 +65,7 @@ public class UpdateDialog extends javax.swing.JDialog {
                 }
                 btnCheck.setEnabled(true);
             }
-        }).start();
+        });
     }
 
     /**

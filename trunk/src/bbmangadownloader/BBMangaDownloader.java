@@ -35,7 +35,7 @@ public final class BBMangaDownloader {
     //
     private static final int MODE = MODE_DOWNLOADER;
     public static final String APPLICATION_NAME = APPLICATION_NAMES[MODE];
-    public static final boolean TEST = false;
+    public static final boolean TEST = true;
     public static FileBrowserHttpdServer BROWSER_SERVER;
 
     public static boolean isModeDownloader() {
