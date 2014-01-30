@@ -2,7 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package bbmangadownloader.bus;
+package bbmangadownloader.bus.notmaintained;
+
+import bbmangadownloader.bus._99mh;
 
 /**
  *

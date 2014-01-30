@@ -51,9 +51,9 @@ public class AddMangaDialog extends javax.swing.JDialog {
                 modelChapter.addChapters(lstChapter);
                 modelChapter.fireTableDataChanged();
                 System.out.println("Loaded: " + lstChapter.size());
-                if (lstChapter == null || lstChapter.isEmpty()) {
-                    GUIUtilities.showLog("Loaded: 0 record(s) !");
-                }
+//                if (lstChapter == null || lstChapter.isEmpty()) {
+//                    GUIUtilities.showLog("Loaded: 0 record(s) !");
+//                }
                 tblChapters.setEnabled(true);
             } catch (Exception ex) {
                 Logger.getLogger(MangaDownloadGUI.class.getName()).log(Level.SEVERE, null, ex);

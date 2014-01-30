@@ -112,4 +112,21 @@ public class ChapterDownloadModel extends AbstractTableModel {
     public boolean isCellEditable(int rowIndex, int columnIndex) {
         return false;
     }
+
+    public boolean isDownloadable(int limit) {
+        for (DownloadTask task : listDownload) {
+            DownloadTask.DownloadTaskStatus status = task.getStatusEnum();
+            if (!(status == DownloadTask.DownloadTaskStatus.Done
+                    || status == DownloadTask.DownloadTaskStatus.No
+                    || status == DownloadTask.DownloadTaskStatus.Error
+                    || status == DownloadTask.DownloadTaskStatus.Stopped
+                    || status == DownloadTask.DownloadTaskStatus.Queue)) {
+                limit--;
+                if (limit < 0) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 }

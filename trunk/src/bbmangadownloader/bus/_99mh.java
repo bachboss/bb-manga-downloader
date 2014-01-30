@@ -4,6 +4,7 @@
  */
 package bbmangadownloader.bus;
 
+import bbmangadownloader.bus.notmaintained.Cococomic;
 import bbmangadownloader.entity.Chapter;
 import bbmangadownloader.entity.Manga;
 import bbmangadownloader.entity.Server;

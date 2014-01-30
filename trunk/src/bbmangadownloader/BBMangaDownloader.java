@@ -26,16 +26,16 @@ import nanohttpd.FileBrowserHttpdServer;
  */
 public final class BBMangaDownloader {
 
-    private static final String CURR_VERSION = "1.3.4";
+    private static final String CURR_VERSION = "1.4.0";
     //
-    private static final String[] APPLICATION_NAMES =
-            new String[]{"BB Manga Watcher", "BB Manga Downloader"};
+    private static final String[] APPLICATION_NAMES
+            = new String[]{"BB Manga Watcher", "BB Manga Downloader"};
     private static final int MODE_WATCHER = 0;
     private static final int MODE_DOWNLOADER = 1;
     //
     private static final int MODE = MODE_DOWNLOADER;
     public static final String APPLICATION_NAME = APPLICATION_NAMES[MODE];
-    public static final boolean TEST = true;
+    public static final boolean TEST = false;
     public static FileBrowserHttpdServer BROWSER_SERVER;
 
     public static boolean isModeDownloader() {
@@ -49,7 +49,7 @@ public final class BBMangaDownloader {
         if (TEST) {
             Logger.getLogger(BBMangaDownloader.class.getName()).
                     log(Level.WARNING,
-                    "DEVELOPING MODE - TURN OFF BEFORE RELEASING !", (Object) null);
+                            "DEVELOPING MODE - TURN OFF BEFORE RELEASING !", (Object) null);
         }
         if (OSSupport.getOS() == OSSupport.OS.MAC_OS) {
             configForMacOS();
@@ -78,7 +78,7 @@ public final class BBMangaDownloader {
 
             //
             panel.setProgressString("Setting Look & Feel");
-            panel.setProgressValue(35);
+            panel.setProgressValue(32);
             //<editor-fold defaultstate="collapsed" desc="Set Look&Feel">
             try {
                 UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -88,7 +88,7 @@ public final class BBMangaDownloader {
             //</editor-fold>
 
             panel.setProgressString("Loading Update Service");
-            panel.setProgressValue(55);
+            panel.setProgressValue(50);
             //<editor-fold defaultstate="collapsed" desc="Update Service">
             if (ConfigManager.getCurrentInstance().isCheckUpdateOnStartUp()) {
                 UpdateService.loadOnStartUp();
@@ -96,7 +96,7 @@ public final class BBMangaDownloader {
             //</editor-fold>
 
             panel.setProgressString("Loading Data");
-            panel.setProgressValue(75);
+            panel.setProgressValue(70);
             ServerManager.loadServer();
             // Load Watcher...
             if (!isModeDownloader()) {
@@ -117,7 +117,6 @@ public final class BBMangaDownloader {
 //                        ex);
 //            }
             //</editor-fold>
-
             panel.setProgressValue(100);
             panel.setProgressString("Done");
 //            Thread.sleep(1000);
@@ -178,7 +177,7 @@ public final class BBMangaDownloader {
             ReflectionUtilities.invokeMethod(
                     application,
                     ReflectionUtilities.getMethod(
-                    classApplication, "setDockIconImage", java.awt.Image.class),
+                            classApplication, "setDockIconImage", java.awt.Image.class),
                     image);
             Logger.getLogger(BBMangaDownloader.class.getName()).log(Level.CONFIG,
                     "Config for Mac OS Done", (Object) null);

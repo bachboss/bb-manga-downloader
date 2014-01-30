@@ -21,7 +21,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -38,6 +37,7 @@ public class TaskDownloader {
     private final ITaskDownloaderListener listener;
     private final DownloadTask task;
     private Thread thread;
+    boolean tryToStop = false;
 
     public TaskDownloader(ITaskDownloaderListener listener, DownloadTask task) {
         this.listener = listener;
@@ -68,12 +68,6 @@ public class TaskDownloader {
         }
     }
 
-    boolean isTryStop = false;
-
-    public void tryStop() {
-        isTryStop = true;
-    }
-
     public boolean isStart() {
         DownloadTaskStatus status = task.getStatusEnum();
         return (status == DownloadTaskStatus.No || status == DownloadTaskStatus.Queue);
@@ -81,12 +75,13 @@ public class TaskDownloader {
 
     public boolean isStop() {
         DownloadTaskStatus status = task.getStatusEnum();
-        return (status == DownloadTaskStatus.Checking
-                || status == DownloadTaskStatus.Parsing
-                || status == DownloadTaskStatus.Downloading);
+//        return (status == DownloadTaskStatus.Checking
+//                || status == DownloadTaskStatus.Parsing
+//                || status == DownloadTaskStatus.Downloading);
+        return (status == DownloadTaskStatus.Downloading);
     }
 
-    private void stop() {
+    public void stop() {
         if (isStop()) {
             doStop();
         }
@@ -95,7 +90,6 @@ public class TaskDownloader {
     public boolean isResume() {
         return (task.getStatusEnum() == DownloadTaskStatus.Stopped
                 || task.getStatusEnum() == DownloadTaskStatus.Error);
-
     }
 
     public void resume() {
@@ -121,19 +115,10 @@ public class TaskDownloader {
         }
     }
 
-    public void waitForResume() {
-        if (isTryStop) {
-            isTryStop = false;
-            while (task.getStatusEnum() == DownloadTaskStatus.Stopped) {
-                Thread.yield();
-            }
-        }
-    }
-
     // Private State Machine
     private void doResume() {
-        isTryStop = false;
-        try {
+        tryToStop = false;
+        try {            
             switch (task.getLastStatusEnum()) {
                 case Checking: {
                     doCheck();
@@ -144,7 +129,7 @@ public class TaskDownloader {
                     break;
                 }
                 case Downloading: {
-                    doDownload();
+                    doResumeDownload();
                     break;
                 }
                 case Error: {
@@ -213,7 +198,7 @@ public class TaskDownloader {
         }
     }
 
-    private void doDownload() {
+    private void doDownload() throws IOException {
         try {
             task.setStatus(DownloadTask.DownloadTaskStatus.Downloading);
             listener.updateRecord(task);
@@ -223,18 +208,15 @@ public class TaskDownloader {
             System.out.println("\tSave to: " + imageFolder.getAbsolutePath());
             downloadImages(task, lstImg, imageFolder);
             // Turn-off the logger
-            //MyLogger.log(lstImg, imageFolder.getParentFile(), c);
+            //MyLogger.log(lstImg, imageFolder.getParentFile(), c);            
         } catch (InterruptedException ex) {
             doError();
-            Logger
-                    .getLogger(TaskDownloader.class
-                            .getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(TaskDownloader.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     private void doError() {
         task.setStatus(DownloadTaskStatus.Error);
-        isDownloadImages = false;
     }
 
     private void doClean() throws IOException {
@@ -263,36 +245,53 @@ public class TaskDownloader {
         listener.onTaskDownloadFinish(task);
     }
 
-    private boolean isDownloadImages = false;
+    private void doResumeDownload() {
+        task.setStatus(DownloadTask.DownloadTaskStatus.Downloading);
+        listener.updateRecord(task);
+
+        for (DefaultFileDownloader t : listImageTask) {
+            synchronized (t) {
+                t.notify();
+            }
+        }
+        System.out.println("Done Resume !");
+    }
+
+    private final ArrayList<DefaultFileDownloader> listImageTask = new ArrayList<DefaultFileDownloader>();
 
     private void downloadImages(final DownloadTask task, Collection<Image> lstImg, File imageFolder) throws InterruptedException {
-        if (isDownloadImages) {
-        } else {
-            isDownloadImages = true;
-            ArrayList<Callable<Boolean>> listImageTask = new ArrayList<Callable<Boolean>>();
-            synchronized (task) {
+        synchronized (task) {
 //            task.clearCurrentImage();
-                for (Image img : lstImg) {
-                    if (!img.isIsDownloaded()) {
-                        try {
-                            File fileImage = FileManager.getFileForImage(imageFolder, img);
-                            listImageTask.add(new DefaultFileDownloader(task, img, fileImage));
-
-                        } catch (IOException ex) {
-                            Logger.getLogger(TaskDownloader.class
-                                    .getName()).log(Level.SEVERE, null, ex);
-                        }
+            for (Image img : lstImg) {
+                if (!img.isIsDownloaded()) {
+                    try {
+                        File fileImage = FileManager.getFileForImage(imageFolder, img);
+                        listImageTask.add(new DefaultFileDownloader(task, img, fileImage));
+                    } catch (IOException ex) {
+                        Logger.getLogger(TaskDownloader.class
+                                .getName()).log(Level.SEVERE, null, ex);
                     }
                 }
             }
-            MultitaskJob.doTask(DEFAULT_IMAGE_QUEUE_SIZE, listImageTask);
         }
+        MultitaskJob.doTask(DEFAULT_IMAGE_QUEUE_SIZE, listImageTask);
     }
 
     private void doStop() {
         task.setStatus(DownloadTaskStatus.Stopped);
-
+        tryToStop = true;
     }
+
+    public void remove() {
+        isRemoved = true;
+        for (DefaultFileDownloader t : listImageTask) {
+            synchronized (t) {
+                t.notify();
+            }
+        }
+    }
+
+    boolean isRemoved = false;
 
     private class DefaultFileDownloader extends AFileDownloader {
 
@@ -307,11 +306,17 @@ public class TaskDownloader {
 
         @Override
         public Boolean call() throws Exception {
-            while (true) {
-                if (task.getStatusEnum() == DownloadTaskStatus.Downloading) {
-                    return super.call();
-                } else {
-                    Thread.yield();
+            synchronized (this) {
+                while (true) {
+                    if (!isRemoved) {
+                        if (task.getStatusEnum() == DownloadTaskStatus.Downloading) {
+                            return super.call();
+                        } else {
+                            wait();
+                        }
+                    } else {
+                        return true;
+                    }
                 }
             }
         }
