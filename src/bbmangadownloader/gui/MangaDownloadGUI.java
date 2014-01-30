@@ -13,6 +13,8 @@ import bbmangadownloader.faces.ServerManager;
 import bbmangadownloader.gui.HelpDialog.IHelpListener;
 import bbmangadownloader.gui.model.*;
 import bbmangadownloader.manager.ConfigManager;
+import bbmangadownloader.manager.entity.Bookmark;
+import bbmangadownloader.manager.entity.History;
 import bbmangadownloader.ult.GUIUtilities;
 import bbmangadownloader.ult.MySwingUtilities;
 import bbmangadownloader.ult.OSSupport;
@@ -24,7 +26,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
-import javax.swing.SwingUtilities;
+import javax.swing.JOptionPane;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.jdesktop.swingx.autocomplete.ObjectToStringConverter;
 import org.jdesktop.swingx.combobox.ListComboBoxModel;
@@ -153,15 +155,16 @@ public class MangaDownloadGUI extends javax.swing.JFrame implements IHelpListene
         tblChapters = new org.jdesktop.swingx.JXTable();
         pnlDownload = new javax.swing.JPanel();
         pnlTaskDownload = new bbmangadownloader.gui.control.PanelDownload();
-        pnlBot = new javax.swing.JPanel();
-        lblOutput = new javax.swing.JLabel();
-        jSeparator1 = new javax.swing.JSeparator();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem3 = new javax.swing.JMenuItem();
         jMenu7 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem4 = new javax.swing.JMenuItem();
+        jMenu3 = new javax.swing.JMenu();
+        jMenuItem7 = new javax.swing.JMenuItem();
+        jMenuItem8 = new javax.swing.JMenuItem();
+        jMenuItem6 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jMenuItem2 = new javax.swing.JMenuItem();
         jMenuItem5 = new javax.swing.JMenuItem();
@@ -188,7 +191,12 @@ public class MangaDownloadGUI extends javax.swing.JFrame implements IHelpListene
         });
         popChapters.add(mnChapterViewInBroser);
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         pnlTop.setMinimumSize(new java.awt.Dimension(0, 0));
 
@@ -373,7 +381,7 @@ public class MangaDownloadGUI extends javax.swing.JFrame implements IHelpListene
         );
         pnlDownloadInformationLayout.setVerticalGroup(
             pnlDownloadInformationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(tpnlController, javax.swing.GroupLayout.DEFAULT_SIZE, 94, Short.MAX_VALUE)
+            .addComponent(tpnlController, javax.swing.GroupLayout.PREFERRED_SIZE, 94, Short.MAX_VALUE)
         );
 
         tpnlController.getAccessibleContext().setAccessibleName("Scanner");
@@ -432,7 +440,7 @@ public class MangaDownloadGUI extends javax.swing.JFrame implements IHelpListene
         );
         pnlDownloadLayout.setVerticalGroup(
             pnlDownloadLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlTaskDownload, javax.swing.GroupLayout.DEFAULT_SIZE, 173, Short.MAX_VALUE)
+            .addComponent(pnlTaskDownload, javax.swing.GroupLayout.DEFAULT_SIZE, 206, Short.MAX_VALUE)
         );
 
         jSplitPane2.setRightComponent(pnlDownload);
@@ -449,28 +457,7 @@ public class MangaDownloadGUI extends javax.swing.JFrame implements IHelpListene
             .addGroup(pnlTopLayout.createSequentialGroup()
                 .addComponent(pnlDownloadInformation, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSplitPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 356, Short.MAX_VALUE))
-        );
-
-        lblOutput.setText(".");
-        lblOutput.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-
-        javax.swing.GroupLayout pnlBotLayout = new javax.swing.GroupLayout(pnlBot);
-        pnlBot.setLayout(pnlBotLayout);
-        pnlBotLayout.setHorizontalGroup(
-            pnlBotLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSeparator1)
-            .addGroup(pnlBotLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(lblOutput, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-        pnlBotLayout.setVerticalGroup(
-            pnlBotLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlBotLayout.createSequentialGroup()
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblOutput))
+                .addComponent(jSplitPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 384, Short.MAX_VALUE))
         );
 
         jMenu1.setText("File");
@@ -485,7 +472,7 @@ public class MangaDownloadGUI extends javax.swing.JFrame implements IHelpListene
 
         jMenuBar1.add(jMenu1);
 
-        jMenu7.setText("Edit");
+        jMenu7.setText("Tools");
 
         jMenuItem1.setText("HTML Generator");
         jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
@@ -503,6 +490,37 @@ public class MangaDownloadGUI extends javax.swing.JFrame implements IHelpListene
             }
         });
         jMenu7.add(jMenuItem4);
+
+        jMenu3.setText("Bookmarks");
+
+        jMenuItem7.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_D, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItem7.setText("Bookmark Manga");
+        jMenuItem7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem7ActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenuItem7);
+
+        jMenuItem8.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_B, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItem8.setText("Show bookmarks");
+        jMenuItem8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem8ActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenuItem8);
+
+        jMenu7.add(jMenu3);
+
+        jMenuItem6.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_H, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItem6.setText("History");
+        jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem6ActionPerformed(evt);
+            }
+        });
+        jMenu7.add(jMenuItem6);
 
         jMenuBar1.add(jMenu7);
 
@@ -532,15 +550,11 @@ public class MangaDownloadGUI extends javax.swing.JFrame implements IHelpListene
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlBot, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(pnlTop, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(pnlTop, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pnlBot, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addComponent(pnlTop, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -629,6 +643,37 @@ public class MangaDownloadGUI extends javax.swing.JFrame implements IHelpListene
             doAddToDownload();
         }
     }//GEN-LAST:event_tblChaptersMouseReleased
+
+    private void jMenuItem8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem8ActionPerformed
+        doShowBookmarks();
+    }//GEN-LAST:event_jMenuItem8ActionPerformed
+
+    private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
+        doAddBookmarks();
+    }//GEN-LAST:event_jMenuItem7ActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        if (!pnlTaskDownload.isAllDownloadDone()) {
+            int x = GUIUtilities.showConfirmError(this,
+                    "Some download task are in progess. "
+                    + "Exit program will terminate them all.\n"
+                    + "Exit anyway?",
+                    "Exit",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE
+            );
+            if (x != JOptionPane.YES_OPTION) {
+                return;
+            }
+        }
+        this.dispose();
+        System.exit(0);
+    }//GEN-LAST:event_formWindowClosing
+
+    private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
+        actionHistoryManager();
+    }//GEN-LAST:event_jMenuItem6ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCheckSupport;
     private javax.swing.JButton btnScanerFletch;
@@ -641,6 +686,7 @@ public class MangaDownloadGUI extends javax.swing.JFrame implements IHelpListene
     private javax.swing.JLabel jLabel7;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu5;
     private javax.swing.JMenu jMenu6;
     private javax.swing.JMenu jMenu7;
@@ -651,16 +697,16 @@ public class MangaDownloadGUI extends javax.swing.JFrame implements IHelpListene
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
+    private javax.swing.JMenuItem jMenuItem6;
+    private javax.swing.JMenuItem jMenuItem7;
+    private javax.swing.JMenuItem jMenuItem8;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSplitPane jSplitPane2;
     private org.jdesktop.swingx.JXBusyLabel lblLoading;
-    public static javax.swing.JLabel lblOutput;
     private org.jdesktop.swingx.JXBusyLabel lblScannerLoading;
     private javax.swing.JLabel lblSupport;
     private javax.swing.JMenuItem mnChapterViewInBroser;
     private javax.swing.JMenuItem mnChaptersAddToDownload;
-    private javax.swing.JPanel pnlBot;
     private javax.swing.JPanel pnlChapters;
     private javax.swing.JPanel pnlDownload;
     private javax.swing.JPanel pnlDownloadInformation;
@@ -827,5 +873,47 @@ public class MangaDownloadGUI extends javax.swing.JFrame implements IHelpListene
         } catch (IOException ex) {
             Logger.getLogger(MangaDownloadGUI.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    BookmarkManagerDialog dlgBookmarkManager;
+
+    private void doShowBookmarks() {
+        if (dlgBookmarkManager == null) {
+            dlgBookmarkManager = new BookmarkManagerDialog(this, false);
+        }
+        dlgBookmarkManager.reload();
+        dlgBookmarkManager.setVisible(true);
+    }
+
+    BookmarkDialog dlgBookMark;
+
+    private void doAddBookmarks() {
+        if (dlgBookMark == null) {
+            dlgBookMark = new BookmarkDialog(this, false);
+        }
+        dlgBookMark.clear(txtMangaName.getText(), txtMangaUrl.getText());
+        dlgBookMark.setVisible(true);
+    }
+
+    void setCheckByBookmark(Bookmark m) {
+        txtMangaName.setText(m.getMangaName());
+        txtMangaUrl.setText(m.getUrl());
+        btnCheckSupportActionPerformed(null);
+    }
+
+    void setCheckByHistory(History m) {
+        txtMangaName.setText(m.getMangaName());
+        txtMangaUrl.setText(m.getMangaUrl());
+        btnCheckSupportActionPerformed(null);
+    }
+
+    HistoryManagerDialog dlgHistoryManager;
+
+    private void actionHistoryManager() {
+        if (dlgHistoryManager == null) {
+            dlgHistoryManager = new HistoryManagerDialog(this, false);
+        }
+        dlgHistoryManager.reload();
+        dlgHistoryManager.setVisible(true);
     }
 }

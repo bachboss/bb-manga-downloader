@@ -4,7 +4,7 @@
  */
 package bbmangadownloader.faces.implement;
 
-import bbmangadownloader.bus._99770;
+import bbmangadownloader.bus.notmaintained._99770;
 import bbmangadownloader.bus.description.IBus;
 import bbmangadownloader.faces.AFacadeDefault;
 import bbmangadownloader.faces.SupportType;

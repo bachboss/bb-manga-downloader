@@ -38,14 +38,14 @@ public class FacadeManager {
         MAP_HOST.put("mangareader", new FacadeManagerReader());
         MAP_HOST.put("batoto", new FacadeBatoto());
         MAP_HOST.put("vietboom", new FacadeVietBoom());
-        MAP_HOST.put("comicvn", new FacadeComicVN());
+//        MAP_HOST.put("comicvn", new FacadeComicVN());
         MAP_HOST.put("kissmanga", new FacadeKissManga());
         MAP_HOST.put("vnsharing", new FacadeVnSharing());
         MAP_HOST.put("mangainn", new FacadeMangaInn());
         MAP_HOST.put("mangastream", new FacadeMangaStream());
         MAP_HOST.put("mangahere", new FacadeMangaHere());
-        MAP_HOST.put("cococomic", new FacadeCococomic());
-        MAP_HOST.put("99770", new Facade99770());
+//        MAP_HOST.put("cococomic", new FacadeCococomic());
+//        MAP_HOST.put("99770", new Facade99770());
         MAP_HOST.put("manga24h", new FacadeManga24h());
 //        MAP_HOST.put("veryim", new FacadeVeryim());
         MAP_HOST.put("blogtruyen", new FacadeBlogTruyen());

@@ -6,13 +6,13 @@ package bbmangadownloader.ult;
 
 import java.awt.Component;
 import java.awt.Desktop;
+import java.awt.HeadlessException;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.net.URI;
 import java.text.DecimalFormat;
 import java.util.logging.Level;
 import javax.swing.JOptionPane;
-import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 import org.jdesktop.swingx.JXErrorPane;
 import org.jdesktop.swingx.error.ErrorInfo;
@@ -51,18 +51,12 @@ public class GUIUtilities {
         JOptionPane.showMessageDialog(parent, text, "Error", JOptionPane.ERROR_MESSAGE);
     }
 
-    public static void showLog(String text) {
-        if (bbmangadownloader.gui.MangaDownloadGUI.lblOutput != null) {
-            bbmangadownloader.gui.MangaDownloadGUI.lblOutput.setText(text);
-        }
-    }
-
     /**
      * Brings up a dialog where the number of choices is determined by the
-     * <code>optionType</code> parameter, where the
-     * <code>messageType</code> parameter determines the icon to display. The
-     * <code>messageType</code> parameter is primarily used to supply a default
-     * icon from the Look and Feel.
+     * <code>optionType</code> parameter, where the <code>messageType</code>
+     * parameter determines the icon to display. The <code>messageType</code>
+     * parameter is primarily used to supply a default icon from the Look and
+     * Feel.
      *
      * @param parentComponent determines the <code>Frame</code> in which the
      * dialog is displayed; if <code>null</code>, or if the

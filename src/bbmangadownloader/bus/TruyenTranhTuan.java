@@ -18,8 +18,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -32,7 +30,7 @@ public class TruyenTranhTuan extends ADefaultBus implements IBusOnePage { // Don
 
     private static final String BASED_URL = "http://truyentranhtuan.com";
     private static final String URL_LIST_MANGA = "http://truyentranhtuan.com/danh-sach-truyen/";
-    private static final String DATE_FORMAT_UPLOAD = "dd-MM-yyyy";
+    private static final String DATE_FORMAT_UPLOAD = "dd.MM.yyyy";
 
     @Override
     public List<Manga> getAllMangas(Server s) throws IOException {
@@ -56,26 +54,26 @@ public class TruyenTranhTuan extends ADefaultBus implements IBusOnePage { // Don
         ArrayList<Chapter> lstChapter = new ArrayList<Chapter>();
 
         Document doc = getDocument(manga.getUrl());
-        Elements xmlNodes = doc.select("div[id=content-main] tr[class]");
+        Elements xmlNodes = doc.select("html body div#nos-web.wrapper div.container div.inner div.content div#container6 div#container5 "
+                + "div#container4 div#container3 div#container2 div#container1"
+                + " div#main-content div#manga-chapter span.chapter-name");
 
         for (Element e : xmlNodes) {
-            Elements children = e.children();
-            if (children.size() == 3) {
-                Element aTag = children.get(0).select("a").first();
-                Chapter c;
-                String strDate = children.get(2).text();
-                MangaDateTime date;
-                try {
-                    date = new MangaDateTime(DateTimeUtilities.getDate(strDate, DATE_FORMAT_UPLOAD));
-                } catch (ParseException ex) {
-                    date = MangaDateTime.NOT_AVAIABLE;
-                }
-                c = new Chapter(-1, aTag.text(), BASED_URL + aTag.attr("href"), manga,
-                        children.get(1).text(),
-                        date);
-                lstChapter.add(c);
-
+            Element aTag = e.select("a").first();
+            Chapter c;
+            Element eTrans = e.nextElementSibling();
+            Element eDate = eTrans.nextElementSibling();
+            String strDate = eDate.text();
+            MangaDateTime date;
+            try {
+                date = new MangaDateTime(DateTimeUtilities.getDate(strDate, DATE_FORMAT_UPLOAD));
+            } catch (ParseException ex) {
+                date = MangaDateTime.NOT_AVAIABLE;
             }
+            c = new Chapter(-1, aTag.text(), aTag.attr("href"), manga,
+                    eTrans.text(),
+                    date);
+            lstChapter.add(c);
         }
 
         return lstChapter;
@@ -107,7 +105,7 @@ public class TruyenTranhTuan extends ADefaultBus implements IBusOnePage { // Don
             Elements xmlNode = doc.select("script[type=text/javascript]");
             Element selectE = null;
             for (Element e : xmlNode) {
-                if (e.html().contains("slides2")) {
+                if (e.html().contains("var slides_page")) {
                     selectE = e;
                     break;
                 }
@@ -115,7 +113,7 @@ public class TruyenTranhTuan extends ADefaultBus implements IBusOnePage { // Don
             String text = selectE.html();
             arrStr = text.split("\n");
             for (String str : arrStr) {
-                if (!str.startsWith("//") && str.startsWith("var slide")) {
+                if (str.contains("var slides_page")) {
                     text = str;
                     break;
                 }

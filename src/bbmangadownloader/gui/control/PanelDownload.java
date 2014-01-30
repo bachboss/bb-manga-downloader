@@ -10,11 +10,12 @@ import bbmangadownloader.entity.Chapter;
 import bbmangadownloader.gui.bus.TaskDownloader;
 import bbmangadownloader.gui.model.ChapterDownloadModel;
 import bbmangadownloader.manager.ConfigManager;
+import bbmangadownloader.manager.HistoryManager;
+import bbmangadownloader.manager.entity.History;
 import bbmangadownloader.ult.GUIUtilities;
 import bbmangadownloader.ult.MySwingUtilities;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -26,7 +27,6 @@ public class PanelDownload extends javax.swing.JPanel implements
 
     private ChapterDownloadModel modelDownload;
     private final ArrayList<DownloadTask> queue = new ArrayList<DownloadTask>();
-    private int numberOfDownloading = 0;
 
     private static int getMaxiumNumberDownload() {
         return ConfigManager.getCurrentInstance().getMaxiumDownloadInQueue();
@@ -238,7 +238,11 @@ public class PanelDownload extends javax.swing.JPanel implements
             if (task.getStatusEnum() == DownloadTaskStatus.Queue) {
                 queue.remove(task);
             }
+            task.getDownloader().remove();
+            modelDownload.removeTask(task);
         }
+        modelDownload.fireTableDataChanged();
+
     }
 
     private void doDownloadOpenDownloadFolder() {
@@ -260,10 +264,6 @@ public class PanelDownload extends javax.swing.JPanel implements
         List<DownloadTask> lstTask = MySwingUtilities.<DownloadTask>getSelectedObjects(tblDownload);
         for (DownloadTask task : lstTask) {
             task.getDownloader().stop();
-            numberOfDownloading--;
-        }
-        if (bbmangadownloader.BBMangaDownloader.TEST) {
-            System.out.println("Number of Downloading: " + numberOfDownloading);
         }
     }
 
@@ -271,10 +271,6 @@ public class PanelDownload extends javax.swing.JPanel implements
         List<DownloadTask> lstTask = MySwingUtilities.<DownloadTask>getSelectedObjects(tblDownload);
         for (DownloadTask task : lstTask) {
             task.getDownloader().resume();
-            numberOfDownloading++;
-        }
-        if (bbmangadownloader.BBMangaDownloader.TEST) {
-            System.out.println("Number of Downloading: " + numberOfDownloading);
         }
     }
 
@@ -282,10 +278,6 @@ public class PanelDownload extends javax.swing.JPanel implements
         List<DownloadTask> lstTask = MySwingUtilities.<DownloadTask>getSelectedObjects(tblDownload);
         for (DownloadTask task : lstTask) {
             task.getDownloader().start();
-            numberOfDownloading++;
-        }
-        if (bbmangadownloader.BBMangaDownloader.TEST) {
-            System.out.println("Number of Downloading: " + numberOfDownloading);
         }
     }
 
@@ -351,22 +343,42 @@ public class PanelDownload extends javax.swing.JPanel implements
         }
     }
 
+    boolean isInvokingQueue = false;
+
     private void invokeQueue() {
         synchronized (queue) {
-            while (numberOfDownloading < getMaxiumNumberDownload()
-                    && !queue.isEmpty()) {
+            isInvokingQueue = true;
+            while (modelDownload.isDownloadable(getMaxiumNumberDownload()) && !queue.isEmpty()) {
                 DownloadTask task = queue.remove(0);
                 if (task.getStatusEnum() == DownloadTaskStatus.Queue) {
-//                    numberOfDownloading++;
                     task.getDownloader().start();
                 }
             }
+            isInvokingQueue = false;
         }
     }
 
     @Override
     public void onTaskDownloadFinish(DownloadTask task) {
-        numberOfDownloading--;
-        invokeQueue();
+        History h = new History(
+                task.getChapter().getManga().getMangaName(),
+                task.getChapter().getManga().getUrl(),
+                task.getChapter().getDisplayName(),
+                task.getChapter().getUrl()
+        );
+
+        HistoryManager.addHistory(h);
+        if (!isInvokingQueue) {
+            invokeQueue();
+        }
+    }
+
+    public boolean isAllDownloadDone() {
+        for (DownloadTask task : modelDownload.getListDownload()) {
+            if (task.getStatusEnum() != DownloadTaskStatus.Done) {
+                return false;
+            }
+        }
+        return true;
     }
 }

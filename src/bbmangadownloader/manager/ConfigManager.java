@@ -9,6 +9,8 @@ import java.io.*;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 
 /**
  *
@@ -188,7 +190,7 @@ public class ConfigManager {
     public String getWatcherFile() {
         File f = new File(getConfig(Config.WatcherFile));
         if (!f.exists()) {
-            f.mkdirs();
+            f.getParentFile().mkdirs();
             try {
                 f.createNewFile();
             } catch (IOException ex) {
@@ -294,6 +296,38 @@ public class ConfigManager {
         setConfig(Config.MaxiumDownloadImage, max);
     }
 
+    public String getBookmarkFile() {
+        File f = new File(getConfig(Config.BookmarkFile));
+        if (!f.exists()) {
+            try {
+                f.createNewFile();
+            } catch (IOException ex) {
+                return Config.BookmarkFile.getDefaultValue();
+            }
+        }
+        return f.getAbsolutePath();
+    }
+
+    public void setBookmarkFile(String file) {
+        setConfig(Config.BookmarkFile, file);
+    }
+
+    public String getHistoryFile() {
+        File f = new File(getConfig(Config.HistoryFile));
+        if (!f.exists()) {
+            try {
+                f.createNewFile();
+            } catch (IOException ex) {
+                return Config.HistoryFile.getDefaultValue();
+            }
+        }
+        return f.getAbsolutePath();
+    }
+
+    public void setHistoryFile(String file) {
+        setConfig(Config.HistoryFile, file);
+    }
+
     public static class ConfigNotFoundException extends Exception {
 
         public ConfigNotFoundException(String message) {
@@ -320,7 +354,9 @@ public class ConfigManager {
         MaxiumDownloadInQueue("maxiumDownloadInQueue", "5"),
         MaxiumDownloadImage("maxiumDownloadImage", "3"),
         LastDownloadMangaUrl("lastDownloadMangaUrl", "http://kissmanga.com/Manga/Hentai-Ouji-to-Warawanai-Neko"),
-        LastDownloadMangaName("lastDownloadMangaName", "Hentai Ouji to Warawanai Neko");
+        LastDownloadMangaName("lastDownloadMangaName", "Hentai Ouji to Warawanai Neko"),
+        BookmarkFile("bookmarkfile", "bookmark.xml"),
+        HistoryFile("historyfile", "history.xml");
 
         private Config(String configName, String defaultValue) {
             this.configName = configName;

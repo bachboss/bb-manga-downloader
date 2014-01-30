@@ -92,11 +92,11 @@ public class Manga24h extends ADefaultBus implements IBusOnePage { // Done
     public List<Chapter> getAllChapters(Manga manga) throws IOException {
         ArrayList<Chapter> lstChapter = new ArrayList<Chapter>();
         Document doc = getDocument(manga.getUrl());
-        Elements xmlNodes = doc.select("div[class=post] table[class=mytable] tr:gt(0)");
+        Elements xmlNodes = doc.select("html body div.container div.row div.col-xs-12 div.row div.table_view table.table tbody tr");
         for (Element e : xmlNodes) {
             Elements children = e.children();
             Element aTag = children.first().select("a").first();
-            Element eDate = children.last();
+            Element eDate = children.get(2);
             Chapter c;
             String dateString = TextUtilities.trim(HtmlUtilities.unescapeHtml4(eDate.text()));
             MangaDateTime date;
@@ -116,7 +116,7 @@ public class Manga24h extends ADefaultBus implements IBusOnePage { // Done
     public List<Image> getAllImages(Chapter chapter) throws IOException {
         List<Image> lstImage = new ArrayList<Image>();
         Document doc = getDocument(chapter.getUrl());
-        Elements xmlNode = doc.select("img[class=m_picture][alt]");
+        Elements xmlNode = doc.select("html body div.row div div.row div.view2 img.img-responsive");
 
         for (int i = 0; i < xmlNode.size(); i++) {
             lstImage.add(new Image(i, xmlNode.get(i).attr("src"), chapter));
